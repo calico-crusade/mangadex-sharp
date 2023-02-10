@@ -82,7 +82,7 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				["artist"] = typeof(PersonRelationship),
 				["cover_art"] = typeof(CoverArtRelationship),
 				["manga"] = typeof(RelatedDataRelationship),
-				["scanlation_group"] = typeof(ScanlationGroupRelationship),
+				["scanlation_group"] = typeof(ScanlationGroup),
 				["user"] = typeof(UserRelationship)
 			})
 		};

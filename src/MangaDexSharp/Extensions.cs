@@ -40,7 +40,7 @@ public static class Extensions
 
 	public static RelatedDataRelationship[] Manga(this IRelationshipModel? source) => source.Relationship<RelatedDataRelationship>();
 
-	public static ScanlationGroupRelationship[] ScanlationGroups(this IRelationshipModel? source) => source.Relationship<ScanlationGroupRelationship>();
+	public static ScanlationGroup[] ScanlationGroups(this IRelationshipModel? source) => source.Relationship<ScanlationGroup>();
 
 	public static UserRelationship[] Users(this IRelationshipModel? source)  => source.Relationship<UserRelationship>();
 
@@ -58,6 +58,8 @@ public static class Extensions
 			.AddTransient<IMangaDexFeedService, MangaDexFeedService>()
 			.AddTransient<IMangaDexFollowsService, MangaDexFollowsService>()
 			.AddTransient<IMangaDexReadMarkerService, MangaDexReadMarkerService>()
+			.AddTransient<IMangaDexReportService, MangaDexReportService>()
+			.AddTransient<IMangaDexScanlationGroupService, MangaDexScanlationGroupService>()
 
 			.AddTransient<IMangaDexMiscService, MangaDexMiscService>()
 			.AddTransient<IMangaDexPageService, MangaDexMiscService>()

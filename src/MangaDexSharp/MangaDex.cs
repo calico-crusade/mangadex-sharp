@@ -27,6 +27,10 @@ public interface IMangaDex
 	IMangaDexCaptchaService Captcha { get; }
 
 	IMangaDexReadMarkerService ReadMarker { get; }
+
+	IMangaDexReportService Report { get; }
+
+	IMangaDexScanlationGroupService ScanlationGroup { get; }
 }
 
 public class MangaDex : IMangaDex
@@ -49,6 +53,10 @@ public class MangaDex : IMangaDex
 
 	public IMangaDexFollowsService Follows { get; }
 
+	public IMangaDexReportService Report { get; }
+
+	public IMangaDexScanlationGroupService ScanlationGroup { get; }
+
 	public IMangaDexPageService Pages => Misc;
 
 	public IMangaDexRatingService Ratings => Misc;
@@ -66,7 +74,9 @@ public class MangaDex : IMangaDex
 		IMangaDexCustomListService lists,
 		IMangaDexFeedService feed,
 		IMangaDexFollowsService follows,
-		IMangaDexReadMarkerService readMarker)
+		IMangaDexReadMarkerService readMarker,
+		IMangaDexReportService report,
+		IMangaDexScanlationGroupService scanlationGroup)
 	{
 		Manga = manga;
 		Chapter = chapter;
@@ -77,6 +87,8 @@ public class MangaDex : IMangaDex
 		Feed = feed;
 		Follows = follows;
 		ReadMarker = readMarker;
+		Report = report;
+		ScanlationGroup = scanlationGroup;
 	}
 
 	public static IMangaDex Create(string? token = null)
