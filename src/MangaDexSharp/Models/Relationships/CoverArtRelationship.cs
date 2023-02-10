@@ -1,7 +1,10 @@
 ﻿namespace MangaDexSharp;
 
-public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.AttributesModel>, IRelationship
+public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.AttributesModel>, IRelationship, IRelationshipModel
 {
+	[JsonPropertyName("relationships")]
+	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+
 	public class AttributesModel
 	{
 		[JsonPropertyName("description")]
@@ -26,3 +29,5 @@ public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.Attribute
 		public int Version { get; set; }
 	}
 }
+
+public class CoverArtList : MangaDexCollection<CoverArtRelationship> { }

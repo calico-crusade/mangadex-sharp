@@ -49,7 +49,9 @@ public static class Extensions
 			.AddTransient<IMangaDex, MangaDex>()
 			.AddTransient<IMangaDexMangaService, MangaDexMangaService>()
 			.AddTransient<IMangaDexChapterService, MangaDexChapterService>()
-			.AddTransient<IMangaDexPagesService, MangaDexPagesService>();
+			.AddTransient<IMangaDexPagesService, MangaDexPagesService>()
+			.AddTransient<IMangaDexAuthorService, MangaDexAuthorService>()
+			.AddTransient<IMangaDexCoverArtService, MangaDexCoverArtService>();
 	}
 
 	public static IServiceCollection AddMangaDex(this IServiceCollection services)

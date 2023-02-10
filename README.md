@@ -71,7 +71,7 @@ var manga = await api.Manga.Get("some-manga-id-here");
 ## Usage
 The API follows the [docs](https://api.mangadex.org/docs/redoc.html) pretty closely. 
 With the root object for the api being the `IMangaDex` interface.
-Once you can an instance (see above), you can access any of the sub-sections within it.
+Once you have an instance (see above), you can access any of the sub-sections within it.
 Here are some common use cases:
 
 ```csharp
@@ -97,7 +97,7 @@ var pages = await api.Pages.Get("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
 ```
 
 ## Authentication
-MangaDex switch to authorization bearer tokens via an OAuth2 flow recently. 
+MangaDex switched to authorization bearer tokens via an OAuth2 flow recently. 
 In order to access any resources that require an account, you will need to get one of those tokens (you can read more [here](https://api.mangadex.org/docs/authentication/) once they update the docs).
 Once you have a bearer token, you can either add it at an API level or for a specific request, you can also create your own token service provider.
 

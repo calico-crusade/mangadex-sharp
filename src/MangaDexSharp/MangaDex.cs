@@ -7,6 +7,10 @@ public interface IMangaDex
 	IMangaDexChapterService Chapter { get; }
 
 	IMangaDexPagesService Pages { get; }
+
+	IMangaDexAuthorService Author { get; }
+
+	IMangaDexCoverArtService Cover { get; }
 }
 
 public class MangaDex : IMangaDex
@@ -17,14 +21,22 @@ public class MangaDex : IMangaDex
 
 	public IMangaDexPagesService Pages { get; }
 
+	public IMangaDexAuthorService Author { get; }
+
+	public IMangaDexCoverArtService Cover { get; }
+
 	public MangaDex(
 		IMangaDexMangaService manga, 
 		IMangaDexChapterService chapter,
-		IMangaDexPagesService pages)
+		IMangaDexPagesService pages,
+		IMangaDexAuthorService author,
+		IMangaDexCoverArtService cover)
 	{
 		Manga = manga;
 		Chapter = chapter;
 		Pages = pages;
+		Author = author;
+		Cover = cover;
 	}
 
 	public static IMangaDex Create(string? token = null)
