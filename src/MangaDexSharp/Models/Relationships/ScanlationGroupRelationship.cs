@@ -1,7 +1,10 @@
 ﻿namespace MangaDexSharp;
 
-public class ScanlationGroupRelationship : MangaDexModel<ScanlationGroupRelationship.AttributesModel>, IRelationship
+public class ScanlationGroupRelationship : MangaDexModel<ScanlationGroupRelationship.AttributesModel>, IRelationship, IRelationshipModel
 {
+	[JsonPropertyName("relationships")]
+	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+
 	public class AttributesModel
 	{
 		[JsonPropertyName("name")]
@@ -56,3 +59,5 @@ public class ScanlationGroupRelationship : MangaDexModel<ScanlationGroupRelation
 		public int Version { get; set; }
 	}
 }
+
+public class ScanlationGroupList : MangaDexCollection<ScanlationGroupRelationship> { }

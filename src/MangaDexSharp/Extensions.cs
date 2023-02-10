@@ -14,9 +14,11 @@ public static class Extensions
 		ContentRating.pornographic
 	};
 
-	public static async Task<Action<HttpRequestMessage>> Auth(string? token, ICredentialsService creds)
+	public static async Task<Action<HttpRequestMessage>> Auth(string? token, ICredentialsService creds, bool optional = false)
 	{
 		token ??= await creds.GetToken();
+		if (string.IsNullOrEmpty(token) && optional) return c => { };
+
 		if (string.IsNullOrEmpty(token))
 			throw new ArgumentException("No token provided by credentials service", nameof(token));
 
@@ -47,11 +49,21 @@ public static class Extensions
 		return services
 			.AddCardboardHttp()
 			.AddTransient<IMangaDex, MangaDex>()
+
 			.AddTransient<IMangaDexMangaService, MangaDexMangaService>()
 			.AddTransient<IMangaDexChapterService, MangaDexChapterService>()
-			.AddTransient<IMangaDexPagesService, MangaDexPagesService>()
 			.AddTransient<IMangaDexAuthorService, MangaDexAuthorService>()
-			.AddTransient<IMangaDexCoverArtService, MangaDexCoverArtService>();
+			.AddTransient<IMangaDexCoverArtService, MangaDexCoverArtService>()
+			.AddTransient<IMangaDexCustomListService, MangaDexCustomListService>()
+			.AddTransient<IMangaDexFeedService, MangaDexFeedService>()
+			.AddTransient<IMangaDexFollowsService, MangaDexFollowsService>()
+			.AddTransient<IMangaDexReadMarkerService, MangaDexReadMarkerService>()
+
+			.AddTransient<IMangaDexMiscService, MangaDexMiscService>()
+			.AddTransient<IMangaDexPageService, MangaDexMiscService>()
+			.AddTransient<IMangaDexRatingService, MangaDexMiscService>()
+			.AddTransient<IMangaDexThreadsService, MangaDexMiscService>()
+			.AddTransient<IMangaDexCaptchaService, MangaDexMiscService>();
 	}
 
 	public static IServiceCollection AddMangaDex(this IServiceCollection services)

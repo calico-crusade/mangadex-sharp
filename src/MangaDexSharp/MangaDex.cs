@@ -6,11 +6,27 @@ public interface IMangaDex
 
 	IMangaDexChapterService Chapter { get; }
 
-	IMangaDexPagesService Pages { get; }
+	IMangaDexMiscService Misc { get; }
+
+	IMangaDexPageService Pages { get; }
 
 	IMangaDexAuthorService Author { get; }
 
 	IMangaDexCoverArtService Cover { get; }
+
+	IMangaDexCustomListService Lists { get; }
+
+	IMangaDexFeedService Feed { get; }
+
+	IMangaDexFollowsService Follows { get; }
+
+	IMangaDexRatingService Ratings { get; }
+
+	IMangaDexThreadsService Threads { get; }
+
+	IMangaDexCaptchaService Captcha { get; }
+
+	IMangaDexReadMarkerService ReadMarker { get; }
 }
 
 public class MangaDex : IMangaDex
@@ -19,24 +35,48 @@ public class MangaDex : IMangaDex
 
 	public IMangaDexChapterService Chapter { get; }
 
-	public IMangaDexPagesService Pages { get; }
+	public IMangaDexMiscService Misc { get; }
 
 	public IMangaDexAuthorService Author { get; }
 
 	public IMangaDexCoverArtService Cover { get; }
 
+	public IMangaDexCustomListService Lists { get; }
+
+	public IMangaDexReadMarkerService ReadMarker { get; }
+
+	public IMangaDexFeedService Feed { get; }
+
+	public IMangaDexFollowsService Follows { get; }
+
+	public IMangaDexPageService Pages => Misc;
+
+	public IMangaDexRatingService Ratings => Misc;
+
+	public IMangaDexThreadsService Threads => Misc;
+
+	public IMangaDexCaptchaService Captcha => Misc;
+
 	public MangaDex(
 		IMangaDexMangaService manga, 
 		IMangaDexChapterService chapter,
-		IMangaDexPagesService pages,
+		IMangaDexMiscService misc,
 		IMangaDexAuthorService author,
-		IMangaDexCoverArtService cover)
+		IMangaDexCoverArtService cover,
+		IMangaDexCustomListService lists,
+		IMangaDexFeedService feed,
+		IMangaDexFollowsService follows,
+		IMangaDexReadMarkerService readMarker)
 	{
 		Manga = manga;
 		Chapter = chapter;
-		Pages = pages;
+		Misc = misc;
 		Author = author;
 		Cover = cover;
+		Lists = lists;
+		Feed = feed;
+		Follows = follows;
+		ReadMarker = readMarker;
 	}
 
 	public static IMangaDex Create(string? token = null)

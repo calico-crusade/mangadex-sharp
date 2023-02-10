@@ -46,6 +46,5 @@ public class MangaDexChapterService : IMangaDexChapterService
 	{
 		var c = await Auth(token, _creds);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}", c) ?? new() { Result = "error" };
-
 	}
 }
