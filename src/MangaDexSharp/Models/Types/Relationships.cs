@@ -1,5 +1,6 @@
 ﻿namespace MangaDexSharp;
 
+[JsonConverter(typeof(MangaDexEnumParser<Relationships>))]
 public enum Relationships
 {
 	monochrome,

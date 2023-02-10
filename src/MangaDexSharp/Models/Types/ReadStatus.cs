@@ -1,5 +1,6 @@
 ﻿namespace MangaDexSharp;
 
+[JsonConverter(typeof(MangaDexEnumParser<ReadStatus>))]
 public enum ReadStatus
 {
 	reading,

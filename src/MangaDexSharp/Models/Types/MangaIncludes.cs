@@ -1,5 +1,6 @@
 ﻿namespace MangaDexSharp;
 
+[JsonConverter(typeof(MangaDexEnumParser<MangaIncludes>))]
 public enum MangaIncludes
 {
 	manga,
