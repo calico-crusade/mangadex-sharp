@@ -1,6 +1,6 @@
 ﻿namespace MangaDexSharp;
 
-public class UserRelationship : MangaDexModel<UserRelationship.AttributesModel>, IRelationship, IRelationshipModel
+public class User : MangaDexModel<User.AttributesModel>, IRelationship, IRelationshipModel
 {
 	[JsonPropertyName("relationships")]
 	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
@@ -18,4 +18,4 @@ public class UserRelationship : MangaDexModel<UserRelationship.AttributesModel>,
 	}
 }
 
-public class UserList : MangaDexCollection<UserRelationship> { }
+public class UserList : MangaDexCollection<User> { }
