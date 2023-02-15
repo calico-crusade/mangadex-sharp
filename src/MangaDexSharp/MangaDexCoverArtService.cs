@@ -18,7 +18,7 @@ public class MangaDexCoverArtService : IMangaDexCoverArtService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/cover";
+	public string Root => $"{_creds.ApiUrl}/cover";
 
 	public MangaDexCoverArtService(IApiService api, ICredentialsService creds)
 	{

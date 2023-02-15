@@ -14,7 +14,7 @@ public class MangaDexReportService : IMangaDexReportService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/report";
+	public string Root => $"{_creds.ApiUrl}/report";
 
 	public MangaDexReportService(IApiService api, ICredentialsService creds)
 	{

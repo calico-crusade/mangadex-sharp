@@ -5,6 +5,7 @@ namespace MangaDexSharp;
 public static class Extensions
 {
 	public const string API_ROOT = "https://api.mangadex.org";
+	public const string API_DEV_ROOT = "https://api.mangadex.dev";
 
 	public static ContentRating[] ContentRatingsAll => new[]
 	{
@@ -75,10 +76,10 @@ public static class Extensions
 		return services.AddMangaDex<ConfigurationCredentialsService>();
 	}
 
-	public static IServiceCollection AddMangaDex(this IServiceCollection services, string token)
+	public static IServiceCollection AddMangaDex(this IServiceCollection services, string token, string? apiUrl = null)
 	{
 		return services
-			.AddMangaDex(new HardCodedCredentialsService(token));
+			.AddMangaDex(new HardCodedCredentialsService(token, apiUrl));
 	}
 
 	public static IServiceCollection AddMangaDex<T>(this IServiceCollection services) where T: class, ICredentialsService

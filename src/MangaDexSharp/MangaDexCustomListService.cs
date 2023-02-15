@@ -28,7 +28,7 @@ public class MangaDexCustomListService : IMangaDexCustomListService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/list";
+	public string Root => $"{_creds.ApiUrl}/list";
 
 	public MangaDexCustomListService(IApiService api, ICredentialsService creds)
 	{
@@ -74,23 +74,23 @@ public class MangaDexCustomListService : IMangaDexCustomListService
 	public async Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"{API_ROOT}/manga/{mangaId}/list/{listId}", new MangaDexEmpty { }, c) ?? new() { Result = "error" };
+		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"{_creds.ApiUrl}/manga/{mangaId}/list/{listId}", new MangaDexEmpty { }, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		return await _api.Delete<MangaDexRoot>($"{API_ROOT}/manga/{mangaId}/list/{listId}", c) ?? new() { Result = "error" };
+		return await _api.Delete<MangaDexRoot>($"{_creds.ApiUrl}/manga/{mangaId}/list/{listId}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<CustomListList> List(int limit = 100, int offset = 0, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		return await _api.Get<CustomListList>($"{API_ROOT}/user/list?limit={limit}&offset={offset}", c) ?? new() { Result = "error" };
+		return await _api.Get<CustomListList>($"{_creds.ApiUrl}/user/list?limit={limit}&offset={offset}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<CustomListList> List(string userId, int limit = 100, int offset = 0)
 	{
-		return await _api.Get<CustomListList>($"{API_ROOT}/user/{userId}/list?limit={limit}&offset={offset}") ?? new() { Result = "error" };
+		return await _api.Get<CustomListList>($"{_creds.ApiUrl}/user/{userId}/list?limit={limit}&offset={offset}") ?? new() { Result = "error" };
 	}
 }

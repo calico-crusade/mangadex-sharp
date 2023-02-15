@@ -14,6 +14,8 @@ public class MangaDexReadMarkerService : IMangaDexReadMarkerService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
+	public string Root => _creds.ApiUrl;
+
 	public MangaDexReadMarkerService(IApiService api, ICredentialsService creds)
 	{
 		_api = api;
@@ -23,7 +25,7 @@ public class MangaDexReadMarkerService : IMangaDexReadMarkerService
 	public async Task<ReadMarkerList> Read(string mangaId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		return await _api.Get<ReadMarkerList>($"{API_ROOT}/manga/{mangaId}/read", c) ?? new() { Result = "error" };
+		return await _api.Get<ReadMarkerList>($"{Root}/manga/{mangaId}/read", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<ReadMarkerList> Read(string[] mangaIds, bool grouped = true, string? token = null)
@@ -33,7 +35,7 @@ public class MangaDexReadMarkerService : IMangaDexReadMarkerService
 			.Add("ids", mangaIds)
 			.Add("grouped", grouped)
 			.Build();
-		var url = $"{API_ROOT}/manga/read?{bob}";
+		var url = $"{Root}/manga/read?{bob}";
 		return await _api.Get<ReadMarkerList>(url, c) ?? new() { Result = "error" };
 	}
 
@@ -50,7 +52,7 @@ public class MangaDexReadMarkerService : IMangaDexReadMarkerService
 	public async Task<MangaDexRoot> BatchUpdate(string mangaId, ReadMarkerBatchUpdate update, bool updateHistory = true, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		var url = $"{API_ROOT}/manga/{mangaId}/read?updateHistory={updateHistory}";
+		var url = $"{Root}/manga/{mangaId}/read?updateHistory={updateHistory}";
 		return await _api.Post<MangaDexRoot, ReadMarkerBatchUpdate>(url, update, c) ?? new() { Result = "error" };
 	}
 }

@@ -32,7 +32,7 @@ public class MangaDexMangaService : IMangaDexMangaService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/manga";
+	public string Root => $"{_creds.ApiUrl}/manga";
 
 	public MangaDexMangaService(IApiService api, ICredentialsService creds)
 	{

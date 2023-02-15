@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp", "MangaDexSharp\MangaDexSharp.csproj", "{A337FEE8-86DE-405B-9394-123EAC782BA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp", "MangaDexSharp\MangaDexSharp.csproj", "{A337FEE8-86DE-405B-9394-123EAC782BA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp.Cli", "MangaDexSharp.Cli\MangaDexSharp.Cli.csproj", "{E2BA6C78-048B-4649-A7B2-D28C2DC69708}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp.Cli", "MangaDexSharp.Cli\MangaDexSharp.Cli.csproj", "{E2BA6C78-048B-4649-A7B2-D28C2DC69708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp.OAuthLocal.Web", "MangaDexSharp.OAuthLocal.Web\MangaDexSharp.OAuthLocal.Web.csproj", "{42298204-E183-426F-98CC-1FCB49AA1B6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E2BA6C78-048B-4649-A7B2-D28C2DC69708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2BA6C78-048B-4649-A7B2-D28C2DC69708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2BA6C78-048B-4649-A7B2-D28C2DC69708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

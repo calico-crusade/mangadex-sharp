@@ -101,6 +101,28 @@ MangaDex switched to authorization bearer tokens via an OAuth2 flow recently.
 In order to access any resources that require an account, you will need to get one of those tokens (you can read more [here](https://api.mangadex.org/docs/authentication/) once they update the docs).
 Once you have a bearer token, you can either add it at an API level or for a specific request, you can also create your own token service provider.
 
+> Note: You can see an example of how to fetch bearer tokens for the new OAuth2 flow in the `src/MangaDexSharp.OAuthLocal.Web` project.
+
+### Legacy Authentication method:
+You can use the legacy login method to fetch the session token like so:
+
+```csharp
+var api = MangaDex.Create();
+
+var result = await api.User.Login("<username>", "<password>");
+
+var token = result.Data.Session;
+
+//You can either pass the token into authenticated routes
+var me = await api.User.Me(token);
+
+//Or you can create an authenticated api
+var authedApi = MangaDex.Create(token);
+var me = await api.User.Me();
+```
+
+> Note: These methods are technically deprecated on mangadex's docs, so they are marked as `[Obsolete]` and will show up as warnings.
+
 ### API Level:
 You have 2 primary options for using this, you can either specify it directly when you create a client or inject it via configuration.
 

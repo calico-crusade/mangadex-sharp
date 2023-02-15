@@ -103,10 +103,14 @@ public class MangaDex : IMangaDex
 		User = user;
 	}
 
-	public static IMangaDex Create(string? token = null)
+	public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null)
 	{
-		return new ServiceCollection()
-			.AddMangaDex(token ?? string.Empty)
+		var create = new ServiceCollection()
+			.AddMangaDex(token ?? string.Empty, apiUrl);
+
+		config?.Invoke(create);
+
+		return create
 			.BuildServiceProvider()
 			.GetRequiredService<IMangaDex>();
 	}

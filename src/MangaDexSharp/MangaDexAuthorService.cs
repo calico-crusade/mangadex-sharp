@@ -14,7 +14,7 @@ public class MangaDexAuthorService : IMangaDexAuthorService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/author";
+	public string Root => $"{_creds.ApiUrl}/author";
 
 	public MangaDexAuthorService(IApiService api, ICredentialsService creds)
 	{

@@ -21,14 +21,14 @@ public class MangaDexFeedService : IMangaDexFeedService
 	{
 		var c = await Auth(token, _creds);
 		filter ??= new ChaptersFilter();
-		var url = $"{API_ROOT}/user/follows/manga/feed?{filter.BuildQuery()}";
+		var url = $"{_creds.ApiUrl}/user/follows/manga/feed?{filter.BuildQuery()}";
 		return await _api.Get<ChapterList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<ChapterList> List(string listId, ChaptersFilter? filter = null)
 	{
 		filter ??= new ChaptersFilter();
-		var url = $"{API_ROOT}/list/{listId}/feed?{filter.BuildQuery()}";
+		var url = $"{_creds.ApiUrl}/list/{listId}/feed?{filter.BuildQuery()}";
 		return await _api.Get<ChapterList>(url) ?? new() { Result = "error" };
 	}
 }

@@ -13,7 +13,7 @@ public class MangaDexChapterService : IMangaDexChapterService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/chapter";
+	public string Root => $"{_creds.ApiUrl}/chapter";
 
 	public MangaDexChapterService(IApiService api, ICredentialsService creds)
 	{

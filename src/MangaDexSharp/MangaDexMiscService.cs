@@ -31,7 +31,7 @@ public class MangaDexMiscService : IMangaDexMiscService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/at-home/server/";
+	public string Root => _creds.ApiUrl;
 
 	public MangaDexMiscService(IApiService api, ICredentialsService creds)
 	{
@@ -41,13 +41,13 @@ public class MangaDexMiscService : IMangaDexMiscService
 
 	public async Task<Pages> Pages(string chapterId)
 	{
-		return await _api.Get<Pages>($"{Root}/{chapterId}?forcePort443=false") ?? new();
+		return await _api.Get<Pages>($"{Root}/at-home/server/{chapterId}?forcePort443=false") ?? new();
 	}
 
 	public async Task<MangaDexRoot> Captcha(string challenge, string? token = null)
 	{
 		var c = await Auth(token, _creds, true);
-		return await _api.Post<MangaDexRoot, CaptchaChallenge>($"{API_ROOT}/captcha/solve", new CaptchaChallenge { Challenge = challenge }, c) ?? new() { Result = "error" };
+		return await _api.Post<MangaDexRoot, CaptchaChallenge>($"{Root}/captcha/solve", new CaptchaChallenge { Challenge = challenge }, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<Thread>> CreateThread(ThreadType type, string id, string? token = null)
@@ -58,7 +58,7 @@ public class MangaDexMiscService : IMangaDexMiscService
 			Type = type,
 			Id = id
 		};
-		return await _api.Post<MangaDexRoot<Thread>, ThreadCreate>($"{API_ROOT}/forums/thread", thread, c) ?? new() { Result = "error" };
+		return await _api.Post<MangaDexRoot<Thread>, ThreadCreate>($"{Root}/forums/thread", thread, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<RatingList> Ratings(string[] mangaIds, string? token = null)
@@ -67,13 +67,13 @@ public class MangaDexMiscService : IMangaDexMiscService
 		var bob = new FilterBuilder()
 			.Add("manga", mangaIds)
 			.Build();
-		return await _api.Get<RatingList>($"{API_ROOT}/rating?{bob}", c) ?? new() { Result = "error" };
+		return await _api.Get<RatingList>($"{Root}/rating?{bob}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Rate(string mangaId, int rating, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		var url = $"{API_ROOT}/rating/{mangaId}";
+		var url = $"{Root}/rating/{mangaId}";
 		var data = new RatingCreate { Rating = rating };
 		return await _api.Post<MangaDexRoot, RatingCreate>(url, data, c) ?? new() { Result = "error" };
 	}
@@ -81,7 +81,7 @@ public class MangaDexMiscService : IMangaDexMiscService
 	public async Task<MangaDexRoot> RatingDelete(string mangaId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		var url = $"{API_ROOT}/rating/{mangaId}";
+		var url = $"{Root}/rating/{mangaId}";
 		return await _api.Delete<MangaDexRoot>(url, c) ?? new() { Result = "error" };
 	}
 }

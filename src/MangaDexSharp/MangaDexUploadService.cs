@@ -19,7 +19,7 @@ public class MangaDexUploadService : IMangaDexUploadService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/upload";
+	public string Root => $"{_creds.ApiUrl}/upload";
 
 	public MangaDexUploadService(IApiService api, ICredentialsService creds)
 	{

@@ -22,7 +22,7 @@ public class MangaDexScanlationGroupService : IMangaDexScanlationGroupService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
-	public string Root => $"{API_ROOT}/group";
+	public string Root => $"{_creds.ApiUrl}/group";
 
 	public MangaDexScanlationGroupService(IApiService api, ICredentialsService creds)
 	{

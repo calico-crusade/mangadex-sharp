@@ -16,6 +16,8 @@ public class MangaDexFollowsService : IMangaDexFollowsService
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
 
+	public string Root => _creds.ApiUrl;
+
 	public MangaDexFollowsService(IApiService api, ICredentialsService creds)
 	{
 		_api = api;
@@ -30,7 +32,7 @@ public class MangaDexFollowsService : IMangaDexFollowsService
 			.Add("offset", offset)
 			.Add("includes", new[] { "leader", "member" })
 			.Build();
-		var url = $"{API_ROOT}/user/follows/group?{bob}";
+		var url = $"{Root}/user/follows/group?{bob}";
 		return await _api.Get<ScanlationGroupList>(url, c) ?? new() { Result = "error" };
 	}
 
@@ -41,14 +43,14 @@ public class MangaDexFollowsService : IMangaDexFollowsService
 			.Add("limit", limit)
 			.Add("offset", offset)
 			.Build();
-		var url = $"{API_ROOT}/user/follows/user?{bob}";
+		var url = $"{Root}/user/follows/user?{bob}";
 		return await _api.Get<UserList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> User(string userId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		var url = $"{API_ROOT}/user/follows/user/{userId}";
+		var url = $"{Root}/user/follows/user/{userId}";
 		return await _api.Get<MangaDexRoot>(url, c) ?? new() { Result = "error" };
 	}
 
@@ -68,14 +70,14 @@ public class MangaDexFollowsService : IMangaDexFollowsService
 			.Add("offset", offset)
 			.Add("includes", includes)
 			.Build();
-		var url = $"{API_ROOT}/user/follows/manga?{bob}";
+		var url = $"{Root}/user/follows/manga?{bob}";
 		return await _api.Get<MangaList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Manga(string mangaId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		var url = $"{API_ROOT}/user/follows/manga/{mangaId}";
+		var url = $"{Root}/user/follows/manga/{mangaId}";
 		return await _api.Get<MangaDexRoot>(url, c) ?? new() { Result = "error" };
 	}
 
@@ -86,14 +88,14 @@ public class MangaDexFollowsService : IMangaDexFollowsService
 			.Add("limit", limit)
 			.Add("offset", offset)
 			.Build();
-		var url = $"{API_ROOT}/user/follows/list?{bob}";
+		var url = $"{Root}/user/follows/list?{bob}";
 		return await _api.Get<CustomListList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<CustomListList> List(string listId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
-		var url = $"{API_ROOT}/user/follows/list/{listId}";
+		var url = $"{Root}/user/follows/list/{listId}";
 		return await _api.Get<CustomListList>(url, c) ?? new() { Result = "error" };
 	}
 }
