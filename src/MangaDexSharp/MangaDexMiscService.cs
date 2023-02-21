@@ -3,6 +3,7 @@
 public interface IMangaDexPageService
 {
 	Task<Pages> Pages(string chapterId);
+	Task ReportPage(PageReport report);
 }
 
 public interface IMangaDexRatingService
@@ -37,6 +38,11 @@ public class MangaDexMiscService : IMangaDexMiscService
 	{
 		_api = api;
 		_creds = creds;
+	}
+
+	public Task ReportPage(PageReport report)
+	{
+		return _api.Post<MangaDexEmpty, PageReport>("https://api.mangadex.network/report", report);
 	}
 
 	public async Task<Pages> Pages(string chapterId)

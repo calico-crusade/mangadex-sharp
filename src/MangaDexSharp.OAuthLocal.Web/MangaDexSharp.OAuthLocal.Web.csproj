@@ -14,4 +14,9 @@
     <ProjectReference Include="..\MangaDexSharp\MangaDexSharp.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<None Include="wwwroot\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

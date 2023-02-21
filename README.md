@@ -118,7 +118,7 @@ var me = await api.User.Me(token);
 
 //Or you can create an authenticated api
 var authedApi = MangaDex.Create(token);
-var me = await api.User.Me();
+var me = await authedApi.User.Me();
 ```
 
 > Note: These methods are technically deprecated on mangadex's docs, so they are marked as `[Obsolete]` and will show up as warnings.
