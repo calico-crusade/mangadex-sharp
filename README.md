@@ -93,7 +93,7 @@ var chapters = await api.Manga.Feed("fc0a7b86-992e-4126-b30f-ca04811979bf");
 var chapter = await api.Chapter.Get("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
 
 //Get all of the pages of a specific chapter by chapter ID:
-var pages = await api.Pages.Get("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
+var pages = await api.Pages.Pages("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
 ```
 
 ## Authentication
