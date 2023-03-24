@@ -1,17 +1,73 @@
 ﻿namespace MangaDexSharp;
 
+/// <summary>
+/// Represents all of the different requests relating to objects the current user follows
+/// </summary>
 public interface IMangaDexFollowsService
 {
+	/// <summary>
+	/// Requests a paginated list of all of the scanlation groups the current user follows 
+	/// </summary>
+	/// <param name="offset">How many items to skip when requestin groups</param>
+	/// <param name="limit">How many items to limit one request to</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>A list of scanlation groups</returns>
 	Task<ScanlationGroupList> Groups(int offset = 0, int limit = 100, string? token = null);
+
+	/// <summary>
+	/// Requests a paginated list of all of the users the current user follows
+	/// </summary>
+	/// <param name="offset">How many items to skip when requesting users</param>
+	/// <param name="limit">How many items to limit one request to</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>A list of users</returns>
 	Task<UserList> Users(int offset = 0, int limit = 100, string? token = null);
+
+	/// <summary>
+	/// Checks if the current user follows a specific user
+	/// </summary>
+	/// <param name="userId">The ID of the user</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> User(string userId, string? token = null);
+
+	/// <summary>
+	/// Requests a paginated list of all of the manga the current user follows
+	/// </summary>
+	/// <param name="offset">How many items to skip when requesting users</param>
+	/// <param name="limit">How many items to limit one request to</param>
+	/// <param name="includes">What relationship data to include</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>A list of manga</returns>
 	Task<MangaList> Manga(int offset = 0, int limit = 100, MangaIncludes[]? includes = null, string? token = null);
+
+	/// <summary>
+	/// Checks if the current user follows the given manga
+	/// </summary>
+	/// <param name="mangaId">The ID of the manga</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> Manga(string mangaId, string? token = null);
+
+	/// <summary>
+	/// Requests a paginated list of the custom lists that the current user follows
+	/// </summary>
+	/// <param name="offset">How many items to skip when requesting custom lists</param>
+	/// <param name="limit">How many items to limit one request to</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>A list of custom lists</returns>
 	Task<CustomListList> Lists(int offset = 0, int limit = 100, string? token = null);
-	Task<CustomListList> List(string listId, string? token = null);
+
+	/// <summary>
+	/// Checks if the current users follows the specified custom list
+	/// </summary>
+	/// <param name="listId">The ID of the custom list</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
+	Task<MangaDexRoot> List(string listId, string? token = null);
 }
 
-public class MangaDexFollowsService : IMangaDexFollowsService
+internal class MangaDexFollowsService : IMangaDexFollowsService
 {
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;
@@ -92,10 +148,10 @@ public class MangaDexFollowsService : IMangaDexFollowsService
 		return await _api.Get<CustomListList>(url, c) ?? new() { Result = "error" };
 	}
 
-	public async Task<CustomListList> List(string listId, string? token = null)
+	public async Task<MangaDexRoot> List(string listId, string? token = null)
 	{
 		var c = await Auth(token, _creds);
 		var url = $"{Root}/user/follows/list/{listId}";
-		return await _api.Get<CustomListList>(url, c) ?? new() { Result = "error" };
+		return await _api.Get<MangaDexRoot>(url, c) ?? new() { Result = "error" };
 	}
 }

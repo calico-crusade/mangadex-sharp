@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp", "MangaDexSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp.Cli", "MangaDexSharp.Cli\MangaDexSharp.Cli.csproj", "{E2BA6C78-048B-4649-A7B2-D28C2DC69708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp.OAuthLocal.Web", "MangaDexSharp.OAuthLocal.Web\MangaDexSharp.OAuthLocal.Web.csproj", "{42298204-E183-426F-98CC-1FCB49AA1B6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp.OAuthLocal.Web", "MangaDexSharp.OAuthLocal.Web\MangaDexSharp.OAuthLocal.Web.csproj", "{42298204-E183-426F-98CC-1FCB49AA1B6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp.UpdatesPoll", "MangaDexSharp.UpdatesPoll\MangaDexSharp.UpdatesPoll.csproj", "{70686F17-80CE-41E5-BEAB-6A32C61D195D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42298204-E183-426F-98CC-1FCB49AA1B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70686F17-80CE-41E5-BEAB-6A32C61D195D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70686F17-80CE-41E5-BEAB-6A32C61D195D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70686F17-80CE-41E5-BEAB-6A32C61D195D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70686F17-80CE-41E5-BEAB-6A32C61D195D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

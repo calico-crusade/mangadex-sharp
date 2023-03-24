@@ -2,19 +2,82 @@
 
 namespace MangaDexSharp;
 
+/// <summary>
+/// Represents all of the requests related to uploading chapters
+/// </summary>
 public interface IMangaDexUploadService
 {
+	/// <summary>
+	/// Gets the current users active session
+	/// </summary>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The active upload session</returns>
 	Task<MangaDexRoot<UploadSession>> Get(string? token = null);
+
+	/// <summary>
+	/// Starts an upload session for the current user
+	/// </summary>
+	/// <param name="manga">The ID of the manga</param>
+	/// <param name="groups">The scanlation groups doing the upload</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The new upload session</returns>
 	Task<MangaDexRoot<UploadSession>> Begin(string manga, string[] groups, string? token = null);
+
+	/// <summary>
+	/// Starts editing a specific chapter
+	/// </summary>
+	/// <param name="chapterId">The ID of the chapter to edit</param>
+	/// <param name="version">The version of the request</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The current upload session</returns>
 	Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, string? token = null);
+
+	/// <summary>
+	/// Uploads files to the given session
+	/// </summary>
+	/// <param name="sessionId">The ID of the session to upload to</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <param name="files">All of the files to upload to the chapter (limit 10 per request)</param>
+	/// <returns>The uploaded file results</returns>
 	Task<UploadSessionFileList> Upload(string sessionId, string? token = null, params IFileUpload[] files);
+
+	/// <summary>
+	/// Deletes a specific file from the upload session
+	/// </summary>
+	/// <param name="sessionId">The ID of the session</param>
+	/// <param name="fileId">The ID of the file to delete</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> DeleteUpload(string sessionId, string fileId, string? token = null);
+
+	/// <summary>
+	/// Deletes multiple files from the upload session
+	/// </summary>
+	/// <param name="sessionId">The ID of the session</param>
+	/// <param name="fileIds">The file IDs to delete</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> DeleteUpload(string sessionId, string[] fileIds, string? token = null);
+
+	/// <summary>
+	/// Abandons and deletes the upload session
+	/// </summary>
+	/// <param name="sessionId">The ID of the session to abandon</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> Abandon(string sessionId, string? token = null);
+
+	/// <summary>
+	/// Commits the upload session
+	/// </summary>
+	/// <param name="sessionId">The ID of the session to commit</param>
+	/// <param name="data">The data of the session</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The uploaded chapter</returns>
 	Task<MangaDexRoot<Chapter>> Commit(string sessionId, UploadSessionCommit data, string? token = null);
 }
 
-public class MangaDexUploadService : IMangaDexUploadService
+internal class MangaDexUploadService : IMangaDexUploadService
 {
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;

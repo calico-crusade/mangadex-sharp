@@ -1,15 +1,36 @@
 ﻿namespace MangaDexSharp;
 
+/// <summary>
+/// Represents all of the requests relating to object reports
+/// </summary>
 public interface IMangaDexReportService
 {
+	/// <summary>
+	/// Requests a list of available reasons for the given category
+	/// </summary>
+	/// <param name="category">The type of object the reasons are for</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>A list of all of the report reasons</returns>
 	Task<ReportReasonList> Reasons(ReportCategory category, string? token = null);
 
+	/// <summary>
+	/// Requests a paginated list of reports for the given filter
+	/// </summary>
+	/// <param name="filters">How to filter the reports</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>A list of reports</returns>
 	Task<ReportList> Reports(ReportFilter? filters = null, string? token = null);
 
+	/// <summary>
+	/// Creates a report
+	/// </summary>
+	/// <param name="report">The report to create</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> Create(ReportCreate report, string? token = null);
 }
 
-public class MangaDexReportService : IMangaDexReportService
+internal class MangaDexReportService : IMangaDexReportService
 {
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;

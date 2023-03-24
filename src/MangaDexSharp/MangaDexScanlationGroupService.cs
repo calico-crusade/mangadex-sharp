@@ -1,23 +1,67 @@
 ﻿namespace MangaDexSharp;
 
+/// <summary>
+/// Represents all of the requests related to scanlation groups
+/// </summary>
 public interface IMangaDexScanlationGroupService
 {
+	/// <summary>
+	/// Requests a paginated list of scanlation groups
+	/// </summary>
+	/// <param name="filter">How to filter the groups</param>
+	/// <returns>A list of scanlation groups</returns>
 	Task<ScanlationGroupList> List(ScanlationGroupFilter? filter = null);
 
+	/// <summary>
+	/// Creates a scanlation group
+	/// </summary>
+	/// <param name="group">The group to create</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The created scanlation group</returns>
 	Task<MangaDexRoot<ScanlationGroup>> Create(ScanlationGroupCreate group, string? token = null);
 
+	/// <summary>
+	/// Fetches a scanlation group by ID
+	/// </summary>
+	/// <param name="id">The ID of the group</param>
+	/// <returns>The scanlation group</returns>
 	Task<MangaDexRoot<ScanlationGroup>> Get(string id);
 
+	/// <summary>
+	/// Updates a scanlation group
+	/// </summary>
+	/// <param name="id">The ID of the group</param>
+	/// <param name="group">The updates</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The created scanlation group</returns>
 	Task<MangaDexRoot<ScanlationGroup>> Update(string id, ScanlationGroupUpdate group, string? token = null);
 
+	/// <summary>
+	/// Deletes a scanlation group
+	/// </summary>
+	/// <param name="id">The ID of the group to delete</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> Delete(string id, string? token = null);
 
+	/// <summary>
+	/// Requests that the current user follows the group
+	/// </summary>
+	/// <param name="id">The ID of the group to follow</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> Follow(string id, string? token = null);
 
+	/// <summary>
+	/// Requests that the current user unfollows the group
+	/// </summary>
+	/// <param name="id">The ID of the group to unfollow</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> Unfollow(string id, string? token = null);
 }
 
-public class MangaDexScanlationGroupService : IMangaDexScanlationGroupService
+internal class MangaDexScanlationGroupService : IMangaDexScanlationGroupService
 {
 	private readonly IApiService _api;
 	private readonly ICredentialsService _creds;

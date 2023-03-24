@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>Cardboard</Authors>
     <Company>N/A</Company>
     <Description>A MangaDex.org API package</Description>
@@ -12,7 +13,7 @@
     <RepositoryUrl>https://github.com/calico-crusade/mangadex-sharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Manga;Mangadex;Anime;Cardboard;mangadex-sharp;</PackageTags>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
