@@ -123,14 +123,6 @@ public class MangaFeedFilter : IPaginateFilter
 	public enum OrderKey
 	{
 		/// <summary>
-		/// Order by the title field
-		/// </summary>
-		title,
-		/// <summary>
-		/// Order by the year field
-		/// </summary>
-		year,
-		/// <summary>
 		/// Order by the created at field
 		/// </summary>
 		createdAt,
@@ -139,20 +131,20 @@ public class MangaFeedFilter : IPaginateFilter
 		/// </summary>
 		updatedAt,
 		/// <summary>
-		/// Order by the latest uploaded chapter field
+		/// Order by the publish at field
 		/// </summary>
-		latestUploadedChapter,
+		publishAt,
 		/// <summary>
-		/// Order by the followed count field
+		/// Order by the readable at field
 		/// </summary>
-		followedCount,
+		readableAt,
 		/// <summary>
-		/// Order by the relevance field
+		/// Order by the volume ordinal field
 		/// </summary>
-		relevance,
+		volume,
 		/// <summary>
-		/// Order by the rating field 
+		/// Order by the chapter ordinal field
 		/// </summary>
-		rating
+		chapter
 	}
 }
