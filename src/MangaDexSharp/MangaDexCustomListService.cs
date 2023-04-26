@@ -17,8 +17,9 @@ public interface IMangaDexCustomListService
 	/// Fetches a custom list by ID
 	/// </summary>
 	/// <param name="id">The ID of the custom list</param>
+	/// <param name="includeManga">Whether or not to include the manga data</param>
 	/// <returns>The custom list object</returns>
-	Task<MangaDexRoot<CustomList>> Get(string id);
+	Task<MangaDexRoot<CustomList>> Get(string id, bool includeManga = false);
 
 	/// <summary>
 	/// Updates a custom list
@@ -109,9 +110,10 @@ internal class MangaDexCustomListService : IMangaDexCustomListService
 		return await _api.Post<MangaDexRoot<CustomList>, CustomListCreate>(Root, create, c) ?? new() { Result = "error" };
 	}
 
-	public async Task<MangaDexRoot<CustomList>> Get(string id)
+	public async Task<MangaDexRoot<CustomList>> Get(string id, bool includeManga = false)
 	{
-		return await _api.Get<MangaDexRoot<CustomList>>($"{Root}/{id}") ?? new() { Result = "error" };
+		var url = $"{Root}/{id}" + (includeManga ? "?includes[]=manga" : "");
+		return await _api.Get<MangaDexRoot<CustomList>>(url) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<CustomList>> Update(string id, CustomListCreate create, string? token = null)
