@@ -14,6 +14,13 @@ var api = MangaDex.Create(config: (c) =>
 	});
 });
 
+var group = await api.ScanlationGroup.List(new ScanlationGroupFilter
+{
+	Name = "europaisacoolmoon"
+});
+
+Console.WriteLine("Group: " + group?.Data?.FirstOrDefault()?.Attributes?.Name);
+
 //Example of using any of the ListAll endpoints
 //These are useful for fetching all of the results of a specific paginated request
 var allChaps = api.Chapter.ListAll(new ChaptersFilter
