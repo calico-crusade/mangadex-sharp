@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a chapter returned by the MD api
 /// </summary>
-public class Chapter : MangaDexModel<Chapter.AttributesModel>, IRelationshipModel
+public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelationshipModel
 {
 	/// <summary>
 	/// All of the related items for the chapter
@@ -14,7 +14,7 @@ public class Chapter : MangaDexModel<Chapter.AttributesModel>, IRelationshipMode
 	/// <summary>
 	/// All of the attributes the chapter has
 	/// </summary>
-	public class AttributesModel
+	public class ChapterAttributesModel
 	{
 		/// <summary>
 		/// The name / ordinal of the volume the chapter belongs to

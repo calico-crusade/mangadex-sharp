@@ -3,12 +3,12 @@
 /// <summary>
 /// Represents a reason a report can be made for
 /// </summary>
-public class ReportReason : MangaDexModel<ReportReason.AttributesModel>
+public class ReportReason : MangaDexModel<ReportReason.ReportReasonAttributesModel>
 {
 	/// <summary>
 	/// The properties of the reason
 	/// </summary>
-	public class AttributesModel
+	public class ReportReasonAttributesModel
 	{
 		/// <summary>
 		/// A description of the reason in varying languages

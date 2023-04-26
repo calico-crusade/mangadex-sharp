@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a manga item returned from the MD api
 /// </summary>
-public class Manga : MangaDexModel<Manga.AttributesModel>, IRelationshipModel
+public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipModel
 {
 	/// <summary>
 	/// All of the relationship items related to this manga
@@ -14,7 +14,7 @@ public class Manga : MangaDexModel<Manga.AttributesModel>, IRelationshipModel
 	/// <summary>
 	/// All of the properties on this name
 	/// </summary>
-	public class AttributesModel
+	public class MangaAttributesModel
 	{
 		/// <summary>
 		/// The primary title of the manga in varying languages
@@ -92,7 +92,7 @@ public class Manga : MangaDexModel<Manga.AttributesModel>, IRelationshipModel
 		/// Any tags associated with this manga
 		/// </summary>
 		[JsonPropertyName("tags")]
-		public Tag[] Tags { get; set; } = Array.Empty<Tag>();
+		public MangaTag[] Tags { get; set; } = Array.Empty<MangaTag>();
 
 		/// <summary>
 		/// The publication state of the manga
@@ -135,42 +135,6 @@ public class Manga : MangaDexModel<Manga.AttributesModel>, IRelationshipModel
 		/// </summary>
 		[JsonPropertyName("latestUploadedChapter")]
 		public string LatestUploadedChapter { get; set; } = string.Empty;
-	}
-
-	/// <summary>
-	/// Represents a tag for a manga
-	/// </summary>
-	public class Tag : MangaDexModel<Tag.AttributesModel>
-	{
-		/// <summary>
-		/// All of the properties on this tag
-		/// </summary>
-		public class AttributesModel
-		{
-			/// <summary>
-			/// The name of the tag in varying languages
-			/// </summary>
-			[JsonPropertyName("name")]
-			public Localization Name { get; set; } = new();
-
-			/// <summary>
-			/// A description of the tag in varying languages
-			/// </summary>
-			[JsonPropertyName("description")]
-			public Localization Description { get; set; } = new();
-
-			/// <summary>
-			/// How to group the tags when displayed on the UI
-			/// </summary>
-			[JsonPropertyName("group")]
-			public string Group { get; set; } = string.Empty;
-
-			/// <summary>
-			/// The version of the request
-			/// </summary>
-			[JsonPropertyName("version")]
-			public int Version { get; set; }
-		}
 	}
 }
 

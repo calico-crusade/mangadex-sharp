@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a relationship between two manga
 /// </summary>
-public class MangaRelationship : MangaDexModel<MangaRelationship.AttributesModel>, IRelationshipModel
+public class MangaRelationship : MangaDexModel<MangaRelationship.MangaRelationshipAttributesModel>, IRelationshipModel
 {
 	/// <summary>
 	/// The related items
@@ -14,7 +14,7 @@ public class MangaRelationship : MangaDexModel<MangaRelationship.AttributesModel
 	/// <summary>
 	/// The properties of the relationship
 	/// </summary>
-	public class AttributesModel
+	public class MangaRelationshipAttributesModel
 	{
 		/// <summary>
 		/// The type of relationship

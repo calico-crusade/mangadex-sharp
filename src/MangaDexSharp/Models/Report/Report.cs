@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a report in the MD api
 /// </summary>
-public class Report : MangaDexModel<Report.AttributesModel>, IRelationshipModel
+public class Report : MangaDexModel<Report.ReportAttributesModel>, IRelationshipModel
 {
 	/// <summary>
 	/// All of the related items to the report
@@ -14,7 +14,7 @@ public class Report : MangaDexModel<Report.AttributesModel>, IRelationshipModel
 	/// <summary>
 	/// Any properties the report has
 	/// </summary>
-	public class AttributesModel
+	public class ReportAttributesModel
 	{
 		/// <summary>
 		/// The details of the report

@@ -21,12 +21,12 @@ public class Thread
 	/// Any properties of the thread
 	/// </summary>
 	[JsonPropertyName("attributes")]
-	public AttributesModel Attributes { get; set; } = new();
+	public ThreadAttributesModel Attributes { get; set; } = new();
 
 	/// <summary>
 	/// The properties of the thread
 	/// </summary>
-	public class AttributesModel
+	public class ThreadAttributesModel
 	{
 		/// <summary>
 		/// How many replies the thread has

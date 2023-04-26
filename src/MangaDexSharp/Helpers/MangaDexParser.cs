@@ -137,7 +137,7 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				["user"] = typeof(User),
 				["leader"] = typeof(User),
 				["member"] = typeof(User),
-				["tag"] = typeof(Manga.Tag),
+				["tag"] = typeof(MangaTag),
 				["chapter"] = typeof(Chapter)
 			})
 		};

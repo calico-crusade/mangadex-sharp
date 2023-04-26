@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a custom list of entities from the MD api
 /// </summary>
-public class CustomList : MangaDexModel<CustomList.AttributesModel>, IRelationshipModel
+public class CustomList : MangaDexModel<CustomList.CustomListAttributesModel>, IRelationshipModel
 {
 	/// <summary>
 	/// All of the related items for this list
@@ -14,7 +14,7 @@ public class CustomList : MangaDexModel<CustomList.AttributesModel>, IRelationsh
 	/// <summary>
 	/// All of the attributes the list has
 	/// </summary>
-	public class AttributesModel
+	public class CustomListAttributesModel
 	{
 		/// <summary>
 		/// The name of the list

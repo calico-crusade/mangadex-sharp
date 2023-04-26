@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a user in the MD api
 /// </summary>
-public class User : MangaDexModel<User.AttributesModel>, IRelationship, IRelationshipModel
+public class User : MangaDexModel<User.UserAttributesModel>, IRelationship, IRelationshipModel
 {
 	/// <summary>
 	/// All of the related items 
@@ -14,7 +14,7 @@ public class User : MangaDexModel<User.AttributesModel>, IRelationship, IRelatio
 	/// <summary>
 	/// The properties of the user
 	/// </summary>
-	public class AttributesModel
+	public class UserAttributesModel
 	{
 		/// <summary>
 		/// The user's name

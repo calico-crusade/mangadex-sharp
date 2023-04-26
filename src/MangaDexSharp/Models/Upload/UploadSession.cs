@@ -3,12 +3,12 @@
 /// <summary>
 /// Represents an upload sessions
 /// </summary>
-public class UploadSession : MangaDexModel<UploadSession.AttributesModel>
+public class UploadSession : MangaDexModel<UploadSession.UploadSessionAttributesModel>
 {
 	/// <summary>
 	/// The properties for this upload session
 	/// </summary>
-	public class AttributesModel
+	public class UploadSessionAttributesModel
 	{
 		/// <summary>
 		/// Whether or not the session has been committed yet

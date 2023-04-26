@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a scanlation group in the MD api
 /// </summary>
-public class ScanlationGroup : MangaDexModel<ScanlationGroup.AttributesModel>, IRelationship, IRelationshipModel
+public class ScanlationGroup : MangaDexModel<ScanlationGroup.ScanlationGroupAttributesModel>, IRelationship, IRelationshipModel
 {
 	/// <summary>
 	/// All of the related items to this group
@@ -14,7 +14,7 @@ public class ScanlationGroup : MangaDexModel<ScanlationGroup.AttributesModel>, I
 	/// <summary>
 	/// The properties of the scanlation group
 	/// </summary>
-	public class AttributesModel
+	public class ScanlationGroupAttributesModel
 	{
 		/// <summary>
 		/// The name of the group

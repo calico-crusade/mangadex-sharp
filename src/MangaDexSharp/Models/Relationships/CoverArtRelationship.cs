@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents the relationship between cover art and the parent manga
 /// </summary>
-public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.AttributesModel>, IRelationship, IRelationshipModel
+public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.CoverArtAttributesModel>, IRelationship, IRelationshipModel
 {
 	/// <summary>
 	/// All of the related items for the cover art
@@ -14,7 +14,7 @@ public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.Attribute
 	/// <summary>
 	/// All of the properties the cover art has
 	/// </summary>
-	public class AttributesModel
+	public class CoverArtAttributesModel
 	{
 		/// <summary>
 		/// The description of the cover art

@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a person in the MD api
 /// </summary>
-public class PersonRelationship : MangaDexModel<PersonRelationship.AttributesModel>, IRelationship, IRelationshipModel
+public class PersonRelationship : MangaDexModel<PersonRelationship.PersonRelationshipAttributesModel>, IRelationship, IRelationshipModel
 {
 	/// <summary>
 	/// Any relationships this person has
@@ -14,7 +14,7 @@ public class PersonRelationship : MangaDexModel<PersonRelationship.AttributesMod
 	/// <summary>
 	/// The properties of the person
 	/// </summary>
-	public class AttributesModel : AuthorCreate
+	public class PersonRelationshipAttributesModel : AuthorCreate
 	{
 		/// <summary>
 		/// The persons avatar
