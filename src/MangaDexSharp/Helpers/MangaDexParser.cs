@@ -34,12 +34,10 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 
 		//Create a clone of the reader so we don't mess with subsequent reads
 		Utf8JsonReader readerClone = reader;
-		//Validate we're starting an object
-		if (reader.TokenType != JsonTokenType.StartObject)
-			throw new JsonException();
+		var type = JsonSerializer.Deserialize<EmptyType>(ref readerClone, options);
 
 		//Read until we get to the `type` property
-		var typeName = ReadUntilType(readerClone);
+		var typeName = type?.Type ?? string.Empty;
 		//Ensure that it is a type we're expecting.
 		if (!map.ContainsKey(typeName))
 			throw new JsonException("Type is not present in type map");
@@ -70,53 +68,6 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 		var pureType = map[value.Type];
 		//Serialize the results to JSON
 		JsonSerializer.Serialize(writer, value, pureType, options);
-	}
-
-	/// <summary>
-	/// Keeps reading from the JSON reader until it hits the `type` property
-	/// </summary>
-	/// <param name="reader">The reader to read from</param>
-	/// <returns></returns>
-	public string ReadUntilType(Utf8JsonReader reader)
-	{
-		while (true)
-		{
-			reader.Read();
-			var (name, value) = ReadProperty(reader);
-			if (name == "type") return value ?? string.Empty;
-			reader.Read();
-		}
-	}
-
-	/// <summary>
-	/// Reads the value of a property from the JSON reader
-	/// </summary>
-	/// <param name="reader"></param>
-	/// <returns></returns>
-	/// <exception cref="JsonException"></exception>
-	public (string? name, string? value) ReadProperty(Utf8JsonReader reader)
-	{
-		//Skip over the previous property value
-		if (reader.TokenType == JsonTokenType.String)
-			reader.GetString();
-
-		//Ensure we're looking at the property name
-		if (reader.TokenType != JsonTokenType.PropertyName)
-			throw new JsonException();
-
-		//Read the name from the property
-		var name = reader.GetString();
-
-		//Advance until we hit the next token
-		reader.Read();
-		//Ensure the token is a string 
-		if (reader.TokenType != JsonTokenType.String)
-			throw new JsonException();
-
-		//Read the value of the token
-		var value = reader.GetString();
-		//Return the property name and value
-		return (name, value);
 	}
 
 	/// <summary>
@@ -155,6 +106,12 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				return map;
 
 		return null;
+	}
+
+	internal class EmptyType
+	{
+		[JsonPropertyName("type")]
+		public string Type { get; set; } = string.Empty;
 	}
 }
 
