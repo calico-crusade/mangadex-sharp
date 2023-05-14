@@ -19,6 +19,11 @@ public interface IJsonType
 public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 {
 	/// <summary>
+	/// Whether or not to ignore missing type maps.
+	/// </summary>
+	public static bool IgnoreMapErrors { get; set; } = true;
+
+	/// <summary>
 	/// Reads the object from the JSON reader
 	/// </summary>
 	/// <param name="reader">The reader to read from</param>
@@ -29,7 +34,14 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 	public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
 		//Get a map of all of the types we can deserialize
-		var actualMap = GetTypeMap() ?? throw new JsonException("Type is not present in types list");
+		var actualMap = GetTypeMap();
+
+		if (actualMap == null)
+		{
+			if (IgnoreMapErrors) return default;
+
+			throw new JsonException("Type is not present in types list");
+		}
 		var (_, map) = actualMap;
 
 		//Create a clone of the reader so we don't mess with subsequent reads
@@ -40,7 +52,11 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 		var typeName = type?.Type ?? string.Empty;
 		//Ensure that it is a type we're expecting.
 		if (!map.ContainsKey(typeName))
+		{
+			if (IgnoreMapErrors) return default;
+
 			throw new JsonException("Type is not present in type map");
+		}
 
 		//Get the actual C# POCO that represents the type from the map
 		var pureType = map[typeName];
@@ -87,6 +103,7 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				["scanlation_group"] = typeof(ScanlationGroup),
 				["user"] = typeof(User),
 				["leader"] = typeof(User),
+				["creator"] = typeof(User),
 				["member"] = typeof(User),
 				["tag"] = typeof(MangaTag),
 				["chapter"] = typeof(Chapter)

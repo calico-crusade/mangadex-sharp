@@ -41,5 +41,9 @@ public enum MangaIncludes
 	/// <summary>
 	/// Returns any custom list objects
 	/// </summary>
-	custom_list
+	custom_list,
+	/// <summary>
+	/// Returns any user objects for the creator
+	/// </summary>
+	creator,
 }
