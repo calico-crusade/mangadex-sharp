@@ -105,7 +105,6 @@ public static class Extensions
 	private static IServiceCollection AddBaseMangaDex(this IServiceCollection services)
 	{
 		return services
-			.AddCardboardHttp()
 			.AddTransient<IMangaDex, MangaDex>()
 
 			.AddTransient<IMangaDexMangaService, MangaDexMangaService>()

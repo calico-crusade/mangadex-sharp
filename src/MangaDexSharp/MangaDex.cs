@@ -1,4 +1,6 @@
-﻿namespace MangaDexSharp;
+﻿using CardboardBox.Json;
+
+namespace MangaDexSharp;
 
 /// <summary>
 /// Represents an instance of the MangaDex API
@@ -237,7 +239,9 @@ public class MangaDex : IMangaDex
 	public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null)
 	{
 		var create = new ServiceCollection()
-			.AddMangaDex(token ?? string.Empty, apiUrl);
+			.AddMangaDex(token ?? string.Empty, apiUrl)
+			.AddCardboardHttp()
+			.AddJson();
 
 		config?.Invoke(create);
 
