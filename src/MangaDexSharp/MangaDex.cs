@@ -229,17 +229,18 @@ public class MangaDex : IMangaDex
 		User = user;
 	}
 
-	/// <summary>
-	/// Creates an isolated instance of the MangaDex API 
-	/// </summary>
-	/// <param name="token">The optional authentication token</param>
-	/// <param name="apiUrl">The optional api URL</param>
-	/// <param name="config">The optional configuration action</param>
-	/// <returns>The instance of the MangaDex API</returns>
-	public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null)
+    /// <summary>
+    /// Creates an isolated instance of the MangaDex API 
+    /// </summary>
+    /// <param name="token">The optional authentication token</param>
+    /// <param name="apiUrl">The optional api URL</param>
+    /// <param name="config">The optional configuration action</param>
+    /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
+    /// <returns>The instance of the MangaDex API</returns>
+    public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null, string? userAgent = null)
 	{
 		var create = new ServiceCollection()
-			.AddMangaDex(token ?? string.Empty, apiUrl)
+			.AddMangaDex(token ?? string.Empty, apiUrl, userAgent)
 			.AddCardboardHttp()
 			.AddJson();
 
