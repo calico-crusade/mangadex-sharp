@@ -63,15 +63,13 @@ public interface IMangaDexScanlationGroupService
 
 internal class MangaDexScanlationGroupService : IMangaDexScanlationGroupService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/group";
+	public string Root => $"group";
 
-	public MangaDexScanlationGroupService(IApiService api, ICredentialsService creds)
+	public MangaDexScanlationGroupService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<ScanlationGroupList> List(ScanlationGroupFilter? filter = null)
@@ -83,7 +81,7 @@ internal class MangaDexScanlationGroupService : IMangaDexScanlationGroupService
 
 	public async Task<MangaDexRoot<ScanlationGroup>> Create(ScanlationGroupCreate group, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<ScanlationGroup>, ScanlationGroupCreate>(Root, group, c) ?? new() { Result = "error" };
 	}
 
@@ -95,28 +93,28 @@ internal class MangaDexScanlationGroupService : IMangaDexScanlationGroupService
 
 	public async Task<MangaDexRoot<ScanlationGroup>> Update(string id, ScanlationGroupUpdate group, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var url = $"{Root}/{id}";
 		return await _api.Put<MangaDexRoot<ScanlationGroup>, ScanlationGroupUpdate>(url, group, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Delete(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var url = $"{Root}/{id}";
 		return await _api.Delete<MangaDexRoot>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Follow(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var url = $"{Root}/{id}/follow";
 		return await _api.Post<MangaDexRoot, MangaDexEmpty>(url, new MangaDexEmpty(), c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Unfollow(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var url = $"{Root}/{id}/follow";
 		return await _api.Delete<MangaDexRoot>(url, c) ?? new() { Result = "error" };
 	}

@@ -55,20 +55,18 @@ public interface IMangaDexUserService
 
 internal class MangaDexUserService : IMangaDexUserService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/user";
+	public string Root => $"user";
 
-	public MangaDexUserService(IApiService api, ICredentialsService creds)
+	public MangaDexUserService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<UserList> List(UserFilter? filter = null, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var url = $"{Root}?{(filter ?? new()).BuildQuery()}";
 		return await _api.Get<UserList>(url, c) ?? new() { Result = "error" };
 	}
@@ -80,14 +78,14 @@ internal class MangaDexUserService : IMangaDexUserService
 
 	public async Task<MangaDexRoot<User>> Me(string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Get<MangaDexRoot<User>>($"{Root}/me", c) ?? new() { Result = "error" };
 	}
 
 	[Obsolete]
 	public async Task<LoginResult> Login(LoginRequest request)
 	{
-		return await _api.Post<LoginResult, LoginRequest>($"{_creds.ApiUrl}/auth/login", request) ?? new() { Result = "error" };
+		return await _api.Post<LoginResult, LoginRequest>($"auth/login", request) ?? new() { Result = "error" };
 	}
 
 	[Obsolete]
@@ -100,7 +98,7 @@ internal class MangaDexUserService : IMangaDexUserService
 	public async Task<LoginResult> Refresh(string token)
 	{
 		var request = new RefreshRequest { Refresh = token };
-		return await _api.Post<LoginResult, RefreshRequest>($"{_creds.ApiUrl}/auth/refresh", request) ?? new() { Result = "error" };
+		return await _api.Post<LoginResult, RefreshRequest>($"auth/refresh", request) ?? new() { Result = "error" };
 	}
 }
 

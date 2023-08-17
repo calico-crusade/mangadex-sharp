@@ -11,9 +11,11 @@
 
 		public string ApiUrl => Extensions.API_DEV_ROOT;
 
-		public Task<string> GetToken()
+		public string UserAgent => Extensions.API_USER_AGENT;
+
+		public Task<string?> GetToken()
 		{
-			var token = _context.HttpContext?.Request.Cookies["access_token"] ?? string.Empty;
+			var token = _context.HttpContext?.Request.Cookies["access_token"];
 			return Task.FromResult(token);
 		}
 	}

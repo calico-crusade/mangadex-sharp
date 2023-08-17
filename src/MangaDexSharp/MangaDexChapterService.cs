@@ -49,15 +49,13 @@ public interface IMangaDexChapterService
 
 internal class MangaDexChapterService : IMangaDexChapterService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/chapter";
+	public string Root => $"chapter";
 
-	public MangaDexChapterService(IApiService api, ICredentialsService creds)
+	public MangaDexChapterService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<ChapterList> List(ChaptersFilter? filter = null)
@@ -86,13 +84,13 @@ internal class MangaDexChapterService : IMangaDexChapterService
 
 	public async Task<MangaDexRoot<Chapter>> Update(string id, ChapterUpdate update, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Put<MangaDexRoot<Chapter>, ChapterUpdate>($"{Root}/{id}", update, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Delete(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}", c) ?? new() { Result = "error" };
 	}
 }

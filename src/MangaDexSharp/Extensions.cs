@@ -18,6 +18,11 @@ public static class Extensions
 	public const string API_DEV_ROOT = "https://api.mangadex.dev";
 
 	/// <summary>
+	/// The user agent to use for all requests
+	/// </summary>
+	public const string API_USER_AGENT = "manga-dex-sharp";
+
+	/// <summary>
 	/// An array of all of the available content ratings
 	/// </summary>
 	public static ContentRating[] ContentRatingsAll => new[]
@@ -106,6 +111,7 @@ public static class Extensions
 	{
 		return services
 			.AddTransient<IMangaDex, MangaDex>()
+			.AddTransient<IMdApiService, MdApiService>()
 
 			.AddTransient<IMangaDexMangaService, MangaDexMangaService>()
 			.AddTransient<IMangaDexChapterService, MangaDexChapterService>()
@@ -137,17 +143,18 @@ public static class Extensions
 		return services.AddMangaDex<ConfigurationCredentialsService>();
 	}
 
-	/// <summary>
-	/// Adds the MangaDex API with the associated authentication token and API url to the given service collection
-	/// </summary>
-	/// <param name="services">The service collection to inject into</param>
-	/// <param name="token">The user's authentication token</param>
-	/// <param name="apiUrl">The API url for the MangaDex environment (see <see cref="API_ROOT"/> or <see cref="API_DEV_ROOT"/>)</param>
-	/// <returns>The service collection for chaining</returns>
-	public static IServiceCollection AddMangaDex(this IServiceCollection services, string token, string? apiUrl = null)
+    /// <summary>
+    /// Adds the MangaDex API with the associated authentication token and API url to the given service collection
+    /// </summary>
+    /// <param name="services">The service collection to inject into</param>
+    /// <param name="token">The user's authentication token</param>
+    /// <param name="apiUrl">The API url for the MangaDex environment (see <see cref="API_ROOT"/> or <see cref="API_DEV_ROOT"/>)</param>
+    /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
+    /// <returns>The service collection for chaining</returns>
+    public static IServiceCollection AddMangaDex(this IServiceCollection services, string token, string? apiUrl = null, string? userAgent = null)
 	{
 		return services
-			.AddMangaDex(new HardCodedCredentialsService(token, apiUrl));
+			.AddMangaDex(new HardCodedCredentialsService(token, apiUrl, userAgent));
 	}
 
 	/// <summary>

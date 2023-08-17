@@ -32,34 +32,32 @@ public interface IMangaDexReportService
 
 internal class MangaDexReportService : IMangaDexReportService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/report";
+	public string Root => $"report";
 
-	public MangaDexReportService(IApiService api, ICredentialsService creds)
+	public MangaDexReportService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<ReportReasonList> Reasons(ReportCategory category, string? token = null)
 	{
-		var c = await Auth(token, _creds, true);
+		var c = await _api.Auth(token, true);
 		var url = $"{Root}/reasons/{category}";
 		return await _api.Get<ReportReasonList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<ReportList> Reports(ReportFilter? filters = null, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var url = $"{Root}?{(filters ?? new()).BuildQuery()}";
 		return await _api.Get<ReportList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Create(ReportCreate report, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot, ReportCreate>(Root, report, c) ?? new() { Result = "error" };
 	}
 }

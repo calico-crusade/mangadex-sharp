@@ -79,26 +79,24 @@ public interface IMangaDexUploadService
 
 internal class MangaDexUploadService : IMangaDexUploadService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/upload";
+	public string Root => $"upload";
 
-	public MangaDexUploadService(IApiService api, ICredentialsService creds)
+	public MangaDexUploadService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<MangaDexRoot<UploadSession>> Get(string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Get<MangaDexRoot<UploadSession>>(Root, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<UploadSession>> Begin(string manga, string[] groups, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var d = new UploadSessionCreate
 		{
 			Manga = manga,
@@ -109,7 +107,7 @@ internal class MangaDexUploadService : IMangaDexUploadService
 
 	public async Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var d = new EditChapterCreate
 		{
 			Version = version
@@ -125,7 +123,7 @@ internal class MangaDexUploadService : IMangaDexUploadService
 		if (files.Length > 10)
 			throw new ArgumentException("There is a limit of 10 files at a tile for uploads", nameof(files));
 
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		using var body = new MultipartFormDataContent();
 
 		for(var i = 0; i < files.Length; i++)
@@ -143,13 +141,13 @@ internal class MangaDexUploadService : IMangaDexUploadService
 
 	public async Task<MangaDexRoot> DeleteUpload(string sessionId, string fileId, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{sessionId}/{fileId}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> DeleteUpload(string sessionId, string[] fileIds, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 
 		return await _api.Create($"{Root}/{sessionId}/batch", "DELETE")
 			.With(c)
@@ -159,13 +157,13 @@ internal class MangaDexUploadService : IMangaDexUploadService
 
 	public async Task<MangaDexRoot> Abandon(string sessionId, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{sessionId}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<Chapter>> Commit(string sessionId, UploadSessionCommit data, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<Chapter>, UploadSessionCommit>($"{Root}/{sessionId}/commit", data, c) ?? new() { Result = "error" };
 
 	}

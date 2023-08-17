@@ -57,15 +57,13 @@ public interface IMangaDexCoverArtService
 
 internal class MangaDexCoverArtService : IMangaDexCoverArtService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/cover";
+	public string Root => $"cover";
 
-	public MangaDexCoverArtService(IApiService api, ICredentialsService creds)
+	public MangaDexCoverArtService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<CoverArtList> List(CoverArtFilter? filter = null)
@@ -85,7 +83,7 @@ internal class MangaDexCoverArtService : IMangaDexCoverArtService
 
 	public async Task<MangaDexRoot<CoverArtRelationship>> Upload(string mangaOrCoverId, CoverArtCreate cover, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<CoverArtRelationship>, CoverArtCreate>($"{Root}/{mangaOrCoverId}", cover, c) ??
 			new() { Result = "error" };
 	}
@@ -97,14 +95,14 @@ internal class MangaDexCoverArtService : IMangaDexCoverArtService
 
 	public async Task<MangaDexRoot<CoverArtRelationship>> Update(string mangaOrCoverId, CoverArtUpdate cover, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Put<MangaDexRoot<CoverArtRelationship>, CoverArtUpdate>($"{Root}/{mangaOrCoverId}", cover, c) ??
 			new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Delete(string mangaOrCoverId, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{mangaOrCoverId}", c) ?? new() { Result = "error" };
 	}
 }

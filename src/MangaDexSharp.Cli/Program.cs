@@ -14,6 +14,9 @@ var api = MangaDex.Create(config: (c) =>
 	});
 });
 
+var chapter = await api.Chapter.Get("158f54ed-9983-406d-b882-208858288874");
+Console.WriteLine("Chapter: " + chapter.Data.Attributes.Title);
+
 var group = await api.ScanlationGroup.List(new ScanlationGroupFilter
 {
 	Name = "europaisacoolmoon"

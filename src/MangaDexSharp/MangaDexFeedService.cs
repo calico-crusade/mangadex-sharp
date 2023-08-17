@@ -24,27 +24,25 @@ public interface IMangaDexFeedService
 
 internal class MangaDexFeedService : IMangaDexFeedService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public MangaDexFeedService(IApiService api, ICredentialsService creds)
+	public MangaDexFeedService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<ChapterList> User(ChaptersFilter? filter = null, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		filter ??= new ChaptersFilter();
-		var url = $"{_creds.ApiUrl}/user/follows/manga/feed?{filter.BuildQuery()}";
+		var url = $"user/follows/manga/feed?{filter.BuildQuery()}";
 		return await _api.Get<ChapterList>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<ChapterList> List(string listId, ChaptersFilter? filter = null)
 	{
 		filter ??= new ChaptersFilter();
-		var url = $"{_creds.ApiUrl}/list/{listId}/feed?{filter.BuildQuery()}";
+		var url = $"list/{listId}/feed?{filter.BuildQuery()}";
 		return await _api.Get<ChapterList>(url) ?? new() { Result = "error" };
 	}
 }

@@ -46,31 +46,27 @@ public interface IMangaDexReadMarkerService
 
 internal class MangaDexReadMarkerService : IMangaDexReadMarkerService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => _creds.ApiUrl;
-
-	public MangaDexReadMarkerService(IApiService api, ICredentialsService creds)
+	public MangaDexReadMarkerService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<ReadMarkerList> Read(string mangaId, string? token = null)
 	{
-		var c = await Auth(token, _creds);
-		return await _api.Get<ReadMarkerList>($"{Root}/manga/{mangaId}/read", c) ?? new() { Result = "error" };
+		var c = await _api.Auth(token);
+		return await _api.Get<ReadMarkerList>($"manga/{mangaId}/read", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<ReadMarkerList> Read(string[] mangaIds, bool grouped = true, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var bob = new FilterBuilder()
 			.Add("ids", mangaIds)
 			.Add("grouped", grouped)
 			.Build();
-		var url = $"{Root}/manga/read?{bob}";
+		var url = $"manga/read?{bob}";
 		return await _api.Get<ReadMarkerList>(url, c) ?? new() { Result = "error" };
 	}
 
@@ -86,8 +82,8 @@ internal class MangaDexReadMarkerService : IMangaDexReadMarkerService
 
 	public async Task<MangaDexRoot> BatchUpdate(string mangaId, ReadMarkerBatchUpdate update, bool updateHistory = true, string? token = null)
 	{
-		var c = await Auth(token, _creds);
-		var url = $"{Root}/manga/{mangaId}/read?updateHistory={updateHistory}";
+		var c = await _api.Auth(token);
+		var url = $"manga/{mangaId}/read?updateHistory={updateHistory}";
 		return await _api.Post<MangaDexRoot, ReadMarkerBatchUpdate>(url, update, c) ?? new() { Result = "error" };
 	}
 }

@@ -56,15 +56,13 @@ public interface IMangaDexAuthorService
 
 internal class MangaDexAuthorService : IMangaDexAuthorService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/author";
+	public string Root => $"author";
 
-	public MangaDexAuthorService(IApiService api, ICredentialsService creds)
+	public MangaDexAuthorService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<PersonList> List(AuthorFilter? filter = null)
@@ -84,7 +82,7 @@ internal class MangaDexAuthorService : IMangaDexAuthorService
 
 	public async Task<MangaDexRoot<PersonRelationship>> Create(AuthorCreate author, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<PersonRelationship>, AuthorCreate>(Root, author, c) ?? new() {  Result = "error" };
 	}
 
@@ -95,13 +93,13 @@ internal class MangaDexAuthorService : IMangaDexAuthorService
 
 	public async Task<MangaDexRoot<PersonRelationship>> Update(string id, AuthorCreate author, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Put<MangaDexRoot<PersonRelationship>, AuthorCreate>($"{Root}/{id}", author, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Delete(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}", c) ?? new() { Result = "error" };
 	}
 }

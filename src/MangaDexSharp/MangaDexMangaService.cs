@@ -190,15 +190,13 @@ public interface IMangaDexMangaService
 
 internal class MangaDexMangaService : IMangaDexMangaService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/manga";
+	public string Root => $"manga";
 
-	public MangaDexMangaService(IApiService api, ICredentialsService creds)
+	public MangaDexMangaService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<MangaList> List(MangaFilter? filter = null)
@@ -227,7 +225,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot<Manga>> Create(MangaCreate manga, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<Manga>, MangaCreate>(Root, manga, c) ??
 			new()
 			{
@@ -258,7 +256,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot<Manga>> Update(string id, MangaCreate manga, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Put<MangaDexRoot<Manga>, MangaCreate>($"{Root}/{id}", manga, c) ??
 			new()
 			{
@@ -269,19 +267,19 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot> Delete(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Unfollow(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}/follow", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Follow(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"{Root}/{id}/follow", new MangaDexEmpty(), c) ?? new() { Result = "error" };
 	}
 
@@ -304,7 +302,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaReadStatuses> Status(ReadStatus? status = null, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 
 		var url = $"{Root}/status";
 		if (status != null)
@@ -315,13 +313,13 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaReadStatuses> Status(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Get<MangaReadStatuses>($"{Root}/{id}/status", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Status(string id, ReadStatus? status, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot, MangaReadStatusPush>($"{Root}/{id}/status", new MangaReadStatusPush
 		{
 			Status = status
@@ -331,7 +329,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 	public async Task<MangaDexRoot<Manga>> Draft(string id, MangaIncludes[]? includes = null, string? token = null)
 	{
 		includes ??= new[] { MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.artist, MangaIncludes.tag };
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var bob = new FilterBuilder()
 			.Add("includes", includes)
 			.Build();
@@ -340,7 +338,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot<Manga>> DraftCommit(string id, int version = 1, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<Manga>, MangaCommit>($"{Root}/draft/{id}/commit", 
 			new MangaCommit {  Version = version }, c) ?? new() { Result = "error" };
 	}
@@ -348,7 +346,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 	public async Task<MangaList> Drafts(MangaDraftFilter? filter = null, string? token = null)
 	{
 		filter ??= new();
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Get<MangaList>($"{Root}/draft?{filter.BuildQuery()}", c) ?? new();
 	}
 
@@ -359,7 +357,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot<MangaRelationship>> Relation(string id, Relationships relation, string target, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		var rel = new MangaRelation
 		{
 			TargetManga = target,
@@ -370,7 +368,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot> RelationDelete(string mangaId, string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{mangaId}/relation/{id}", c) ?? new() { Result = "error" };
 	}
 }

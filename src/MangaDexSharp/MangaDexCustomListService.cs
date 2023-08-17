@@ -93,20 +93,18 @@ public interface IMangaDexCustomListService
 
 internal class MangaDexCustomListService : IMangaDexCustomListService
 {
-	private readonly IApiService _api;
-	private readonly ICredentialsService _creds;
+	private readonly IMdApiService _api;
 
-	public string Root => $"{_creds.ApiUrl}/list";
+	public string Root => $"list";
 
-	public MangaDexCustomListService(IApiService api, ICredentialsService creds)
+	public MangaDexCustomListService(IMdApiService api)
 	{
 		_api = api;
-		_creds = creds;
 	}
 
 	public async Task<MangaDexRoot<CustomList>> Create(CustomListCreate create, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<CustomList>, CustomListCreate>(Root, create, c) ?? new() { Result = "error" };
 	}
 
@@ -118,48 +116,48 @@ internal class MangaDexCustomListService : IMangaDexCustomListService
 
 	public async Task<MangaDexRoot<CustomList>> Update(string id, CustomListCreate create, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<CustomList>, CustomListCreate>($"{Root}/{id}", create, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Delete(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot<CustomList>>($"{Root}/{id}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Follow(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"{Root}/{id}/follow", new MangaDexEmpty { }, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Unfollow(string id, string? token = null)
 	{
-		var c = await Auth(token, _creds);
+		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}/follow", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token = null)
 	{
-		var c = await Auth(token, _creds);
-		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"{_creds.ApiUrl}/manga/{mangaId}/list/{listId}", new MangaDexEmpty { }, c) ?? new() { Result = "error" };
+		var c = await _api.Auth(token);
+		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"manga/{mangaId}/list/{listId}", new MangaDexEmpty { }, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token = null)
 	{
-		var c = await Auth(token, _creds);
-		return await _api.Delete<MangaDexRoot>($"{_creds.ApiUrl}/manga/{mangaId}/list/{listId}", c) ?? new() { Result = "error" };
+		var c = await _api.Auth(token);
+		return await _api.Delete<MangaDexRoot>($"manga/{mangaId}/list/{listId}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<CustomListList> List(int limit = 100, int offset = 0, string? token = null)
 	{
-		var c = await Auth(token, _creds);
-		return await _api.Get<CustomListList>($"{_creds.ApiUrl}/user/list?limit={limit}&offset={offset}", c) ?? new() { Result = "error" };
+		var c = await _api.Auth(token);
+		return await _api.Get<CustomListList>($"user/list?limit={limit}&offset={offset}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<CustomListList> List(string userId, int limit = 100, int offset = 0)
 	{
-		return await _api.Get<CustomListList>($"{_creds.ApiUrl}/user/{userId}/list?limit={limit}&offset={offset}") ?? new() { Result = "error" };
+		return await _api.Get<CustomListList>($"user/{userId}/list?limit={limit}&offset={offset}") ?? new() { Result = "error" };
 	}
 }
