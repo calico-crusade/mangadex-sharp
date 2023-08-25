@@ -179,3 +179,59 @@ var api = MangaDex.Create();
 //Follow a manga
 await api.Manga.Follow("fc0a7b86-992e-4126-b30f-ca04811979bf", "<AUTH TOKEN HERE>");
 ```
+
+## Configuration options
+There are a number of different configuration options (namely: the API URL, authentication token, and the User-Agent) that you can set.
+
+These can all be set in a few different ways:
+* Via a configuration file (appsettings.json)
+* Via the `MangaDex.Create()` method
+* Via the DI services injector `IServiceCollection.AddMangaDex()`
+* Or via a custom `ICredentialsService`.
+
+Below is an example of how to do each of them:
+```csharp
+//With MangaDex.Create():
+var api = MangaDex.Create(
+    token: "Some Token", 
+    userAgent: "Some-Fancy-User-Agent",
+    apiUrl: "https://api.mangadex.dev",
+    config: (services) => {
+        //This can be used to override any service within the library.
+    });
+
+//With DI services:
+services
+    .AddMangaDex(
+        token: "Some Token", 
+        userAgent: "Some-Fancy-User-Agent":
+        apiUrl: "https://api.mangadex.dev");
+
+//With a custom ICredentialsService
+public class SomeCredsService : ICredentialsService
+{
+    ...
+    public string? Token => "Some Token";
+    public string ApiUrl => "https://api.mangadex.dev";
+    public string UserAgent => "Some-Fancy-User-Agent";
+    ...
+}
+...
+services.AddMangaDex<SomeCredsService>(); //This will tell MD# to use your custom credentials service.
+
+//From configuration file (appsettings.json)
+{
+    "Mangadex": {
+        "Token": "Some-Token",
+        "UserAgent": "Some-Fancy-User-Agent",
+        "ApiUrl": "https://api.mangadex.dev"
+    }
+}
+```
+
+For the last option, if you want to change the [configuration keys](https://github.com/calico-crusade/mangadex-sharp/blob/1f09a1aceef0a79d7553c45b69cd401b5ed888bb/src/MangaDexSharp/CredentialsService.cs#L28) that the application loads the variables from, you can change the following static properties:
+```csharp
+ConfigurationCredentialsService.TokenPath = "SomeOther:Path:ToThe:Token";
+ConfigurationCredentialsService.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
+ConfigurationCredentialsService.ApiUrlPath = "SomeOther:Path:ToThe:ApiUrl";
+```
