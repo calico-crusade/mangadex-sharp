@@ -233,5 +233,5 @@ For the last option, if you want to change the [configuration keys](https://gith
 ```csharp
 ConfigurationCredentialsService.TokenPath = "SomeOther:Path:ToThe:Token";
 ConfigurationCredentialsService.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
-ConfigurationCredentialsService.ApiUrlPath = "SomeOther:Path:ToThe:ApiUrl";
+ConfigurationCredentialsService.ApiPath = "SomeOther:Path:ToThe:ApiUrl";
 ```
