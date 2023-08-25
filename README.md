@@ -1,6 +1,15 @@
 # mangadex-sharp
 A C# API for Mangadex.org
 
+## Notice: User-Agent requirements
+In the latest release of MDSharp, the ability to specify a user agent was added (before it would use the default one with no way to change it). 
+
+However, User-Agent spoofing is greatly discouraged, and you should always identify your application uniquely. There is no benefit to spoofing the User-Agent as all clients regardless of the UA specified are subject to the same limitations (rate-limits etc). 
+
+There are demirits to spoofing the User-Agent; as hiding automated traffic can get you banned from the service once you are detected, as it will be assumed you have malicious intent. And it's not like MD frowns upon automated traffic anyway... They wouldn't have a publicly available API if they did. 
+
+On another note, please ensure that you are following the acceptable usage policy on the [API documentation site.](https://api.mangadex.org/docs/#acceptable-usage-policy) 
+
 ## Installation
 You can install the nuget package with Visual Studio. It targets .net standard 2.1 to take advantage of most of the new features within C# and .net.
 
