@@ -236,11 +236,12 @@ public class MangaDex : IMangaDex
     /// <param name="apiUrl">The optional api URL</param>
     /// <param name="config">The optional configuration action</param>
     /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
+	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
     /// <returns>The instance of the MangaDex API</returns>
-    public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null, string? userAgent = null)
+    public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null, string? userAgent = null, bool throwOnError = false)
 	{
 		var create = new ServiceCollection()
-			.AddMangaDex(token ?? string.Empty, apiUrl, userAgent)
+			.AddMangaDex(token ?? string.Empty, apiUrl, userAgent, throwOnError)
 			.AddCardboardHttp()
 			.AddJson();
 

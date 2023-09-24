@@ -150,11 +150,12 @@ public static class Extensions
     /// <param name="token">The user's authentication token</param>
     /// <param name="apiUrl">The API url for the MangaDex environment (see <see cref="API_ROOT"/> or <see cref="API_DEV_ROOT"/>)</param>
     /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
+	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
     /// <returns>The service collection for chaining</returns>
-    public static IServiceCollection AddMangaDex(this IServiceCollection services, string token, string? apiUrl = null, string? userAgent = null)
+    public static IServiceCollection AddMangaDex(this IServiceCollection services, string token, string? apiUrl = null, string? userAgent = null, bool throwOnError = false)
 	{
 		return services
-			.AddMangaDex(new HardCodedCredentialsService(token, apiUrl, userAgent));
+			.AddMangaDex(new HardCodedCredentialsService(token, apiUrl, userAgent, throwOnError));
 	}
 
 	/// <summary>

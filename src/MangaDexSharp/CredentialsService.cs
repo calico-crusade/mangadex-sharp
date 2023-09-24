@@ -20,6 +20,11 @@ public interface ICredentialsService
     /// </summary>
     /// <returns>The user's authentication token</returns>
     Task<string?> GetToken();
+
+	/// <summary>
+	/// Whether or not to throw an exception if the API returns an error
+	/// </summary>
+	bool ThrowOnError { get; }
 }
 
 /// <summary>
@@ -45,6 +50,11 @@ public class ConfigurationCredentialsService : ICredentialsService
 	public static string UserAgentPath { get; set; } = "Mangadex:UserAgent";
 
 	/// <summary>
+	/// Where to fetch the ThrowOnError flag from in the config file
+	/// </summary>
+	public static string ErrorThrownPath { get; set; } = "Mangadex:ThrowOnError";
+
+	/// <summary>
 	/// The authentication token from the configuration file
 	/// </summary>
 	public string? Token => _config[TokenPath];
@@ -59,11 +69,16 @@ public class ConfigurationCredentialsService : ICredentialsService
     /// </summary>
     public string UserAgent => _config[UserAgentPath] ?? API_USER_AGENT;
 
-	/// <summary>
-	/// Represents a provider that fetches the <see cref="ICredentialsService"/> from the configuration
-	/// </summary>
-	/// <param name="config">The <see cref="IConfiguration"/> object to fetch the variables from</param>
-	public ConfigurationCredentialsService(IConfiguration config)
+    /// <summary>
+    /// Whether or not to throw an exception if the API returns an error
+    /// </summary>
+    public bool ThrowOnError => _config[ErrorThrownPath] == "true";
+
+    /// <summary>
+    /// Represents a provider that fetches the <see cref="ICredentialsService"/> from the configuration
+    /// </summary>
+    /// <param name="config">The <see cref="IConfiguration"/> object to fetch the variables from</param>
+    public ConfigurationCredentialsService(IConfiguration config)
 	{
 		_config = config;
 	}
@@ -99,16 +114,23 @@ public class HardCodedCredentialsService : ICredentialsService
 	public string UserAgent { get; set; }
 
     /// <summary>
+    /// Whether or not to throw an exception if the API returns an error
+    /// </summary>
+    public bool ThrowOnError { get; set; }
+
+    /// <summary>
     /// Represents a provider that stores the credentials in-memory
     /// </summary>
     /// <param name="token">The user's authentication token</param>
     /// <param name="apiUrl">The API url</param>
     /// <param name="userAgent">The User-Agent header to send with requests</param>
-    public HardCodedCredentialsService(string? token = null, string? apiUrl = null, string? userAgent = null)
+	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
+    public HardCodedCredentialsService(string? token = null, string? apiUrl = null, string? userAgent = null, bool throwOnError = false)
 	{
 		UserAgent = userAgent ?? API_USER_AGENT;
 		Token = token;
 		ApiUrl = apiUrl ?? API_ROOT;
+		ThrowOnError = throwOnError;
 	}
 
 	/// <summary>

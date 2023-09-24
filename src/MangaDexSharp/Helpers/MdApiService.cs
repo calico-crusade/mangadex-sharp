@@ -83,11 +83,18 @@ public class MdApiService : ApiService, IMdApiService
     /// <returns>The instance of the <see cref="IHttpBuilder"/></returns>
     public override IHttpBuilder Create(string url, IJsonService json, string method = "GET")
     {
-        return base
+        var res = base
             .Create(WrapUrl(url), json, method)
             .With(t =>
             {
                 t.Headers.Add("User-Agent", _creds.UserAgent);
             });
+
+        if (_creds.ThrowOnError)
+            res.FailWithThrow();
+        else
+            res.FailGracefully();
+
+        return res;
     }
 }
