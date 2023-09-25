@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace MangaDexSharp;
 
@@ -79,6 +80,8 @@ public interface IMangaDexUploadService
 
 internal class MangaDexUploadService : IMangaDexUploadService
 {
+	public const string CONTENT_TYPE_FILE = "application/octet-stream";
+
 	private readonly IMdApiService _api;
 
 	public string Root => $"upload";
@@ -121,7 +124,7 @@ internal class MangaDexUploadService : IMangaDexUploadService
 			throw new ArgumentException("At least 1 file is required for an upload", nameof(files));
 
 		if (files.Length > 10)
-			throw new ArgumentException("There is a limit of 10 files at a tile for uploads", nameof(files));
+			throw new ArgumentException("There is a limit of 10 files at a time for uploads", nameof(files));
 
 		var c = await _api.Auth(token);
 		using var body = new MultipartFormDataContent();
@@ -130,8 +133,18 @@ internal class MangaDexUploadService : IMangaDexUploadService
 		{
 			var file = files[i];
 			var data = await file.Content();
-			body.Add(new ByteArrayContent(data), "file" + (i + 1), file.FileName);
-		}
+			var fileContent = new ByteArrayContent(data);
+			fileContent.Headers.ContentType = new MediaTypeHeaderValue(CONTENT_TYPE_FILE);
+			fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+			{
+				Name = "file",
+				FileName = file.FileName
+			};
+            body.Add(fileContent, "file" + (i + 1), file.FileName);
+
+			foreach (var val in body.Headers.ContentType.Parameters.Where(t => t.Name == "boundary"))
+				val.Value = val.Value.Replace("\"", string.Empty);
+        }
 
 		return await _api.Create($"{Root}/{sessionId}", "POST")
 			.With(c)
