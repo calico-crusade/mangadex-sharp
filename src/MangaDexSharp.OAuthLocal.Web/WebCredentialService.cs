@@ -13,7 +13,9 @@
 
 		public string UserAgent => Extensions.API_USER_AGENT;
 
-		public Task<string?> GetToken()
+		public bool ThrowOnError => false;
+
+        public Task<string?> GetToken()
 		{
 			var token = _context.HttpContext?.Request.Cookies["access_token"];
 			return Task.FromResult(token);
