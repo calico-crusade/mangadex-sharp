@@ -50,13 +50,13 @@ public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelations
 		/// When the chapter was published
 		/// </summary>
 		[JsonPropertyName("publishAt")]
-		public DateTime PublishAt { get; set; }
+		public DateTime? PublishAt { get; set; }
 
 		/// <summary>
 		/// When the chapter is available to be read.
 		/// </summary>
 		[JsonPropertyName("readableAt")]
-		public DateTime ReadableAt { get; set; }
+		public DateTime? ReadableAt { get; set; }
 
 		/// <summary>
 		/// When the chapter was first created
