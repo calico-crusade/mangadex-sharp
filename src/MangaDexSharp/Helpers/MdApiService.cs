@@ -35,9 +35,9 @@ public class MdApiService : ApiService, IMdApiService
     /// <param name="logger"></param>
     /// <param name="creds"></param>
     public MdApiService(
-        IHttpClientFactory httpFactory, 
-        IJsonService json, 
-        ICacheService cache, 
+        IHttpClientFactory httpFactory,
+        IMdJsonService json,
+        IMdCacheService cache, 
         ILogger<ApiService> logger,
         ICredentialsService creds) : base(httpFactory, json, cache, logger)
     {

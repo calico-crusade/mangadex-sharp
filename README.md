@@ -15,7 +15,7 @@ PM> Install-Package MangaDexSharp
 
 ## Setup
 You can either use it directly or via dependency injection (for use with asp.net core).
-You will need to ensure that you register the `CardboardBox.Http` and `CardboardBox.Json` packages as well (see the example below).
+> **_NOTE:_** It is no longer necessary to manually register the `CardboardBox.Http` and `CardboardBox.Json` packages as of v1.0.20.
 
 ### Depdency Injection:
 ```csharp
@@ -27,15 +27,9 @@ var builder = WebApplication.CreateBuilder(args);
 ...
 
 //This will find the authentication token in your configuration file (appsettings.json) under: "MangaDex:Token"
-builder.Services
-    .AddMangaDex()
-    .AddJson()
-    .AddCardboardHttp(); 
+builder.Services.AddMangaDex(); 
 //Or, if you want to inject the token directly you can use this (You don't need both of these.):
-builder.Services
-    .AddMangaDex("<AUTH TOKEN HERE>")
-    .AddJson()
-    .AddCardboardHttp();
+builder.Services.AddMangaDex("<AUTH TOKEN HERE>");
 
 var app = builder.Build();
 ```

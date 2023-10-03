@@ -110,8 +110,11 @@ public static class Extensions
 	private static IServiceCollection AddBaseMangaDex(this IServiceCollection services)
 	{
 		return services
+			.AddHttpClient()
 			.AddTransient<IMangaDex, MangaDex>()
 			.AddTransient<IMdApiService, MdApiService>()
+			.AddTransient<IMdJsonService, MdJsonService>()
+			.AddTransient<IMdCacheService, MdCacheService>()
 
 			.AddTransient<IMangaDexMangaService, MangaDexMangaService>()
 			.AddTransient<IMangaDexChapterService, MangaDexChapterService>()
