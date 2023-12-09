@@ -26,19 +26,19 @@ public class ChapterDraft
 	/// <summary>
 	/// The volume ordinal
 	/// </summary>
-	[JsonPropertyName("volume")]
+	[JsonPropertyName("volume"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? Volume { get; set; }
 
 	/// <summary>
 	/// The chapter ordinal
 	/// </summary>
-	[JsonPropertyName("chapter")]
+	[JsonPropertyName("chapter"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? Chapter { get; set; }
 
 	/// <summary>
 	/// The title of the chapter
 	/// </summary>
-	[JsonPropertyName("title")]
+	[JsonPropertyName("title"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? Title { get; set; }
 
 	/// <summary>
@@ -50,12 +50,12 @@ public class ChapterDraft
 	/// <summary>
 	/// Whether or not the chapter is hosted externally
 	/// </summary>
-	[JsonPropertyName("externalUrl")]
+	[JsonPropertyName("externalUrl"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? ExternalUrl { get; set; }
 
 	/// <summary>
 	/// When the chapter is to be published
 	/// </summary>
-	[JsonPropertyName("publishAt")]
+	[JsonPropertyName("publishAt"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public DateTime? PublishAt { get; set; }
 }
