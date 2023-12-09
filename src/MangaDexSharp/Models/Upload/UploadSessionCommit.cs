@@ -50,12 +50,12 @@ public class ChapterDraft
 	/// <summary>
 	/// Whether or not the chapter is hosted externally
 	/// </summary>
-	[JsonPropertyName("externalUrl"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+	[JsonPropertyName("externalUrl")]
 	public string? ExternalUrl { get; set; }
 
 	/// <summary>
 	/// When the chapter is to be published
 	/// </summary>
-	[JsonPropertyName("publishAt"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+	[JsonPropertyName("publishAt")]
 	public DateTime? PublishAt { get; set; }
 }
