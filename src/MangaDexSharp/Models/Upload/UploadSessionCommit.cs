@@ -26,19 +26,19 @@ public class ChapterDraft
 	/// <summary>
 	/// The volume ordinal
 	/// </summary>
-	[JsonPropertyName("volume")]
+	[JsonPropertyName("volume"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? Volume { get; set; }
 
 	/// <summary>
 	/// The chapter ordinal
 	/// </summary>
-	[JsonPropertyName("chapter")]
+	[JsonPropertyName("chapter"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? Chapter { get; set; }
 
 	/// <summary>
 	/// The title of the chapter
 	/// </summary>
-	[JsonPropertyName("title")]
+	[JsonPropertyName("title"), JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 	public string? Title { get; set; }
 
 	/// <summary>
