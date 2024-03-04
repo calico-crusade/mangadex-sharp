@@ -104,10 +104,45 @@ var pages = await api.Pages.Pages("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
 
 ## Authentication
 MangaDex switched to authorization bearer tokens via an OAuth2 flow recently. 
-In order to access any resources that require an account, you will need to get one of those tokens (you can read more [here](https://api.mangadex.org/docs/authentication/) once they update the docs).
+In order to access any resources that require an account, you will need to get one of those tokens (you can read more [here](https://api.mangadex.org/docs/02-authentication/)).
 Once you have a bearer token, you can either add it at an API level or for a specific request, you can also create your own token service provider.
 
 > Note: You can see an example of how to fetch bearer tokens for the new OAuth2 flow in the `src/MangaDexSharp.OAuthLocal.Web` project.
+
+### OAuth2 Personal Clients:
+You can use the OAuth2 Personal client to fetch the session token like so:
+
+```csharp
+var api = MangaDex.Create();
+
+//You can get these from https://mangadex.org/settings under the "API Clients" tab.
+string clientId = "<client-id>"; 
+string clientSecret = "<client-secret>";
+
+//These are your mangadex.org account credentials
+string username = "<username>";
+string password = "<password>";
+
+//Request the tokens from the authorization service
+var auth = await api.Auth.Personal(clientId, clientSecret, username, password);
+var accessToken = auth.AccessToken;
+var refreshToken = auth.RefreshToken;
+
+var me = await api.User.Me(accessToken);
+
+//Or you can create an authenticated api
+var authedApi = MangaDex.Create(accessToken);
+var me = await authedApi.User.Me();
+
+//You can also refresh the token like so:
+var refreshed = await api.Auth.Refresh(refreshToken, clientId, clientSecret);
+var me = await api.User.Me(refreshed.AccessToken);
+```
+
+### OAuth2 Public Clients:
+These are not implemented yet on MangaDex, this library will be updated when they are.
+
+You can read more about them [here](https://api.mangadex.org/docs/02-authentication/public-clients/)
 
 ### Legacy Authentication method:
 You can use the legacy login method to fetch the session token like so:
@@ -228,4 +263,10 @@ For the last option, if you want to change the [configuration keys](https://gith
 ConfigurationCredentialsService.TokenPath = "SomeOther:Path:ToThe:Token";
 ConfigurationCredentialsService.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
 ConfigurationCredentialsService.ApiPath = "SomeOther:Path:ToThe:ApiUrl";
+ConfigurationCredentialsService.AuthPath = "SomeOther:Path:ToThe:AuthUrl";
+ConfigurationCredentialsService.ClientIdPath = "SomeOther:Path:ToThe:ClientId";
+ConfigurationCredentialsService.ClientSecretPath = "SomeOther:Path:ToThe:ClientSecret";
+ConfigurationCredentialsService.UsernamePath = "SomeOther:Path:ToThe:Username";
+ConfigurationCredentialsService.PasswordPath = "SomeOther:Path:ToThe:Password";
+ConfigurationCredentialsService.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
 ```

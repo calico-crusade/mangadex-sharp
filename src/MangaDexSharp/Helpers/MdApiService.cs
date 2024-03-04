@@ -63,7 +63,7 @@ public class MdApiService : ApiService, IMdApiService
     }
 
     /// <summary>
-    /// Adds the <see cref="ICredentialsService.ApiUrl"/> to the begining of the URL if it is not already present
+    /// Adds the <see cref="ICredentialsService.ApiUrl"/> to the beginning of the URL if it is not already present
     /// </summary>
     /// <param name="url">The URL to wrap</param>
     /// <returns>The wrapped URL</returns>

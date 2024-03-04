@@ -18,9 +18,19 @@ public static class Extensions
 	public const string API_DEV_ROOT = "https://api.mangadex.dev";
 
 	/// <summary>
-	/// The user agent to use for all requests
+	/// The base URL for the MangaDex authentication service
 	/// </summary>
-	public const string API_USER_AGENT = "manga-dex-sharp";
+	public const string AUTH_URL = "https://auth.mangadex.org";
+
+	/// <summary>
+	/// The base URL for the MangaDex developer authentication service
+	/// </summary>
+	public const string AUTH_DEV_URL = "https://auth.mangadex.dev";
+
+    /// <summary>
+    /// The user agent to use for all requests
+    /// </summary>
+    public const string API_USER_AGENT = "manga-dex-sharp";
 
 	/// <summary>
 	/// An array of all of the available content ratings
@@ -103,7 +113,7 @@ public static class Extensions
 	public static User[] Users(this IRelationshipModel? source)  => source.Relationship<User>();
 
 	/// <summary>
-	/// Adds all of the base mangadex services to the given service collection
+	/// Adds all of the base MangaDex services to the given service collection
 	/// </summary>
 	/// <param name="services">The service collection to inject to</param>
 	/// <returns>The service collection for chaining</returns>
@@ -133,11 +143,13 @@ public static class Extensions
 			.AddTransient<IMangaDexPageService, MangaDexMiscService>()
 			.AddTransient<IMangaDexRatingService, MangaDexMiscService>()
 			.AddTransient<IMangaDexThreadsService, MangaDexMiscService>()
-			.AddTransient<IMangaDexCaptchaService, MangaDexMiscService>();
+			.AddTransient<IMangaDexCaptchaService, MangaDexMiscService>()
+			
+			.AddTransient<IMangaDexAuthService, MangaDexAuthService>();
 	}
 	
 	/// <summary>
-	/// Adds the MangaDex API to the given service colleciton
+	/// Adds the MangaDex API to the given service collection
 	/// </summary>
 	/// <param name="services">The service collection to inject into</param>
 	/// <returns>The service collection for chaining</returns>
@@ -154,11 +166,28 @@ public static class Extensions
     /// <param name="apiUrl">The API url for the MangaDex environment (see <see cref="API_ROOT"/> or <see cref="API_DEV_ROOT"/>)</param>
     /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
 	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
+	/// <param name="authUrl">The url for the authentication service for auth.mangadex.org (see <see cref="AUTH_URL"/> or <see cref="AUTH_DEV_URL"/>)</param>
+	/// <param name="clientId">The client ID for the authorization endpoint</param>
+	/// <param name="clientSecret">The client secret for the authorization endpoint</param>
+	/// <param name="username">The username for the password grant OAuth2 requests</param>
+	/// <param name="password">The password for the password grant OAuth2 requests</param>
     /// <returns>The service collection for chaining</returns>
-    public static IServiceCollection AddMangaDex(this IServiceCollection services, string token, string? apiUrl = null, string? userAgent = null, bool throwOnError = false)
+    public static IServiceCollection AddMangaDex(
+		this IServiceCollection services, 
+		string token, 
+		string? apiUrl = null, 
+		string? userAgent = null, 
+		bool throwOnError = false,
+        string? authUrl = null,
+        string? clientId = null,
+        string? clientSecret = null,
+        string? username = null,
+        string? password = null)
 	{
 		return services
-			.AddMangaDex(new HardCodedCredentialsService(token, apiUrl, userAgent, throwOnError));
+			.AddMangaDex(new HardCodedCredentialsService(
+				token, apiUrl, userAgent, throwOnError, 
+				authUrl, clientId, clientSecret, username, password));
 	}
 
 	/// <summary>

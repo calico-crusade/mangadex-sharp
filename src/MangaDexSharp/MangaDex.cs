@@ -1,6 +1,4 @@
-﻿using CardboardBox.Json;
-
-namespace MangaDexSharp;
+﻿namespace MangaDexSharp;
 
 /// <summary>
 /// Represents an instance of the MangaDex API
@@ -91,6 +89,11 @@ public interface IMangaDex
 	/// All of the user endpoints
 	/// </summary>
 	IMangaDexUserService User { get; }
+
+	/// <summary>
+	/// The OAuth2.0 service for auth.mangadex.org
+	/// </summary>
+	IMangaDexAuthService Auth { get; }
 }
 
 /// <summary>
@@ -183,6 +186,11 @@ public class MangaDex : IMangaDex
 	/// </summary>
 	public IMangaDexCaptchaService Captcha => Misc;
 
+    /// <summary>
+    /// The OAuth2.0 service for auth.mangadex.org
+    /// </summary>
+    public IMangaDexAuthService Auth { get; }
+
 	/// <summary>
 	/// Dependency Injection CTOR
 	/// </summary>
@@ -199,6 +207,7 @@ public class MangaDex : IMangaDex
 	/// <param name="scanlationGroup"></param>
 	/// <param name="upload"></param>
 	/// <param name="user"></param>
+	/// <param name="auth"></param>
 	public MangaDex(
 		IMangaDexMangaService manga, 
 		IMangaDexChapterService chapter,
@@ -212,7 +221,8 @@ public class MangaDex : IMangaDex
 		IMangaDexReportService report,
 		IMangaDexScanlationGroupService scanlationGroup,
 		IMangaDexUploadService upload,
-		IMangaDexUserService user)
+		IMangaDexUserService user,
+		IMangaDexAuthService auth)
 	{
 		Manga = manga;
 		Chapter = chapter;
@@ -227,6 +237,7 @@ public class MangaDex : IMangaDex
 		ScanlationGroup = scanlationGroup;
 		Upload = upload;
 		User = user;
+		Auth = auth;
 	}
 
     /// <summary>
@@ -237,11 +248,27 @@ public class MangaDex : IMangaDex
     /// <param name="config">The optional configuration action</param>
     /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
 	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
+	/// <param name="authUrl">The url for the authentication service for auth.mangadex.org (see <see cref="AUTH_URL"/> or <see cref="AUTH_DEV_URL"/>)</param>
+	/// <param name="clientId">The client ID for the authorization endpoint</param>
+	/// <param name="clientSecret">The client secret for the authorization endpoint</param>
+	/// <param name="username">The username for the password grant OAuth2 requests</param>
+	/// <param name="password">The password for the password grant OAuth2 requests</param>
     /// <returns>The instance of the MangaDex API</returns>
-    public static IMangaDex Create(string? token = null, string? apiUrl = null, Action<IServiceCollection>? config = null, string? userAgent = null, bool throwOnError = false)
+    public static IMangaDex Create(
+		string? token = null, 
+		string? apiUrl = null, 
+		Action<IServiceCollection>? config = null, 
+		string? userAgent = null, 
+		bool throwOnError = false,
+        string? authUrl = null,
+        string? clientId = null,
+        string? clientSecret = null,
+        string? username = null,
+        string? password = null)
 	{
 		var create = new ServiceCollection()
-			.AddMangaDex(token ?? string.Empty, apiUrl, userAgent, throwOnError);
+			.AddMangaDex(token ?? string.Empty, apiUrl, userAgent, throwOnError,
+                authUrl, clientId, clientSecret, username, password);
 
 		config?.Invoke(create);
 
