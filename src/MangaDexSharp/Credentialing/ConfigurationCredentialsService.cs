@@ -111,7 +111,7 @@ public class ConfigurationCredentialsService : ICredentialsService
     /// Fetches the user's authentication token from the config file
     /// </summary>
     /// <returns>The user's authentication token</returns>
-    public Task<string?> GetToken()
+    public virtual Task<string?> GetToken()
     {
         return Task.FromResult(Token);
     }

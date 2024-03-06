@@ -6,6 +6,21 @@
 public class MangaDexRoot
 {
 	/// <summary>
+	/// The result of the request was successful
+	/// </summary>
+	public const string RESULT_OK = "ok";
+	
+	/// <summary>
+	/// The result of the request was an error
+	/// </summary>
+	public const string RESULT_ERROR = "error";
+
+	/// <summary>
+	/// The result of the request was a failure
+	/// </summary>
+	public const string RESULT_KO = "ko";
+
+	/// <summary>
 	/// A message from the API telling us whether a request was successful or not
 	/// </summary>
 	[JsonPropertyName("result")]
@@ -41,34 +56,4 @@ public class MangaDexRoot<T> : MangaDexRoot where T : new()
 	/// </summary>
 	[JsonIgnore]
 	public bool ErrorOccurred => Result.ToLower().Trim() == "error";
-}
-
-/// <summary>
-/// Represents an error returned by the MD api
-/// </summary>
-public class MangaDexError
-{
-	/// <summary>
-	/// The ID of the error message (Can be used for debugging within #dev-talk-api)
-	/// </summary>
-	[JsonPropertyName("id")]
-	public string Id { get; set; } = string.Empty;
-
-	/// <summary>
-	/// The status code for the error
-	/// </summary>
-	[JsonPropertyName("status")]
-	public int Status { get; set; }
-
-	/// <summary>
-	/// A brief description of the error
-	/// </summary>
-	[JsonPropertyName("title")]
-	public string Title { get; set; } = string.Empty;
-
-	/// <summary>
-	/// A more detailed description of the error
-	/// </summary>
-	[JsonPropertyName("detail")]
-	public string Detail { get; set; } = string.Empty;
 }

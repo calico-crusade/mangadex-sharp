@@ -86,7 +86,7 @@ public interface IMangaDexMangaService
 	Task<MangaDexRoot<Manga>> Random(MangaRandomFilter? filter = null);
 	
 	/// <summary>
-	/// Fetchs a list of all of the manga tags. This should be cached within your application as it hardly changes.
+	/// Fetches a list of all of the manga tags. This should be cached within your application as it hardly changes.
 	/// </summary>
 	/// <returns>All of the manga tags</returns>
 	Task<TagList> Tags();
@@ -146,7 +146,7 @@ public interface IMangaDexMangaService
 	/// Fetches a list of all of the relationships the given manga has
 	/// </summary>
 	/// <param name="id">The ID of the manga</param>
-	/// <returns>A lsit of relationships</returns>
+	/// <returns>A list of relationships</returns>
 	Task<MangaRelationships> Relations(string id);
 
 	/// <summary>

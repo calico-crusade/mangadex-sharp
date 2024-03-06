@@ -22,11 +22,11 @@ public abstract class MangaDexModel
 /// Represents an item returned by the MD API that contains the `attributes` property
 /// </summary>
 /// <typeparam name="T">The type of attributes</typeparam>
-public abstract class MangaDexModel<T> : MangaDexModel where T : new()
+public abstract class MangaDexModel<T> : MangaDexModel
 {
 	/// <summary>
 	/// The attributes the item contains
 	/// </summary>
 	[JsonPropertyName("attributes")]
-	public virtual T Attributes { get; set; } = new();
+	public virtual T? Attributes { get; set; }
 }

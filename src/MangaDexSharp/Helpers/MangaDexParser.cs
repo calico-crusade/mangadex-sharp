@@ -106,7 +106,8 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				["creator"] = typeof(User),
 				["member"] = typeof(User),
 				["tag"] = typeof(MangaTag),
-				["chapter"] = typeof(Chapter)
+				["chapter"] = typeof(Chapter),
+				["api_client"] = typeof(ApiClient),
 			})
 		};
 	}

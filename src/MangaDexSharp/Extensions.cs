@@ -44,25 +44,6 @@ public static class Extensions
 	};
 
 	/// <summary>
-	/// Provides a method of resolving the user's authentication token from varying sources
-	/// </summary>
-	/// <param name="token">The contextual token</param>
-	/// <param name="creds">The credentials service</param>
-	/// <param name="optional">Whether or not the token is optional for this request</param>
-	/// <returns>The current request with the attached authentication token</returns>
-	/// <exception cref="ArgumentException">Thrown if the authentication token is required but is missing</exception>
-	public static async Task<Action<HttpRequestMessage>> Auth(string? token, ICredentialsService creds, bool optional = false)
-	{
-		token ??= await creds.GetToken();
-		if (string.IsNullOrEmpty(token) && optional) return c => { };
-
-		if (string.IsNullOrEmpty(token))
-			throw new ArgumentException("No token provided by credentials service", nameof(token));
-
-		return c => c.Headers.Add("Authorization", "Bearer " + token);
-	}
-
-	/// <summary>
 	/// Fetches all of a specific type of related item
 	/// </summary>
 	/// <typeparam name="T">The type of relationship data to fetch</typeparam>
@@ -145,7 +126,8 @@ public static class Extensions
 			.AddTransient<IMangaDexThreadsService, MangaDexMiscService>()
 			.AddTransient<IMangaDexCaptchaService, MangaDexMiscService>()
 			
-			.AddTransient<IMangaDexAuthService, MangaDexAuthService>();
+			.AddTransient<IMangaDexAuthService, MangaDexAuthService>()
+			.AddTransient<IMangaDexApiClientService, MangaDexApiClientService>();
 	}
 	
 	/// <summary>
@@ -195,12 +177,17 @@ public static class Extensions
 	/// </summary>
 	/// <typeparam name="T">The type of <see cref="ICredentialsService"/></typeparam>
 	/// <param name="services">The service collection to inject into</param>
+	/// <param name="transient">Whether the credential service should be registered as a transient (true) or singleton (false) service</param>
 	/// <returns>The service collection for chaining</returns>
-	public static IServiceCollection AddMangaDex<T>(this IServiceCollection services) where T: class, ICredentialsService
+	public static IServiceCollection AddMangaDex<T>(this IServiceCollection services, bool transient = true) where T: class, ICredentialsService
 	{
+		if (transient)
+			services.AddTransient<ICredentialsService, T>();
+		else
+			services.AddSingleton<ICredentialsService, T>();
+
 		return services
-			.AddBaseMangaDex()
-			.AddTransient<ICredentialsService, T>();
+			.AddBaseMangaDex();
 	}
 
 	/// <summary>

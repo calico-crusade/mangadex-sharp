@@ -12,7 +12,7 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
 
 	/// <summary>
-	/// All of the properties on this name
+	/// All of the properties on this manga
 	/// </summary>
 	public class MangaAttributesModel
 	{
@@ -64,10 +64,10 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 		[JsonPropertyName("lastChapter")]
 		public string LastChapter { get; set; } = string.Empty;
 
-		/// <summary>
-		/// What demographic the manga is targetting
-		/// </summary>
-		[JsonPropertyName("publicationDemographic")]
+        /// <summary>
+        /// What demographic the manga is targeting
+        /// </summary>
+        [JsonPropertyName("publicationDemographic")]
 		public Demographic? PublicationDemographic { get; set; }
 
 		/// <summary>

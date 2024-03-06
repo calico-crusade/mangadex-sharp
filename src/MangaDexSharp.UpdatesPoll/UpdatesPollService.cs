@@ -88,7 +88,7 @@ public class UpdatesPollService : IUpdatesPollService
 		await foreach(var chap in chapters)
 		{
 			//Skip external URLs
-			if (!string.IsNullOrEmpty(chap.Attributes.ExternalUrl))
+			if (!string.IsNullOrEmpty(chap.Attributes?.ExternalUrl))
 			{
 				yield return new(chap, Array.Empty<string>(), Array.Empty<string>());
 				continue;

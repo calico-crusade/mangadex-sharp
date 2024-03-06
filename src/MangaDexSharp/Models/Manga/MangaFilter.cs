@@ -81,7 +81,7 @@ public class MangaFilter : IPaginateFilter
 	public string[] OriginalLanguage { get; set; } = Array.Empty<string>();
 
 	/// <summary>
-	/// Only include manga that weren't written in these langauges originally
+	/// Only include manga that weren't written in these languages originally
 	/// </summary>
 	public string[] ExcludedOriginalLanguage { get; set; } = Array.Empty<string>();
 

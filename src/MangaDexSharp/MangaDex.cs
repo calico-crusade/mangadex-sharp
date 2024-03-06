@@ -94,6 +94,11 @@ public interface IMangaDex
 	/// The OAuth2.0 service for auth.mangadex.org
 	/// </summary>
 	IMangaDexAuthService Auth { get; }
+
+	/// <summary>
+	/// All of the API client endpoints
+	/// </summary>
+	IMangaDexApiClientService ApiClient { get; }
 }
 
 /// <summary>
@@ -191,24 +196,30 @@ public class MangaDex : IMangaDex
     /// </summary>
     public IMangaDexAuthService Auth { get; }
 
-	/// <summary>
-	/// Dependency Injection CTOR
-	/// </summary>
-	/// <param name="manga"></param>
-	/// <param name="chapter"></param>
-	/// <param name="misc"></param>
-	/// <param name="author"></param>
-	/// <param name="cover"></param>
-	/// <param name="lists"></param>
-	/// <param name="feed"></param>
-	/// <param name="follows"></param>
-	/// <param name="readMarker"></param>
-	/// <param name="report"></param>
-	/// <param name="scanlationGroup"></param>
-	/// <param name="upload"></param>
-	/// <param name="user"></param>
-	/// <param name="auth"></param>
-	public MangaDex(
+    /// <summary>
+    /// All of the API client endpoints
+    /// </summary>
+    public IMangaDexApiClientService ApiClient { get; }
+
+    /// <summary>
+    /// Dependency Injection CTOR
+    /// </summary>
+    /// <param name="manga"></param>
+    /// <param name="chapter"></param>
+    /// <param name="misc"></param>
+    /// <param name="author"></param>
+    /// <param name="cover"></param>
+    /// <param name="lists"></param>
+    /// <param name="feed"></param>
+    /// <param name="follows"></param>
+    /// <param name="readMarker"></param>
+    /// <param name="report"></param>
+    /// <param name="scanlationGroup"></param>
+    /// <param name="upload"></param>
+    /// <param name="user"></param>
+    /// <param name="auth"></param>
+	/// <param name="apiClient"></param>
+    public MangaDex(
 		IMangaDexMangaService manga, 
 		IMangaDexChapterService chapter,
 		IMangaDexMiscService misc,
@@ -222,7 +233,8 @@ public class MangaDex : IMangaDex
 		IMangaDexScanlationGroupService scanlationGroup,
 		IMangaDexUploadService upload,
 		IMangaDexUserService user,
-		IMangaDexAuthService auth)
+		IMangaDexAuthService auth,
+		IMangaDexApiClientService apiClient)
 	{
 		Manga = manga;
 		Chapter = chapter;
@@ -238,6 +250,7 @@ public class MangaDex : IMangaDex
 		Upload = upload;
 		User = user;
 		Auth = auth;
+		ApiClient = apiClient;
 	}
 
     /// <summary>
