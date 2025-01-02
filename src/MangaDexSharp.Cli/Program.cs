@@ -8,5 +8,6 @@
         c.Add<ExampleVerb>()
          .Add<MangaVerb>()
          .Add<UserVerb>()
-         .Add<ClientApiTestVerb>();
+         .Add<ClientApiTestVerb>()
+         .Add<TestAggregateVerb>();
     });

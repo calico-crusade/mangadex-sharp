@@ -15,7 +15,8 @@ public class MangaAggregate
 	/// All of the volumes on the manga
 	/// </summary>
 	[JsonPropertyName("volumes")]
-	public VolumeData[] Volumes { get; set; } = Array.Empty<VolumeData>();
+	[JsonConverter(typeof(MangaDexDictionaryParser<string, VolumeData>))]
+	public Dictionary<string, VolumeData> Volumes { get; set; } = new();
 
 	/// <summary>
 	/// Represents a volume of a manga
@@ -38,8 +39,9 @@ public class MangaAggregate
 		/// The chapters within the volume
 		/// </summary>
 		[JsonPropertyName("chapters")]
-		public ChapterData[] Chapters { get; set; } = Array.Empty<ChapterData>();
-	}
+        [JsonConverter(typeof(MangaDexDictionaryParser<string, ChapterData>))]
+        public Dictionary<string, ChapterData> Chapters { get; set; } = new();
+    }
 
 	/// <summary>
 	/// Represents a chapter of the manga
