@@ -25,13 +25,7 @@ public class MangaDexDictionaryParser<TKey, TValue> : JsonConverter<Dictionary<T
             return new();
         }
 
-        var dic = JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options) ?? new();
-
-        var lcl = new Dictionary<TKey, TValue>();
-        foreach (var item in dic)
-            lcl.Add(item.Key, item.Value);
-
-        return lcl;
+        return JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options) ?? new();
     }
 
     /// <summary>
