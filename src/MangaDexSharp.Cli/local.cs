@@ -5,6 +5,7 @@ global using CardboardBox.Setup;
 global using CommandLine;
 
 global using MangaDexSharp;
+global using MangaDexSharp.Cli;
 global using MangaDexSharp.Cli.Services;
 global using MangaDexSharp.Cli.Verbs;
 

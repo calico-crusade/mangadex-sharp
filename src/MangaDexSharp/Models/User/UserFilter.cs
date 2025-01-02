@@ -5,10 +5,15 @@
 /// </summary>
 public class UserFilter : IPaginateFilter
 {
-	/// <summary>
-	/// The number of records to return for this filter (MAX 100, MIN 1, DEFAULT 100)
-	/// </summary>
-	public int Limit { get; set; } = 100;
+    /// <summary>
+    /// The default <see cref="Limit"/> used
+    /// </summary>
+    public static int DefaultLimit { get; set; } = 100;
+
+    /// <summary>
+    /// The number of records to return for this filter (MAX 100, MIN 1, DEFAULT 100)
+    /// </summary>
+    public int Limit { get; set; } = DefaultLimit;
 
 	/// <summary>
 	/// The number of records to skip when using this filter (MIN 0, DEFAULT 0)
