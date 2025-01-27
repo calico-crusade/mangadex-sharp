@@ -11,5 +11,6 @@
          .Add<UserVerb>()
          .Add<ClientApiTestVerb>()
          .Add<TestAggregateVerb>()
-         .Add<TestFeedVerb>();
+         .Add<TestFeedVerb>()
+         .Add<RandomVerb>();
     });

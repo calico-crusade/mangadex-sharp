@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents the return results of almost all MD api endpoints
 /// </summary>
-public class MangaDexRoot
+public class MangaDexRoot : MangaDexRateLimits
 {
 	/// <summary>
 	/// The result of the request was successful

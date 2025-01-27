@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a return result from the MD api that results in a collection of items
 /// </summary>
-/// <typeparam name="T">The type of items in the colleciton</typeparam>
+/// <typeparam name="T">The type of items in the collection</typeparam>
 public class MangaDexCollection<T> : MangaDexRoot<List<T>>
 {
 	/// <summary>

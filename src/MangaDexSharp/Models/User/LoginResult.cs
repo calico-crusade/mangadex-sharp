@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents the result of a login request
 /// </summary>
-public class LoginResult
+public class LoginResult : MangaDexRateLimits
 {
     /// <summary>
     /// Whether or not the result was successful

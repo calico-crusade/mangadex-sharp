@@ -25,6 +25,10 @@ public interface IMdApiService : IApiService
 public class MdApiService : ApiService, IMdApiService
 {
     private readonly ICredentialsService _creds;
+    private readonly IHttpClientFactory _factory;
+    private readonly IMdJsonService _json;
+    private readonly IMdCacheService _cache;
+    private readonly ILogger _logger;
 
     /// <summary>
     /// The DI constructor
@@ -41,6 +45,10 @@ public class MdApiService : ApiService, IMdApiService
         ILogger<ApiService> logger,
         ICredentialsService creds) : base(httpFactory, json, cache, logger)
     {
+        _factory = httpFactory;
+        _json = json;
+        _cache = cache;
+        _logger = logger;
         _creds = creds;
     }
 
@@ -83,8 +91,9 @@ public class MdApiService : ApiService, IMdApiService
     /// <returns>The instance of the <see cref="IHttpBuilder"/></returns>
     public override IHttpBuilder Create(string url, IJsonService json, string method = "GET")
     {
-        var res = base
-            .Create(WrapUrl(url), json, method)
+        var res = new MdHttpBuilder(_factory, _json, _cache, _logger)
+            .Method(method)
+            .Uri(WrapUrl(url))
             .With(t =>
             {
                 t.Headers.Add("User-Agent", _creds.UserAgent);

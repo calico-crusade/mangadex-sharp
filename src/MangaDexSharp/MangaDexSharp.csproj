@@ -12,8 +12,8 @@
     <PackageIcon>icon.jpg</PackageIcon>
     <RepositoryUrl>https://github.com/calico-crusade/mangadex-sharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Manga;Mangadex;Anime;Cardboard;mangadex-sharp;</PackageTags>
-    <Version>1.1.5</Version>
+    <PackageTags>Manga;Mangadex;Anime;Cardboard;mangadex-sharp;mangadex-api</PackageTags>
+    <Version>1.1.6</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
