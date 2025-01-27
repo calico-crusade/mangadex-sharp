@@ -39,7 +39,7 @@ public class MangaAggregate
 		/// The chapters within the volume
 		/// </summary>
 		[JsonPropertyName("chapters")]
-        [JsonConverter(typeof(MangaDexDictionaryParser<string, ChapterData>))]
+        [JsonConverter(typeof(MangaDexAggregateChapterParser))]
         public Dictionary<string, ChapterData> Chapters { get; set; } = new();
     }
 

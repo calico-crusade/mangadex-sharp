@@ -4,7 +4,7 @@ namespace MangaDexSharp.Cli.Verbs;
 [Verb("aggregate-test", HelpText = "Test the aggregate endpoint to ensure bug fix")]
 internal class TestAggregateVerbOptions
 {
-    public const string DEFAULT_ID = "32fdfe9b-6e11-4a13-9e36-dcd8ea77b4e4";
+    public const string DEFAULT_ID = "f9c33607-9180-4ba6-b85c-e4b5faee7192";
 
     [Option('m', "manga-id", HelpText = "The ID of the manga to test", Default = DEFAULT_ID)]
     public string MangaId { get; set; } = DEFAULT_ID;

@@ -3,7 +3,7 @@
     .AddMangaDex<PersonalCredentialsService>(false)
     .AddSerilog()
     .AddTransient<ITokenCacheService, TokenCacheService>()
-    .AddTransient<IMdJsonService, DebuggerMdJsonService>()
+    //.AddTransient<IMdJsonService, DebuggerMdJsonService>()
     .Cli(args, c =>
     {
         c.Add<ExampleVerb>()
