@@ -8,7 +8,7 @@ public class MangaRandomFilter : IFilter
 	/// <summary>
 	/// Determine what to include in the return results of the manga
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[] { MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.author, MangaIncludes.tag };
+	public MangaIncludes[] Includes { get; set; } = new[] { MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.author, MangaIncludes.tag, MangaIncludes.artist };
 
 	/// <summary>
 	/// Only include manga with these content ratings (NSFW vs SFW)

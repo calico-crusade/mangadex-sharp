@@ -1,5 +1,4 @@
 ﻿using CardboardBox.Json;
-using Microsoft.Extensions.Logging;
 using System.Net.Http;
 
 namespace MangaDexSharp;
@@ -16,42 +15,27 @@ public interface IMdApiService : IApiService
     /// <param name="optional">Whether or not the token is optional for this request</param>
     /// <returns>The current request with the attached authentication token</returns>
     /// <exception cref="ArgumentException">Thrown if the authentication token is required but is missing</exception>
-    Task<Action<HttpRequestMessage>> Auth(string? token, bool optional = false);
+    Task<Action<IHttpBuilderConfig>> Auth(string? token, bool optional = false);
 }
 
 /// <summary>
 /// The default implementation of the <see cref="IApiService"/>
 /// </summary>
-public class MdApiService : ApiService, IMdApiService
+/// <remarks>
+/// The DI constructor
+/// </remarks>
+/// <param name="_factory">The factory for creating <see cref="HttpClient"/>s</param>
+/// <param name="_json">The service for parsing JSON responses</param>
+/// <param name="_creds">The credentials to use for the application</param>
+/// <param name="_events">The service for handling events</param>
+/// <param name="_config">The optional configuration method for changing how the underlying HTTP requests are made</param>
+public class MdApiService(
+    IHttpClientFactory _factory,
+    IMdJsonService _json,
+    ICredentialsService _creds,
+    IMdEventsService _events,
+    IMdRequestConfigurationService? _config = null) : ApiService(_factory, _json), IMdApiService
 {
-    private readonly ICredentialsService _creds;
-    private readonly IHttpClientFactory _factory;
-    private readonly IMdJsonService _json;
-    private readonly IMdCacheService _cache;
-    private readonly ILogger _logger;
-
-    /// <summary>
-    /// The DI constructor
-    /// </summary>
-    /// <param name="httpFactory"></param>
-    /// <param name="json"></param>
-    /// <param name="cache"></param>
-    /// <param name="logger"></param>
-    /// <param name="creds"></param>
-    public MdApiService(
-        IHttpClientFactory httpFactory,
-        IMdJsonService json,
-        IMdCacheService cache, 
-        ILogger<ApiService> logger,
-        ICredentialsService creds) : base(httpFactory, json, cache, logger)
-    {
-        _factory = httpFactory;
-        _json = json;
-        _cache = cache;
-        _logger = logger;
-        _creds = creds;
-    }
-
     /// <summary>
     /// Provides a method of resolving the user's authentication token from varying sources
     /// </summary>
@@ -59,7 +43,7 @@ public class MdApiService : ApiService, IMdApiService
     /// <param name="optional">Whether or not the token is optional for this request</param>
     /// <returns>The current request with the attached authentication token</returns>
     /// <exception cref="ArgumentException">Thrown if the authentication token is required but is missing</exception>
-    public async Task<Action<HttpRequestMessage>> Auth(string? token, bool optional = false)
+    public async Task<Action<IHttpBuilderConfig>> Auth(string? token, bool optional = false)
     {
         token ??= await _creds.GetToken();
         if (string.IsNullOrEmpty(token) && optional) return c => { };
@@ -67,7 +51,7 @@ public class MdApiService : ApiService, IMdApiService
         if (string.IsNullOrEmpty(token))
             throw new ArgumentException("No token provided by credentials service", nameof(token));
 
-        return c => c.Headers.Add("Authorization", "Bearer " + token);
+        return c => c.Message(t => t.Headers.Add("Authorization", "Bearer " + token));
     }
 
     /// <summary>
@@ -83,6 +67,32 @@ public class MdApiService : ApiService, IMdApiService
     }
 
     /// <summary>
+    /// Populate the <see cref="MangaDexRateLimits"/> models if possible
+    /// </summary>
+    /// <param name="data">The data being processed</param>
+    /// <param name="resp">The response message from MangaDex</param>
+    public void FillRateLimits(HttpResponseMessage resp, object? data)
+    {
+        if (data is null || data is not MangaDexRateLimits limits) return;
+
+        var rateLimits = new RateLimit();
+
+        if (resp.Headers.TryGetValues("X-RateLimit-Limit", out var strLimit) &&
+            int.TryParse(strLimit.FirstOrDefault(), out var limit))
+            rateLimits.Limit = limit;
+
+        if (resp.Headers.TryGetValues("X-RateLimit-Remaining", out var strRemaining) &&
+            int.TryParse(strRemaining.FirstOrDefault(), out var remaining))
+            rateLimits.Remaining = remaining;
+
+        if (resp.Headers.TryGetValues("X-RateLimit-Retry-After", out var strRetry) &&
+            double.TryParse(strRetry.FirstOrDefault(), out var retry))
+            rateLimits.RetryAfter = DateTime.UnixEpoch.AddSeconds(retry);
+
+        limits.RateLimit = rateLimits;
+    }
+
+    /// <summary>
     /// Creates an <see cref="IHttpBuilder"/> for the given URL and method
     /// </summary>
     /// <param name="url">The url to request data from</param>
@@ -91,19 +101,23 @@ public class MdApiService : ApiService, IMdApiService
     /// <returns>The instance of the <see cref="IHttpBuilder"/></returns>
     public override IHttpBuilder Create(string url, IJsonService json, string method = "GET")
     {
-        var res = new MdHttpBuilder(_factory, _json, _cache, _logger)
+        var builder = new HttpBuilder(_factory, _json);
+
+        var uri = WrapUrl(url);
+        _config?.Configure(uri, builder);
+        builder
             .Method(method)
-            .Uri(WrapUrl(url))
-            .With(t =>
-            {
-                t.Headers.Add("User-Agent", _creds.UserAgent);
-            });
+            .Uri(uri)
+            .UserAgent(_creds.UserAgent)
+            .OnResponseParsed(FillRateLimits);
+
+        _events.Bind(uri, builder);
 
         if (_creds.ThrowOnError)
-            res.FailWithThrow();
+            builder.FailWithThrow();
         else
-            res.FailGracefully();
+            builder.FailGracefully();
 
-        return res;
+        return builder;
     }
 }

@@ -9,7 +9,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp.Cli", "MangaD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp.OAuthLocal.Web", "MangaDexSharp.OAuthLocal.Web\MangaDexSharp.OAuthLocal.Web.csproj", "{42298204-E183-426F-98CC-1FCB49AA1B6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp.UpdatesPoll", "MangaDexSharp.UpdatesPoll\MangaDexSharp.UpdatesPoll.csproj", "{70686F17-80CE-41E5-BEAB-6A32C61D195D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MangaDexSharp.UpdatesPoll", "MangaDexSharp.UpdatesPoll\MangaDexSharp.UpdatesPoll.csproj", "{70686F17-80CE-41E5-BEAB-6A32C61D195D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0AD13D99-48B6-45A1-B479-3AE7B29E1B2F}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\icon.jpg = ..\icon.jpg
+		..\LICENSE = ..\LICENSE
+		..\.github\workflows\main.yml = ..\.github\workflows\main.yml
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

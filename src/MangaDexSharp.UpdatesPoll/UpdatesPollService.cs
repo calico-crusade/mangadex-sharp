@@ -90,7 +90,7 @@ public class UpdatesPollService : IUpdatesPollService
 			//Skip external URLs
 			if (!string.IsNullOrEmpty(chap.Attributes?.ExternalUrl))
 			{
-				yield return new(chap, Array.Empty<string>(), Array.Empty<string>());
+				yield return new(chap, [], []);
 				continue;
 			}
 
@@ -122,7 +122,7 @@ public class UpdatesPollService : IUpdatesPollService
 	public async Task<ChapterPages[]> PollForUpdatesWithoutPages(DateTime since, string[] langs)
 	{
 		return await Latest(since, langs)
-			.Select(t => new ChapterPages(t, Array.Empty<string>(), Array.Empty<string>()))
+			.Select(t => new ChapterPages(t, [], []))
 			.ToArrayAsync();
 	}
 
@@ -138,7 +138,7 @@ public class UpdatesPollService : IUpdatesPollService
 	public async Task Poll(Func<ChapterPages[], Task> callback, DateTime? since = null, string[]? langs = null, bool includePages = true, CancellationToken? token = null)
 	{
 		token ??= CancellationToken.None;
-		langs ??= Array.Empty<string>();
+		langs ??= [];
 		since ??= DateTime.Now.AddMinutes(-30);
 
 		while (true)

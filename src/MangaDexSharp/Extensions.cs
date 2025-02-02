@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace MangaDexSharp;
+﻿namespace MangaDexSharp;
 
 /// <summary>
 /// A bunch of useful extensions for MD related tasks
@@ -35,13 +33,13 @@ public static class Extensions
 	/// <summary>
 	/// An array of all of the available content ratings
 	/// </summary>
-	public static ContentRating[] ContentRatingsAll => new[]
-	{
+	public static ContentRating[] ContentRatingsAll => 
+	[
 		ContentRating.safe,
 		ContentRating.erotica,
 		ContentRating.suggestive,
 		ContentRating.pornographic
-	};
+	];
 
 	/// <summary>
 	/// Fetches all of a specific type of related item
@@ -55,7 +53,7 @@ public static class Extensions
 			.Relationships
 			.Where(t => t is T)
 			.Select(t => (T)t)
-			.ToArray() ?? Array.Empty<T>();
+			.ToArray() ?? [];
 	}
 
 	/// <summary>
@@ -98,7 +96,7 @@ public static class Extensions
 	/// </summary>
 	/// <param name="services">The service collection to inject to</param>
 	/// <returns>The service collection for chaining</returns>
-	private static IServiceCollection AddBaseMangaDex(this IServiceCollection services)
+	internal static IServiceCollection AddBaseMangaDex(this IServiceCollection services)
 	{
 		return services
 			.AddHttpClient()
@@ -106,6 +104,7 @@ public static class Extensions
 			.AddTransient<IMdApiService, MdApiService>()
 			.AddTransient<IMdJsonService, MdJsonService>()
 			.AddTransient<IMdCacheService, MdCacheService>()
+			.AddTransient<IMdEventsService, MdEventsService>()
 
 			.AddTransient<IMangaDexMangaService, MangaDexMangaService>()
 			.AddTransient<IMangaDexChapterService, MangaDexChapterService>()
@@ -135,6 +134,7 @@ public static class Extensions
 	/// </summary>
 	/// <param name="services">The service collection to inject into</param>
 	/// <returns>The service collection for chaining</returns>
+	/// <remarks>You should only call this once for the service collection</remarks>
 	public static IServiceCollection AddMangaDex(this IServiceCollection services)
 	{
 		return services.AddMangaDex<ConfigurationCredentialsService>();
@@ -154,6 +154,7 @@ public static class Extensions
 	/// <param name="username">The username for the password grant OAuth2 requests</param>
 	/// <param name="password">The password for the password grant OAuth2 requests</param>
     /// <returns>The service collection for chaining</returns>
+	/// <remarks>You should only call this once for the service collection</remarks>
     public static IServiceCollection AddMangaDex(
 		this IServiceCollection services, 
 		string token, 
@@ -172,14 +173,15 @@ public static class Extensions
 				authUrl, clientId, clientSecret, username, password));
 	}
 
-	/// <summary>
-	/// Adds the MangaDex API with the associated credential service
-	/// </summary>
-	/// <typeparam name="T">The type of <see cref="ICredentialsService"/></typeparam>
-	/// <param name="services">The service collection to inject into</param>
-	/// <param name="transient">Whether the credential service should be registered as a transient (true) or singleton (false) service</param>
-	/// <returns>The service collection for chaining</returns>
-	public static IServiceCollection AddMangaDex<T>(this IServiceCollection services, bool transient = true) where T: class, ICredentialsService
+    /// <summary>
+    /// Adds the MangaDex API with the associated credential service
+    /// </summary>
+    /// <typeparam name="T">The type of <see cref="ICredentialsService"/></typeparam>
+    /// <param name="services">The service collection to inject into</param>
+    /// <param name="transient">Whether the credential service should be registered as a transient (true) or singleton (false) service</param>
+    /// <returns>The service collection for chaining</returns>
+    /// <remarks>You should only call this once for the service collection</remarks>
+    public static IServiceCollection AddMangaDex<T>(this IServiceCollection services, bool transient = true) where T: class, ICredentialsService
 	{
 		if (transient)
 			services.AddTransient<ICredentialsService, T>();
@@ -190,17 +192,39 @@ public static class Extensions
 			.AddBaseMangaDex();
 	}
 
-	/// <summary>
-	/// Adds the MangaDex API with the associated credential service instance
-	/// </summary>
-	/// <typeparam name="T">The type of <see cref="ICredentialsService"/></typeparam>
-	/// <param name="services">The service collection to inject into</param>
-	/// <param name="instance">The instance of the <see cref="ICredentialsService"/></param>
-	/// <returns>The service collection for chaining</returns>
-	public static IServiceCollection AddMangaDex<T>(this IServiceCollection services, T instance) where T : ICredentialsService
+    /// <summary>
+    /// Adds the MangaDex API with the associated credential service instance
+    /// </summary>
+    /// <typeparam name="T">The type of <see cref="ICredentialsService"/></typeparam>
+    /// <param name="services">The service collection to inject into</param>
+    /// <param name="instance">The instance of the <see cref="ICredentialsService"/></param>
+    /// <returns>The service collection for chaining</returns>
+    /// <remarks>You should only call this once for the service collection</remarks>
+    public static IServiceCollection AddMangaDex<T>(this IServiceCollection services, T instance) where T : ICredentialsService
 	{
 		return services
 			.AddBaseMangaDex()
 			.AddSingleton<ICredentialsService>(instance);
 	}
+
+    /// <summary>
+    /// Adds an event watcher to MangaDexSharp
+    /// </summary>
+    /// <typeparam name="T">The type of event watcher</typeparam>
+    /// <param name="services">The service collection to inject into</param>
+	/// <param name="transient">Whether or not to register the service as a transient (true) or singleton (false)</param>
+    /// <returns>The service collection for chaining</returns>
+	/// <remarks>
+	/// You can create and inject multiple of these and they will be run in the order they're added.
+	/// You will still need to call one of the other <see cref="AddMangaDex(IServiceCollection)"/> methods to add the base services.
+	/// </remarks>
+    public static IServiceCollection AddMangaDexEvents<T>(this IServiceCollection services, bool transient = true) where T : class, IMdEventService
+	{
+        if (transient)
+            services.AddTransient<IMdEventService, T>();
+        else
+            services.AddSingleton<IMdEventService, T>();
+
+		return services;
+    }
 }
