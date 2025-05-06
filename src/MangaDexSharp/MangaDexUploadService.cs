@@ -139,7 +139,7 @@ internal class MangaDexUploadService : IMangaDexUploadService
 			fileContent.Headers.ContentType = new MediaTypeHeaderValue(CONTENT_TYPE_FILE);
 			fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
 			{
-				Name = "file",
+				Name = "file" + (i + 1),
 				FileName = file.FileName
 			};
             body.Add(fileContent, "file" + (i + 1), file.FileName);
