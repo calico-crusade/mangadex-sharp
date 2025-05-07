@@ -34,15 +34,43 @@ public interface IMangaDexUploadService
 	/// <returns>The current upload session</returns>
 	Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, string? token = null);
 
-	/// <summary>
-	/// Uploads files to the given session
-	/// </summary>
-	/// <param name="sessionId">The ID of the session to upload to</param>
-	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
-	/// <param name="cancel">The cancellation token for the upload</param>
-	/// <param name="files">All of the files to upload to the chapter (limit 10 per request)</param>
-	/// <returns>The uploaded file results</returns>
-	Task<UploadSessionFileList> Upload(string sessionId, string? token = null, CancellationToken cancel = default, params IFileUpload[] files);
+    /// <summary>
+    /// Uploads files to the given session
+    /// </summary>
+    /// <param name="sessionId">The ID of the session to upload to</param>
+    /// <param name="files">All of the files to upload to the chapter (limit 10 per request)</param>
+    /// <returns>The uploaded file results</returns>
+    Task<UploadSessionFileList> Upload(string sessionId, params IFileUpload[] files);
+
+    /// <summary>
+    /// Uploads files to the given session
+    /// </summary>
+    /// <param name="sessionId">The ID of the session to upload to</param>
+    /// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+    /// <param name="files">All of the files to upload to the chapter (limit 10 per request)</param>
+    /// <returns>The uploaded file results</returns>
+    Task<UploadSessionFileList> Upload(string sessionId, string token, params IFileUpload[] files);
+
+    /// <summary>
+    /// Uploads files to the given session
+    /// </summary>
+    /// <param name="sessionId">The ID of the session to upload to</param>
+    /// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+    /// <param name="cancel">The cancellation token for the upload</param>
+    /// <param name="files">All of the files to upload to the chapter (limit 10 per request)</param>
+    /// <returns>The uploaded file results</returns>
+    Task<UploadSessionFileList> Upload(string sessionId, string? token, CancellationToken cancel, params IFileUpload[] files);
+
+    /// <summary>
+    /// Uploads files to the given session
+    /// </summary>
+    /// <param name="sessionId">The ID of the session to upload to</param>
+    /// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <param name="contentType">The content type of the content-disposition header</param>
+    /// <param name="cancel">The cancellation token for the upload</param>
+    /// <param name="files">All of the files to upload to the chapter (limit 10 per request)</param>
+    /// <returns>The uploaded file results</returns>
+    Task<UploadSessionFileList> Upload(string sessionId, string? token, string? contentType, CancellationToken cancel, params IFileUpload[] files);
 
 	/// <summary>
 	/// Deletes a specific file from the upload session
@@ -120,7 +148,13 @@ internal class MangaDexUploadService : IMangaDexUploadService
 		return await _api.Post<MangaDexRoot<UploadSession>, EditChapterCreate>($"{Root}/begin/{chapterId}", d, c) ?? new() { Result = "error" };
 	}
 
-	public async Task<UploadSessionFileList> Upload(string sessionId, string? token = null, CancellationToken cancel = default, params IFileUpload[] files)
+	public Task<UploadSessionFileList> Upload(string sessionId, params IFileUpload[] files) => Upload(sessionId, null, null, CancellationToken.None, files);
+
+	public Task<UploadSessionFileList> Upload(string sessionId, string token, params IFileUpload[] files) => Upload(sessionId, token, null, CancellationToken.None, files);
+
+	public Task<UploadSessionFileList> Upload(string sessionId, string? token, CancellationToken cancel, params IFileUpload[] files) => Upload(sessionId, token, null, cancel, files);
+
+    public async Task<UploadSessionFileList> Upload(string sessionId, string? token, string? contentType, CancellationToken cancel, params IFileUpload[] files)
 	{
 		if (files.Length == 0)
 			throw new ArgumentException("At least 1 file is required for an upload", nameof(files));
@@ -131,24 +165,27 @@ internal class MangaDexUploadService : IMangaDexUploadService
 		var c = await _api.Auth(token);
 		using var body = new MultipartFormDataContent();
 
-		for(var i = 0; i < files.Length; i++)
+		contentType ??= CONTENT_TYPE_FILE;
+
+        for (var i = 0; i < files.Length; i++)
 		{
 			var file = files[i];
 			var data = await file.Content();
-			var fileContent = new ByteArrayContent(data);
-			fileContent.Headers.ContentType = new MediaTypeHeaderValue(CONTENT_TYPE_FILE);
+			var dispositionName = $"file{i + 1}";
+            var fileContent = new ByteArrayContent(data);
+			fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 			fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
 			{
-				Name = "file",
+				Name = dispositionName,
 				FileName = file.FileName
 			};
-            body.Add(fileContent, "file" + (i + 1), file.FileName);
+            body.Add(fileContent, dispositionName, file.FileName);
 
 			foreach (var val in body.Headers.ContentType.Parameters.Where(t => t.Name == "boundary"))
 				val.Value = val.Value.Replace("\"", string.Empty);
         }
 
-		return await ((IHttpBuilder)_api.Create($"{Root}/{sessionId}", "POST", c, cancel)
+        return await ((IHttpBuilder)_api.Create($"{Root}/{sessionId}", "POST", c, cancel)
 			.BodyContent(body))
 			.Result<UploadSessionFileList>() ?? new() { Result = "error" };
 	}
@@ -178,6 +215,5 @@ internal class MangaDexUploadService : IMangaDexUploadService
 	{
 		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<Chapter>, UploadSessionCommit>($"{Root}/{sessionId}/commit", data, c) ?? new() { Result = "error" };
-
 	}
 }
