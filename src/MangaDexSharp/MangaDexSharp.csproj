@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/calico-crusade/mangadex-sharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Manga;Mangadex;Anime;Cardboard;mangadex-sharp;mangadex-api</PackageTags>
-    <Version>1.1.7</Version>
+    <Version>1.1.8</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -36,8 +36,8 @@
 
   <ItemGroup>
     <PackageReference Include="CardboardBox.Http" Version="3.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+    <PackageReference Include="System.Text.Json" Version="9.0.4" />
   </ItemGroup>
 
 </Project>

@@ -52,4 +52,18 @@ public class RateLimit
     /// <remarks>This is a computed value and not included in json serialized strings</remarks>
     [JsonIgnore]
     public bool IsLimited => Limit.HasValue && Remaining.HasValue && Remaining.Value == 0;
+
+    /// <summary>
+    /// Whether or not the <see cref="RetryAfter"/> time has already passed
+    /// </summary>
+    /// <returns>Whether or not the <see cref="RetryAfter"/> time has already passed</returns>
+    /// <remarks>True means you're not longer rate limited</remarks>
+    public bool RetryPassed()
+    {
+        if (RetryAfter is null) return true;
+
+        var now = DateTime.UtcNow;
+        var retry = RetryAfter.Value;
+        return now > retry;
+    }
 }

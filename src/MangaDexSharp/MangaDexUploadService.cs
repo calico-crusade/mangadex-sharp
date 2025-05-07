@@ -108,18 +108,11 @@ public interface IMangaDexUploadService
 	Task<MangaDexRoot<Chapter>> Commit(string sessionId, UploadSessionCommit data, string? token = null);
 }
 
-internal class MangaDexUploadService : IMangaDexUploadService
+internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadService
 {
 	public const string CONTENT_TYPE_FILE = "application/octet-stream";
 
-	private readonly IMdApiService _api;
-
 	public string Root => $"upload";
-
-	public MangaDexUploadService(IMdApiService api)
-	{
-		_api = api;
-	}
 
 	public async Task<MangaDexRoot<UploadSession>> Get(string? token = null)
 	{

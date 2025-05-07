@@ -17,10 +17,4 @@ public class MangaDexStruct<T> : MangaDexRoot
     /// </summary>
     [JsonPropertyName("data")]
     public T? Data { get; set; }
-
-    /// <summary>
-    /// This is a shorthand for <see cref="MangaDexRoot.Result"/> == "error"
-    /// </summary>
-    [JsonIgnore]
-    public bool ErrorOccurred => Result.ToLower().Trim() == "error";
 }

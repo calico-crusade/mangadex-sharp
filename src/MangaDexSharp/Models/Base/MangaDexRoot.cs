@@ -30,13 +30,19 @@ public class MangaDexRoot : MangaDexRateLimits
 	/// A collection of errors from the MD api
 	/// </summary>
 	[JsonPropertyName("errors")]
-	public MangaDexError[] Errors { get; set; } = Array.Empty<MangaDexError>();
+	public MangaDexError[] Errors { get; set; } = [];
+
+    /// <summary>
+    /// This is a shorthand for <see cref="Result"/> == "error"
+    /// </summary>
+    [JsonIgnore]
+    public bool ErrorOccurred => Result.ToLower().Trim() == "error";
 }
 
 /// <summary>
 /// Represents the return results of the MD api endpoints
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The type of the result from MD</typeparam>
 public class MangaDexRoot<T> : MangaDexRoot where T : new()
 {
 	/// <summary>
@@ -50,10 +56,4 @@ public class MangaDexRoot<T> : MangaDexRoot where T : new()
 	/// </summary>
 	[JsonPropertyName("data")]
 	public T Data { get; set; } = new();
-
-	/// <summary>
-	/// This is a shorthand for <see cref="MangaDexRoot.Result"/> == "error"
-	/// </summary>
-	[JsonIgnore]
-	public bool ErrorOccurred => Result.ToLower().Trim() == "error";
 }
