@@ -9,7 +9,7 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 	/// All of the relationship items related to this manga
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// All of the properties on this manga

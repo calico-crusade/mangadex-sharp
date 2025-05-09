@@ -86,7 +86,7 @@ internal class ExampleVerb(
         //You can either pass the token to the authenticated endpoints
         var me = await _api.User.Me(token);
         //Or you can create a authenticated API
-        var authedApi = MangaDex.Create(token);
+        var authedApi = MangaDex.Create(c => c.WithAccessToken(token));
         var me2 = await authedApi.User.Me();
 
         _logger.LogInformation("Login Success: {username}", me.Data.Attributes?.Username);

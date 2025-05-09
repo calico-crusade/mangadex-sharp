@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 var srv = new ServiceCollection()
-	.AddMangaDex(string.Empty)
+	.AddMangaDex()
 	.AddLogging(c =>
 	{
 		c.AddSerilog(new LoggerConfiguration()

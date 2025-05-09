@@ -33,10 +33,10 @@ public class MangaDexRoot : MangaDexRateLimits
 	public MangaDexError[] Errors { get; set; } = [];
 
     /// <summary>
-    /// This is a shorthand for <see cref="Result"/> == "error"
+    /// Whether or not an error occurred
     /// </summary>
     [JsonIgnore]
-    public bool ErrorOccurred => Result.ToLower().Trim() == "error";
+    public bool ErrorOccurred => this.IsError();
 }
 
 /// <summary>

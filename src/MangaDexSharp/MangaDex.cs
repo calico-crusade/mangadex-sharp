@@ -104,77 +104,92 @@ public interface IMangaDex
 /// <summary>
 /// An instance of the MangaDex API
 /// </summary>
-public class MangaDex : IMangaDex
+public class MangaDex(
+    IMangaDexMangaService manga,
+    IMangaDexChapterService chapter,
+    IMangaDexMiscService misc,
+    IMangaDexAuthorService author,
+    IMangaDexCoverArtService cover,
+    IMangaDexCustomListService lists,
+    IMangaDexFeedService feed,
+    IMangaDexFollowsService follows,
+    IMangaDexReadMarkerService readMarker,
+    IMangaDexReportService report,
+    IMangaDexScanlationGroupService scanlationGroup,
+    IMangaDexUploadService upload,
+    IMangaDexUserService user,
+    IMangaDexAuthService auth,
+    IMangaDexApiClientService apiClient) : IMangaDex
 {
-	/// <summary>
-	/// All of the manga endpoints
-	/// </summary>
-	public IMangaDexMangaService Manga { get; }
+    /// <summary>
+    /// All of the manga endpoints
+    /// </summary>
+    public IMangaDexMangaService Manga { get; } = manga;
 
-	/// <summary>
-	/// All of the chapter endpoints
-	/// </summary>
-	public IMangaDexChapterService Chapter { get; }
+    /// <summary>
+    /// All of the chapter endpoints
+    /// </summary>
+    public IMangaDexChapterService Chapter { get; } = chapter;
 
-	/// <summary>
-	/// All of the miscellaneous endpoints
-	/// </summary>
-	public IMangaDexMiscService Misc { get; }
+    /// <summary>
+    /// All of the miscellaneous endpoints
+    /// </summary>
+    public IMangaDexMiscService Misc { get; } = misc;
 
-	/// <summary>
-	/// All of the author endpoints
-	/// </summary>
-	public IMangaDexAuthorService Author { get; }
+    /// <summary>
+    /// All of the author endpoints
+    /// </summary>
+    public IMangaDexAuthorService Author { get; } = author;
 
-	/// <summary>
-	/// All of the cover-art endpoints
-	/// </summary>
-	public IMangaDexCoverArtService Cover { get; }
+    /// <summary>
+    /// All of the cover-art endpoints
+    /// </summary>
+    public IMangaDexCoverArtService Cover { get; } = cover;
 
-	/// <summary>
-	/// All of the custom lists endpoints
-	/// </summary>
-	public IMangaDexCustomListService Lists { get; }
+    /// <summary>
+    /// All of the custom lists endpoints
+    /// </summary>
+    public IMangaDexCustomListService Lists { get; } = lists;
 
-	/// <summary>
-	/// All of the read-status endpoints
-	/// </summary>
-	public IMangaDexReadMarkerService ReadMarker { get; }
+    /// <summary>
+    /// All of the read-status endpoints
+    /// </summary>
+    public IMangaDexReadMarkerService ReadMarker { get; } = readMarker;
 
-	/// <summary>
-	/// All of the manga-feed endpoints
-	/// </summary>
-	public IMangaDexFeedService Feed { get; }
+    /// <summary>
+    /// All of the manga-feed endpoints
+    /// </summary>
+    public IMangaDexFeedService Feed { get; } = feed;
 
-	/// <summary>
-	/// All of the follows endpoints
-	/// </summary>
-	public IMangaDexFollowsService Follows { get; }
+    /// <summary>
+    /// All of the follows endpoints
+    /// </summary>
+    public IMangaDexFollowsService Follows { get; } = follows;
 
-	/// <summary>
-	/// All of the report endpoints
-	/// </summary>
-	public IMangaDexReportService Report { get; }
+    /// <summary>
+    /// All of the report endpoints
+    /// </summary>
+    public IMangaDexReportService Report { get; } = report;
 
-	/// <summary>
-	/// All of the scanlation group endpoints
-	/// </summary>
-	public IMangaDexScanlationGroupService ScanlationGroup { get; }
+    /// <summary>
+    /// All of the scanlation group endpoints
+    /// </summary>
+    public IMangaDexScanlationGroupService ScanlationGroup { get; } = scanlationGroup;
 
-	/// <summary>
-	/// All of the upload session endpoints
-	/// </summary>
-	public IMangaDexUploadService Upload { get; }
+    /// <summary>
+    /// All of the upload session endpoints
+    /// </summary>
+    public IMangaDexUploadService Upload { get; } = upload;
 
-	/// <summary>
-	/// All of the user endpoints
-	/// </summary>
-	public IMangaDexUserService User { get; }
+    /// <summary>
+    /// All of the user endpoints
+    /// </summary>
+    public IMangaDexUserService User { get; } = user;
 
-	/// <summary>
-	/// All of the chapter-page endpoints
-	/// </summary>
-	public IMangaDexPageService Pages => Misc;
+    /// <summary>
+    /// All of the chapter-page endpoints
+    /// </summary>
+    public IMangaDexPageService Pages => Misc;
 
 	/// <summary>
 	/// All of the ratings endpoints
@@ -194,98 +209,25 @@ public class MangaDex : IMangaDex
     /// <summary>
     /// The OAuth2.0 service for auth.mangadex.org
     /// </summary>
-    public IMangaDexAuthService Auth { get; }
+    public IMangaDexAuthService Auth { get; } = auth;
 
     /// <summary>
     /// All of the API client endpoints
     /// </summary>
-    public IMangaDexApiClientService ApiClient { get; }
-
-    /// <summary>
-    /// Dependency Injection CTOR
-    /// </summary>
-    /// <param name="manga"></param>
-    /// <param name="chapter"></param>
-    /// <param name="misc"></param>
-    /// <param name="author"></param>
-    /// <param name="cover"></param>
-    /// <param name="lists"></param>
-    /// <param name="feed"></param>
-    /// <param name="follows"></param>
-    /// <param name="readMarker"></param>
-    /// <param name="report"></param>
-    /// <param name="scanlationGroup"></param>
-    /// <param name="upload"></param>
-    /// <param name="user"></param>
-    /// <param name="auth"></param>
-	/// <param name="apiClient"></param>
-    public MangaDex(
-		IMangaDexMangaService manga, 
-		IMangaDexChapterService chapter,
-		IMangaDexMiscService misc,
-		IMangaDexAuthorService author,
-		IMangaDexCoverArtService cover,
-		IMangaDexCustomListService lists,
-		IMangaDexFeedService feed,
-		IMangaDexFollowsService follows,
-		IMangaDexReadMarkerService readMarker,
-		IMangaDexReportService report,
-		IMangaDexScanlationGroupService scanlationGroup,
-		IMangaDexUploadService upload,
-		IMangaDexUserService user,
-		IMangaDexAuthService auth,
-		IMangaDexApiClientService apiClient)
-	{
-		Manga = manga;
-		Chapter = chapter;
-		Misc = misc;
-		Author = author;
-		Cover = cover;
-		Lists = lists;
-		Feed = feed;
-		Follows = follows;
-		ReadMarker = readMarker;
-		Report = report;
-		ScanlationGroup = scanlationGroup;
-		Upload = upload;
-		User = user;
-		Auth = auth;
-		ApiClient = apiClient;
-	}
+    public IMangaDexApiClientService ApiClient { get; } = apiClient;
 
     /// <summary>
     /// Creates an isolated instance of the MangaDex API 
     /// </summary>
-    /// <param name="token">The optional authentication token</param>
-    /// <param name="apiUrl">The optional api URL</param>
     /// <param name="config">The optional configuration action</param>
-    /// <param name="userAgent">The User-Agent header to send with requests (see <see cref="API_USER_AGENT"/>)</param>
-	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
-	/// <param name="authUrl">The url for the authentication service for auth.mangadex.org (see <see cref="AUTH_URL"/> or <see cref="AUTH_DEV_URL"/>)</param>
-	/// <param name="clientId">The client ID for the authorization endpoint</param>
-	/// <param name="clientSecret">The client secret for the authorization endpoint</param>
-	/// <param name="username">The username for the password grant OAuth2 requests</param>
-	/// <param name="password">The password for the password grant OAuth2 requests</param>
+    /// <param name="services">The optional service collection to use</param>
     /// <returns>The instance of the MangaDex API</returns>
     public static IMangaDex Create(
-		string? token = null, 
-		string? apiUrl = null, 
-		Action<IServiceCollection>? config = null, 
-		string? userAgent = null, 
-		bool throwOnError = false,
-        string? authUrl = null,
-        string? clientId = null,
-        string? clientSecret = null,
-        string? username = null,
-        string? password = null)
+		Action<IMangaDexBuilder>? config = null,
+        IServiceCollection? services = null)
 	{
-		var create = new ServiceCollection()
-			.AddMangaDex(token ?? string.Empty, apiUrl, userAgent, throwOnError,
-                authUrl, clientId, clientSecret, username, password);
-
-		config?.Invoke(create);
-
-		return create
+		return (services ?? new ServiceCollection())
+            .AddMangaDex(config)
 			.BuildServiceProvider()
 			.GetRequiredService<IMangaDex>();
 	}

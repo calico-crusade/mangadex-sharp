@@ -8,7 +8,7 @@ public static class MangaDexRootExtensions
     /// <summary>
     /// All of the possible error results
     /// </summary>
-    public static readonly string[] ResultErrors = new[] { MangaDexRoot.RESULT_ERROR, MangaDexRoot.RESULT_KO };
+    public static readonly string[] ResultErrors = [MangaDexRoot.RESULT_ERROR, MangaDexRoot.RESULT_KO];
 
     /// <summary>
     /// Converts the <see cref="MangaDexError"/> to a string
@@ -88,5 +88,16 @@ public static class MangaDexRootExtensions
     {
         data = root.Data!;
         return root.IsError(out error);
+    }
+
+    /// <summary>
+    /// Throws an instance of the <see cref="MangaDexException"/> if the result has an error
+    /// </summary>
+    /// <param name="result">The result to check</param>
+    /// <exception cref="MangaDexException">Thrown if the result has an error</exception>
+    public static void ThrowIfError(this MangaDexRoot result)
+    {
+        if (!result.IsError()) return;
+        throw new MangaDexException(result);
     }
 }

@@ -1,6 +1,6 @@
 ﻿return await new ServiceCollection()
     .AddAppSettings()
-    .AddMangaDex<PersonalCredentialsService>(false)
+    .AddMangaDex()
     .AddSerilog()
     .AddTransient<ITokenCacheService, TokenCacheService>()
     //.AddTransient<IMdJsonService, DebuggerMdJsonService>()
@@ -12,5 +12,6 @@
          .Add<ClientApiTestVerb>()
          .Add<TestAggregateVerb>()
          .Add<TestFeedVerb>()
-         .Add<RandomVerb>();
+         .Add<RandomVerb>()
+         .Add<UploadVerb>();
     });

@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a file in an upload session
 /// </summary>
-public class UploadSessionFile : MangaDexModel<UploadSessionFile.UploadSessionFileAttributesModel>
+public class UploadSessionFile : MangaDexModel<UploadSessionFile.UploadSessionFileAttributesModel>, IRelationship
 {
 	/// <summary>
 	/// The properties of the file

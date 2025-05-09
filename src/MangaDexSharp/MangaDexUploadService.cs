@@ -12,9 +12,10 @@ public interface IMangaDexUploadService
 	/// <summary>
 	/// Gets the current users active session
 	/// </summary>
+	/// <param name="include">The relationships that should be included in the request</param>
 	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
 	/// <returns>The active upload session</returns>
-	Task<MangaDexRoot<UploadSession>> Get(string? token = null);
+	Task<MangaDexRoot<UploadSession>> Get(UploadIncludes[]? include = null, string? token = null);
 
 	/// <summary>
 	/// Starts an upload session for the current user
@@ -25,14 +26,15 @@ public interface IMangaDexUploadService
 	/// <returns>The new upload session</returns>
 	Task<MangaDexRoot<UploadSession>> Begin(string manga, string[] groups, string? token = null);
 
-	/// <summary>
-	/// Starts editing a specific chapter
-	/// </summary>
-	/// <param name="chapterId">The ID of the chapter to edit</param>
-	/// <param name="version">The version of the request</param>
-	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
-	/// <returns>The current upload session</returns>
-	Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, string? token = null);
+    /// <summary>
+    /// Starts editing a specific chapter
+    /// </summary>
+    /// <param name="chapterId">The ID of the chapter to edit</param>
+    /// <param name="version">The version of the request</param>
+    /// <param name="include">The relationships that should be included in the request</param>
+    /// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+    /// <returns>The current upload session</returns>
+    Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, UploadIncludes[]? include = null, string? token = null);
 
     /// <summary>
     /// Uploads files to the given session
@@ -114,10 +116,12 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
 
 	public string Root => $"upload";
 
-	public async Task<MangaDexRoot<UploadSession>> Get(string? token = null)
+	public async Task<MangaDexRoot<UploadSession>> Get(UploadIncludes[]? include = null, string? token = null)
 	{
+		include ??= [UploadIncludes.upload_session_file];
+		var filter = new FilterBuilder().Add("includes", include).Build();
 		var c = await _api.Auth(token);
-		return await _api.Get<MangaDexRoot<UploadSession>>(Root, c) ?? new() { Result = "error" };
+		return await _api.Get<MangaDexRoot<UploadSession>>($"{Root}?{filter}", c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<UploadSession>> Begin(string manga, string[] groups, string? token = null)
@@ -131,14 +135,16 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
 		return await _api.Post<MangaDexRoot<UploadSession>, UploadSessionCreate>($"{Root}/begin", d, c) ?? new() { Result = "error" };
 	}
 
-	public async Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, string? token = null)
-	{
-		var c = await _api.Auth(token);
+	public async Task<MangaDexRoot<UploadSession>> EditChapter(string chapterId, int version = 1, UploadIncludes[]? include = null, string? token = null)
+    {
+        include ??= [UploadIncludes.upload_session_file];
+        var filter = new FilterBuilder().Add("includes", include).Build();
+        var c = await _api.Auth(token);
 		var d = new EditChapterCreate
 		{
 			Version = version
 		};
-		return await _api.Post<MangaDexRoot<UploadSession>, EditChapterCreate>($"{Root}/begin/{chapterId}", d, c) ?? new() { Result = "error" };
+		return await _api.Post<MangaDexRoot<UploadSession>, EditChapterCreate>($"{Root}/begin/{chapterId}?{filter}", d, c) ?? new() { Result = "error" };
 	}
 
 	public Task<UploadSessionFileList> Upload(string sessionId, params IFileUpload[] files) => Upload(sessionId, null, null, CancellationToken.None, files);
@@ -163,7 +169,7 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
         for (var i = 0; i < files.Length; i++)
 		{
 			var file = files[i];
-			var data = await file.Content();
+			var data = await file.Content(cancel);
 			var dispositionName = $"file{i + 1}";
             var fileContent = new ByteArrayContent(data);
 			fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
