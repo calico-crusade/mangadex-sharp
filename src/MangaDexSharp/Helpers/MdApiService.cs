@@ -26,12 +26,14 @@ public interface IMdApiService : IApiService
 /// </remarks>
 /// <param name="_factory">The factory for creating <see cref="HttpClient"/>s</param>
 /// <param name="_json">The service for parsing JSON responses</param>
+/// <param name="_api">The API configuration</param>
 /// <param name="_creds">The credentials to use for the application</param>
 /// <param name="_events">The service for handling events</param>
 /// <param name="_config">The optional configuration method for changing how the underlying HTTP requests are made</param>
 public class MdApiService(
     IHttpClientFactory _factory,
     IMdJsonService _json,
+    IConfigurationApi _api,
     ICredentialsService _creds,
     IMdEventsService _events,
     IMdRequestConfigurationService? _config = null) : ApiService(_factory, _json), IMdApiService
@@ -55,7 +57,7 @@ public class MdApiService(
     }
 
     /// <summary>
-    /// Adds the <see cref="ICredentialsService.ApiUrl"/> to the beginning of the URL if it is not already present
+    /// Adds the <see cref="IConfigurationApi.ApiUrl"/> to the beginning of the URL if it is not already present
     /// </summary>
     /// <param name="url">The URL to wrap</param>
     /// <returns>The wrapped URL</returns>
@@ -63,7 +65,7 @@ public class MdApiService(
     {
         if (url.ToLower().StartsWith("http")) return url;
 
-        return $"{_creds.ApiUrl.TrimEnd('/')}/{url.TrimStart('/')}";
+        return $"{_api.ApiUrl.TrimEnd('/')}/{url.TrimStart('/')}";
     }
 
     /// <summary>
@@ -108,12 +110,12 @@ public class MdApiService(
         builder
             .Method(method)
             .Uri(uri)
-            .UserAgent(_creds.UserAgent)
+            .UserAgent(_api.UserAgent)
             .OnResponseParsed(FillRateLimits);
 
         _events.Bind(uri, builder);
 
-        if (_creds.ThrowOnError)
+        if (_api.ThrowOnError)
             builder.FailWithThrow();
         else
             builder.FailGracefully();

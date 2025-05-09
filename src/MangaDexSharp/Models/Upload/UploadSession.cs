@@ -3,12 +3,18 @@
 /// <summary>
 /// Represents an upload sessions
 /// </summary>
-public class UploadSession : MangaDexModel<UploadSession.UploadSessionAttributesModel>
+public class UploadSession : MangaDexModel<UploadSession.UploadSessionAttributesModel>, IRelationshipModel
 {
-	/// <summary>
-	/// The properties for this upload session
-	/// </summary>
-	public class UploadSessionAttributesModel
+    /// <summary>
+    /// All of the relationship items related to this upload
+    /// </summary>
+    [JsonPropertyName("relationships")]
+    public IRelationship[] Relationships { get; set; } = [];
+
+    /// <summary>
+    /// The properties for this upload session
+    /// </summary>
+    public class UploadSessionAttributesModel
 	{
 		/// <summary>
 		/// Whether or not the session has been committed yet

@@ -7,7 +7,7 @@ By using this library, you agree to follow MangaDex's [Acceptable Use Policy](ht
 Note: Using a spoofed user-agent is not allowed and will result in being banned from using the API. There is no reason to spoof the user-agent, except for malicious purposes.
 
 ## Installation
-You can install the nuget package with Visual Studio. It targets .net standard 2.1 to take advantage of most of the new features within C# and .net.
+You can install the NuGet package with Visual Studio. It targets .net standard 2.1 to take advantage of most of the new features within C# and .net.
 
 ```
 PM> Install-Package MangaDexSharp
@@ -29,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
 //This will find the authentication token in your configuration file (appsettings.json) under: "MangaDex:Token"
 builder.Services.AddMangaDex(); 
 //Or, if you want to inject the token directly you can use this (You don't need both of these.):
-builder.Services.AddMangaDex("<AUTH TOKEN HERE>");
+builder.Services.AddMangaDex(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
 
 var app = builder.Build();
 ```
@@ -69,7 +69,7 @@ using MangaDexSharp;
 var api = MangaDex.Create();
 
 //However, you can specify the token like so:
-var api = MangaDex.Create("<AUTH TOKEN HERE>");
+var api = MangaDex.Create(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
 
 var manga = await api.Manga.Get("some-manga-id-here");
 ```
@@ -158,7 +158,7 @@ var token = result.Data.Session;
 var me = await api.User.Me(token);
 
 //Or you can create an authenticated api
-var authedApi = MangaDex.Create(token);
+var authedApi = MangaDex.Create(c => c.WithAccessToken(token));
 var me = await authedApi.User.Me();
 ```
 
@@ -169,10 +169,10 @@ You have 2 primary options for using this, you can either specify it directly wh
 
 ```csharp
 //You can apply it directly like this:
-var api = MangaDex.Create("<AUTH TOKEN HERE>");
+var api = MangaDex.Create(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
 
 //Or if you're using dependency injection, you can provide it here:
-builder.Services.AddMangaDex("<AUTH TOKEN HERE>");
+builder.Services.AddMangaDex(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
 
 //Or you can include it in your appsettings.json (or environment variables):
 builder.Services.AddMangaDex();
@@ -195,7 +195,7 @@ public class MyCustomCredentialsService : ICredentialsService
 }
 ...
 //Then add your service like so:
-builder.Services.AddMangaDex<MyCustomCredentialsService>();
+builder.Services.AddMangaDex(c => c.WithCredentials<MyCustomCredentialsService>());
 ```
 
 ### Specific Request
@@ -221,23 +221,21 @@ These can all be set in a few different ways:
 Below is an example of how to do each of them:
 ```csharp
 //With MangaDex.Create():
-var api = MangaDex.Create(
-    token: "Some Token", 
-    userAgent: "Some-Fancy-User-Agent",
-    apiUrl: "https://api.mangadex.dev",
-    config: (services) => {
-        //This can be used to override any service within the library.
-    });
+var api = MangaDex.Create(c => c
+    .WithAccessToken("Some Token")
+    .WithApiConfig(a => a
+        .WithApiUrl("https://api.mangadex.dev")
+        .WithUserAgent("Some-Fancy-User-Agent")));
 
 //With DI services:
-services
-    .AddMangaDex(
-        token: "Some Token", 
-        userAgent: "Some-Fancy-User-Agent":
-        apiUrl: "https://api.mangadex.dev");
+services.AddMangaDex(c => c
+    .WithAccessToken("Some Token")
+    .WithApiConfig(a => a
+        .WithApiUrl("https://api.mangadex.dev")
+        .WithUserAgent("Some-Fancy-User-Agent")));
 
-//With a custom ICredentialsService
-public class SomeCredsService : ICredentialsService
+//With a custom IConfigurationApi
+public class SomeConfig : IConfigurationApi
 {
     ...
     public string? Token => "Some Token";
@@ -246,7 +244,7 @@ public class SomeCredsService : ICredentialsService
     ...
 }
 ...
-services.AddMangaDex<SomeCredsService>(); //This will tell MD# to use your custom credentials service.
+services.AddMangaDex(c => c.WithApiConfig<SomeConfig>());
 
 //From configuration file (appsettings.json)
 {
@@ -261,12 +259,74 @@ services.AddMangaDex<SomeCredsService>(); //This will tell MD# to use your custo
 For the last option, if you want to change the [configuration keys](https://github.com/calico-crusade/mangadex-sharp/blob/1f09a1aceef0a79d7553c45b69cd401b5ed888bb/src/MangaDexSharp/CredentialsService.cs#L28) that the application loads the variables from, you can change the following static properties:
 ```csharp
 ConfigurationCredentialsService.TokenPath = "SomeOther:Path:ToThe:Token";
-ConfigurationCredentialsService.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
-ConfigurationCredentialsService.ApiPath = "SomeOther:Path:ToThe:ApiUrl";
-ConfigurationCredentialsService.AuthPath = "SomeOther:Path:ToThe:AuthUrl";
-ConfigurationCredentialsService.ClientIdPath = "SomeOther:Path:ToThe:ClientId";
-ConfigurationCredentialsService.ClientSecretPath = "SomeOther:Path:ToThe:ClientSecret";
-ConfigurationCredentialsService.UsernamePath = "SomeOther:Path:ToThe:Username";
-ConfigurationCredentialsService.PasswordPath = "SomeOther:Path:ToThe:Password";
-ConfigurationCredentialsService.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
+ConfigurationApi.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
+ConfigurationApi.ApiPath = "SomeOther:Path:ToThe:ApiUrl";
+ConfigurationApi.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
+ConfigurationOIDC.AuthPath = "SomeOther:Path:ToThe:AuthUrl";
+ConfigurationOIDC.ClientIdPath = "SomeOther:Path:ToThe:ClientId";
+ConfigurationOIDC.ClientSecretPath = "SomeOther:Path:ToThe:ClientSecret";
+ConfigurationOIDC.UsernamePath = "SomeOther:Path:ToThe:Username";
+ConfigurationOIDC.PasswordPath = "SomeOther:Path:ToThe:Password";
+```
+
+## Uploading / Editing Chapters
+There is now a handy utility for uploading / editing chapters via the API:
+
+```csharp
+//Get an instance of the API
+var api = MangaDex.Create(c => c
+    .WithAuthConfig(a => a
+        .WithClientId("<client-id>")
+        .WithClientSecret("<client-secret>")
+        .WithUsername("<username>")
+        .WithPassword("<password>")));
+
+//Get the manga ID and groups you want to upload to
+string mangaId = "f9c33607-9180-4ba6-b85c-e4b5faee7192"; //Official "Test" Manga
+string[] groups = ["e11e461b-8c3a-4b5c-8b07-8892c2dcf449"]; //Cardboard test
+
+//Create a session for the manga
+await using var session = await api.NewUploadSession(mangaId, groups);
+
+//Upload some files to the session (by file path)
+await session.UploadFile("wrong-file.png");
+await session.UploadFile("page-1.jpg");
+await session.UploadFile("page-2.jpg");
+await session.UploadFile("page-3.png");
+
+//Maybe upload the files by stream instead?
+using var io = File.OpenRead("some-weird-gif.gif");
+await session.UploadFile(io, "page-4.gif");
+
+//Woops, messed up that one, let's delete it from the upload
+var file = session.Uploads
+    .FirstOrDefault(t => t.Attributes.OriginalFileName == "wrong-file.png");
+if (file is not null)
+    await session.DeleteUpload(file);
+
+//Commit the chapter to MD
+var chapter = await session.Commit(new ChapterDraft 
+{
+    Chapter = "69.5",
+    Title = "My Super Chapter",
+    TranslatedLanguage = "en",
+    Volume = "420"
+});
+//Print out the chapter ID
+Console.WriteLine("Chapter ID: {0}", chapter.Id);
+
+//You can also edit existing sessions:
+await using var session = await api.ContinueUploadSession();
+
+//Or you can edit an existing chapter that has already been upload
+var chapterId = "8f32fa09-593b-49d4-ae23-229cee63f005";
+await using var session = await api.EditChapterSession(chapterId);
+
+//There are a bunch of settings you can change for the upload utility.
+//There is a builder method you can specify when creating the sessions:
+await using var session = await api.NewUploadSession(mangaId, groups, 
+    config => 
+    {
+        config.MaxBatchSize(5);
+    });
 ```

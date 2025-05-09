@@ -9,7 +9,7 @@ public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelations
 	/// All of the related items for the chapter
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// All of the attributes the chapter has

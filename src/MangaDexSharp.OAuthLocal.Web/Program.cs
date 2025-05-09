@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddMangaDex<WebCredentialService>();
+builder.Services.AddMangaDex(c => c.WithCredentials<WebCredentialService>());
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(opt =>

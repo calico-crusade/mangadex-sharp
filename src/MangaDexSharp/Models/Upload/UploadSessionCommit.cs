@@ -15,7 +15,7 @@ public class UploadSessionCommit
 	/// The order of the pages
 	/// </summary>
 	[JsonPropertyName("pageOrder")]
-	public string[] PageOrder { get; set; } = Array.Empty<string>();
+	public string[] PageOrder { get; set; } = [];
 }
 
 /// <summary>
