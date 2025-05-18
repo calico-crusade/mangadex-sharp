@@ -1,4 +1,6 @@
-﻿namespace MangaDexSharp;
+﻿using System.Threading;
+
+namespace MangaDexSharp;
 
 /// <summary>
 /// An instance of the <see cref="ICredentialsService"/> that automatically fetches and refreshes the access token
@@ -12,6 +14,7 @@ public class PersonalCredentialsService(
     ITokenCacheService? _cache = null) : ICredentialsService
 {
     private (TokenResult? token, DateTime? executed) _last = (null, null);
+    private readonly SemaphoreSlim _lock = new(1);
 
     /// <summary>
     /// Whether or not the access token is expired
@@ -76,11 +79,19 @@ public class PersonalCredentialsService(
     /// <returns>The access token details</returns>
     public async Task<TokenResult?> Fetch()
     {
-        var token = await _auth.Personal();
-        if (token is null) return null;
+        try
+        {
+            await _lock.WaitAsync();
+            var token = await _auth.Personal();
+            if (token is null) return null;
 
-        await SetCache(token);
-        return token;
+            await SetCache(token);
+            return token;
+        }
+        finally
+        {
+            _lock.Release();
+        }
     }
 
     /// <summary>
@@ -90,18 +101,26 @@ public class PersonalCredentialsService(
     /// <returns>The access token details</returns>
     public async Task<TokenResult?> Refresh(string refresh)
     {
-        var token = await _auth.Refresh(refresh);
-        if (token is null) return null;
+        try
+        {
+            await _lock.WaitAsync();
+            var token = await _auth.Refresh(refresh);
+            if (token is null) return null;
 
-        await SetCache(token);
-        return token;
+            await SetCache(token);
+            return token;
+        }
+        finally
+        {
+            _lock.Release();
+        }
     }
 
     /// <summary>
     /// Fetches the access token if it is expired, or returns the cached token if it is still valid
     /// </summary>
     /// <returns>The access token</returns>
-    public async Task<string?> GetToken()
+    public virtual async Task<string?> GetToken()
     {
         //Ensure the service is enabled
         if (!Enabled) return null;

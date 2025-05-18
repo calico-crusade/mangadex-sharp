@@ -65,7 +65,7 @@ public static class Extensions
 	/// <param name="source">The relationship source</param>
 	/// <returns>All of the related users</returns>
 	public static User[] Users(this IRelationshipModel? source)  => source.Relationship<User>();
-		
+	
     /// <summary>
     /// Adds the MangaDex API to the given service collection
     /// </summary>

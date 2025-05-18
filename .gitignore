@@ -348,4 +348,4 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/src/MangaDexSharp.Cli/Properties/launchSettings.json
+**/launchSettings.json
