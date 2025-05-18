@@ -7,6 +7,9 @@ on:
 env:
   DOTNETVERSION: "8.0"
   APP: "MangaDexSharp.Utilities.Cli"
+  
+permissions:
+  contents: write
 
 jobs:
   release:
