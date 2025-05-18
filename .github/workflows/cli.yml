@@ -7,7 +7,7 @@ on:
 env:
   DOTNETVERSION: "8.0"
   APP: "MangaDexSharp.Utilities.Cli"
-  
+
 permissions:
   contents: write
 
@@ -35,10 +35,10 @@ jobs:
         id: paths
         run: |
           echo "csproj-path=./src/${{ env.APP }}/${{ env.APP }}.csproj" >> $GITHUB_OUTPUT
-          echo "linux-publish=./src/${{ env.APP }}/bin/Release/net${{ env.DOTNETVERSION }}/linux-x64/publish" >> $GITHUB_OUTPUT
           echo "linux-artifact=${{ env.APP }}-linux-x64-${{ steps.version.outputs.version-without-v }}" >> $GITHUB_OUTPUT
-          echo "windows-publish=./src/${{ env.APP }}/bin/Release/net${{ env.DOTNETVERSION }}/win-x64/publish" >> $GITHUB_OUTPUT
+          echo "linux-output=./md-cli-linux-x64" >> $GITHUB_OUTPUT
           echo "windows-artifact=${{ env.APP }}-win-x64-${{ steps.version.outputs.version-without-v }}" >> $GITHUB_OUTPUT
+          echo "windows-output=./md-cli-win-x64" >> $GITHUB_OUTPUT
 
       - name: Get previous release tag
         id: previousTag
@@ -48,28 +48,28 @@ jobs:
           echo "tag=${PREV_TAG}" >> $GITHUB_OUTPUT
 
       - name: Build Windows
-        run: dotnet publish ${{ steps.paths.outputs.csproj-path }} --configuration Release --runtime win-x64 --self-contained /p:Version=${{ steps.version.outputs.version-without-v }}
+        run: dotnet publish ${{ steps.paths.outputs.csproj-path }} --configuration Release --runtime win-x64 --self-contained --output ${{ steps.paths.outputs.windows-output }} /p:Version=${{ steps.version.outputs.version-without-v }}
 
       - name: Upload windows app build artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.paths.outputs.windows-artifact }}
-          path: ${{ steps.paths.outputs.windows-publish }}
+          path: ${{ steps.paths.outputs.windows-output }}
 
       - name: ZIP windows release artifact
-        run: zip -r ${{ steps.paths.outputs.windows-artifact }}.zip ${{ steps.paths.outputs.windows-publish }}
+        run: zip -r ${{ steps.paths.outputs.windows-artifact }}.zip ${{ steps.paths.outputs.windows-output }}
 
       - name: Build Linux
-        run: dotnet publish ${{ steps.paths.outputs.csproj-path }} --configuration Release --runtime linux-x64 --self-contained /p:Version=${{ steps.version.outputs.version-without-v }}
+        run: dotnet publish ${{ steps.paths.outputs.csproj-path }} --configuration Release --runtime linux-x64 --self-contained --output ${{ steps.paths.outputs.linux-output }} /p:Version=${{ steps.version.outputs.version-without-v }}
 
       - name: Upload linux app build artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.paths.outputs.linux-artifact }}
-          path: ${{ steps.paths.outputs.linux-publish }}
+          path: ${{ steps.paths.outputs.linux-output }}
 
       - name: ZIP linux release artifact
-        run: zip -r ${{ steps.paths.outputs.linux-artifact }}.zip ${{ steps.paths.outputs.linux-publish }}
+        run: zip -r ${{ steps.paths.outputs.linux-artifact }}.zip ${{ steps.paths.outputs.linux-output }}
 
       - name: GitHub release
         id: release
