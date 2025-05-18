@@ -36,16 +36,12 @@ jobs:
         run: |
           echo "version-without-v=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
           echo "csproj=./src/${{ env.PROJECT }}/${{ env.PROJECT }}.csproj" >> $GITHUB_OUTPUT
-
-      - name: Build Package
-        run: dotnet build -c Release -p:Version=${{ steps.version.outputs.version-without-v }} ${{ steps.version.outputs.csproj }}
      
       - name: Publish Extensions Nuget Package
         id: publish_nuget_extensions
-        uses: alirezanet/publish-nuget@v3.0.4
+        uses: cardboards-box/publish-nuget@v1.0.0
         with:
           PROJECT_FILE_PATH: ${{ steps.version.outputs.csproj }}
-          NO_BUILD: true
           TAG_COMMIT: false
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           VERSION_STATIC: ${{ steps.version.outputs.version-without-v }}
