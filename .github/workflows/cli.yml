@@ -5,7 +5,7 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 env:
-  DOTNETVERSION: "8.0.x"
+  DOTNETVERSION: "8.0"
   APP: "MangaDexSharp.Utilities.Cli"
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET Core SDK ${{ env.DOTNETVERSION }}
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNETVERSION }}
+          dotnet-version: ${{ env.DOTNETVERSION }}.x
 
       - name: Get version
         id: version
@@ -32,9 +32,9 @@ jobs:
         id: paths
         run: |
           echo "csproj-path=./src/${{ env.APP }}/${{ env.APP }}.csproj" >> $GITHUB_OUTPUT
-          echo "linux-publish=./src/${{ env.APP }}/bin/Release/net8.0/linux-x64/publish" >> $GITHUB_OUTPUT
+          echo "linux-publish=./src/${{ env.APP }}/bin/Release/net${{ env.DOTNETVERSION }}/linux-x64/publish" >> $GITHUB_OUTPUT
           echo "linux-artifact=${{ env.APP }}-linux-x64-${{ steps.version.outputs.version-without-v }}" >> $GITHUB_OUTPUT
-          echo "windows-publish=./src/${{ env.APP }}/bin/Release/net8.0/win-x64/publish" >> $GITHUB_OUTPUT
+          echo "windows-publish=./src/${{ env.APP }}/bin/Release/net${{ env.DOTNETVERSION }}/win-x64/publish" >> $GITHUB_OUTPUT
           echo "windows-artifact=${{ env.APP }}-win-x64-${{ steps.version.outputs.version-without-v }}" >> $GITHUB_OUTPUT
 
       - name: Get previous release tag
@@ -48,7 +48,7 @@ jobs:
         run: dotnet publish ${{ steps.paths.outputs.csproj-path }} --configuration Release --runtime win-x64 --self-contained /p:Version=${{ steps.version.outputs.version-without-v }}
 
       - name: Upload windows app build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.paths.outputs.windows-artifact }}
           path: ${{ steps.paths.outputs.windows-publish }}
@@ -60,7 +60,7 @@ jobs:
         run: dotnet publish ${{ steps.paths.outputs.csproj-path }} --configuration Release --runtime linux-x64 --self-contained /p:Version=${{ steps.version.outputs.version-without-v }}
 
       - name: Upload linux app build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.paths.outputs.linux-artifact }}
           path: ${{ steps.paths.outputs.linux-publish }}
