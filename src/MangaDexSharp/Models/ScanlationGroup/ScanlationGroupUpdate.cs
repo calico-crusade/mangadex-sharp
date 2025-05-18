@@ -21,13 +21,13 @@ public class ScanlationGroupUpdate
 	/// The members of the group
 	/// </summary>
 	[JsonPropertyName("members")]
-	public string[] Members { get; set; } = Array.Empty<string>();
+	public string[] Members { get; set; } = [];
 
 	/// <summary>
 	/// The languages the group focuses on translating
 	/// </summary>
 	[JsonPropertyName("focusedLanguages")]
-	public string[] FocusedLanguages { get; set; } = Array.Empty<string>();
+	public string[] FocusedLanguages { get; set; } = [];
 
 	/// <summary>
 	/// The website of the group

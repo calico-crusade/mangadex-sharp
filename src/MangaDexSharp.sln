@@ -22,6 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MangaDexSharp.Utilities.Cli", "MangaDexSharp.Utilities.Cli\MangaDexSharp.Utilities.Cli.csproj", "{6048923B-711D-4375-A6D3-34449A0FD8CD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{C2A9AE7D-B515-4C8C-80C3-C3786784D698}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{291B57E7-1976-458E-9FF0-6AF336418815}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E2BA6C78-048B-4649-A7B2-D28C2DC69708} = {291B57E7-1976-458E-9FF0-6AF336418815}
+		{42298204-E183-426F-98CC-1FCB49AA1B6D} = {291B57E7-1976-458E-9FF0-6AF336418815}
+		{70686F17-80CE-41E5-BEAB-6A32C61D195D} = {C2A9AE7D-B515-4C8C-80C3-C3786784D698}
+		{6048923B-711D-4375-A6D3-34449A0FD8CD} = {C2A9AE7D-B515-4C8C-80C3-C3786784D698}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {073A21EC-20C2-4268-910E-27C3E4B107CC}

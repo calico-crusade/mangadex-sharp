@@ -33,12 +33,12 @@ public class ApiClientFilter : IPaginateFilter
     /// <summary>
     /// Determine what to include in the return results of the API client
     /// </summary>
-    public ApiClientIncludes[] Includes { get; set; } = new[] { ApiClientIncludes.creator };
+    public ApiClientIncludes[] Includes { get; set; } = [ApiClientIncludes.creator];
 
     /// <summary>
     /// Determine how to order the returned results
     /// </summary>
-    public Dictionary<OrderKey, OrderValue> Order { get; set; } = new();
+    public Dictionary<OrderKey, OrderValue> Order { get; set; } = [];
 
     /// <summary>
     /// Builds the query parameters for the URL

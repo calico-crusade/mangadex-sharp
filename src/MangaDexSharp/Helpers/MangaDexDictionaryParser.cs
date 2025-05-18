@@ -22,10 +22,10 @@ public class MangaDexDictionaryParser<TKey, TValue> : JsonConverter<Dictionary<T
         if (reader.TokenType == JsonTokenType.StartArray)
         {
             _ = JsonSerializer.Deserialize<string[]>(ref reader, options);
-            return new();
+            return [];
         }
 
-        return JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options) ?? new();
+        return JsonSerializer.Deserialize<Dictionary<TKey, TValue>>(ref reader, options) ?? [];
     }
 
     /// <summary>
@@ -60,10 +60,10 @@ public class MangaDexDictionaryParser : JsonConverter<Localization>
 		if (reader.TokenType == JsonTokenType.StartArray)
 		{
 			_ = JsonSerializer.Deserialize<string[]>(ref reader, options);
-			return new Localization();
+			return [];
 		}
 
-		var dic = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options) ?? new();
+		var dic = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options) ?? [];
 
 		var lcl = new Localization();
 		foreach (var item in dic)

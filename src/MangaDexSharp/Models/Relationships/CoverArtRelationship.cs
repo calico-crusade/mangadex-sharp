@@ -9,7 +9,7 @@ public class CoverArtRelationship : MangaDexModel<CoverArtRelationship.CoverArtA
 	/// All of the related items for the cover art
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// All of the properties the cover art has

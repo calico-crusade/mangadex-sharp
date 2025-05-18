@@ -9,37 +9,37 @@ public class MangaCreate
 	/// The title of the manga in varying languages
 	/// </summary>
 	[JsonPropertyName("title")]
-	public Localization Title { get; set; } = new();
+	public Localization Title { get; set; } = [];
 
 	/// <summary>
 	/// Any alternative titles of the manga in varying languages
 	/// </summary>
 	[JsonPropertyName("altTitles")]
-	public Localization[] AltTitles { get; set; } = Array.Empty<Localization>();
+	public Localization[] AltTitles { get; set; } = [];
 
 	/// <summary>
 	/// The description of the manga in varying languages
 	/// </summary>
 	[JsonPropertyName("description")]
-	public Localization Description { get; set; } = new();
+	public Localization Description { get; set; } = [];
 
 	/// <summary>
 	/// The IDs of the authors of this manga
 	/// </summary>
 	[JsonPropertyName("authors")]
-	public string[] Authors { get; set; } = Array.Empty<string>();
+	public string[] Authors { get; set; } = [];
 
 	/// <summary>
 	/// The IDs of the artists of this manga
 	/// </summary>
 	[JsonPropertyName("artists")]
-	public string[] Artists { get; set; } = Array.Empty<string>();
+	public string[] Artists { get; set; } = [];
 
 	/// <summary>
 	/// A collection of external links for this manga
 	/// </summary>
 	[JsonPropertyName("links")]
-	public Localization Links { get; set; } = new();
+	public Localization Links { get; set; } = [];
 
 	/// <summary>
 	/// The original language the manga was written in
@@ -93,7 +93,7 @@ public class MangaCreate
 	/// The IDs of the tags associated with this manga
 	/// </summary>
 	[JsonPropertyName("tags")]
-	public string[] Tags { get; set; } = Array.Empty<string>();
+	public string[] Tags { get; set; } = [];
 
 	/// <summary>
 	/// The ID of the primary cover art for this manga

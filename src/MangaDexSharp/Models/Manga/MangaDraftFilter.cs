@@ -33,14 +33,14 @@ public class MangaDraftFilter : IPaginateFilter
 	/// <summary>
 	/// What relationships to include in the results
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[]
-	{
-		MangaIncludes.manga,
+	public MangaIncludes[] Includes { get; set; } =
+    [
+        MangaIncludes.manga,
 		MangaIncludes.cover_art,
 		MangaIncludes.author,
 		MangaIncludes.artist,
 		MangaIncludes.tag
-	};
+	];
 
 	/// <summary>
 	/// Builds the query into 1 string

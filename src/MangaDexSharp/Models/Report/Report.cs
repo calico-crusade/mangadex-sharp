@@ -9,7 +9,7 @@ public class Report : MangaDexModel<Report.ReportAttributesModel>, IRelationship
 	/// All of the related items to the report
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// Any properties the report has

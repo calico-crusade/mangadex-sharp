@@ -23,36 +23,36 @@ public class CoverArtFilter : IPaginateFilter
 	/// <summary>
 	/// An optional list of manga IDs
 	/// </summary>
-	public string[] MangaIds { get; set; } = Array.Empty<string>();
+	public string[] MangaIds { get; set; } = [];
 
 	/// <summary>
 	/// An optional list of cover art IDs
 	/// </summary>
-	public string[] Ids { get; set; } = Array.Empty<string>();
+	public string[] Ids { get; set; } = [];
 
 	/// <summary>
 	/// An optional list of user uploader IDs
 	/// </summary>
-	public string[] Uploaders { get; set; } = Array.Empty<string>();
+	public string[] Uploaders { get; set; } = [];
 
 	/// <summary>
 	/// An optional list of language / locale codes
 	/// </summary>
-	public string[] Locales { get; set; } = Array.Empty<string>();
+	public string[] Locales { get; set; } = [];
 
 	/// <summary>
 	/// Determines how to order the return results
 	/// </summary>
-	public Dictionary<OrderKey, OrderValue> Order { get; set; } = new();
+	public Dictionary<OrderKey, OrderValue> Order { get; set; } = [];
 
 	/// <summary>
 	/// What relationships to include in the results
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[]
-	{
-		MangaIncludes.manga,
+	public MangaIncludes[] Includes { get; set; } =
+    [
+        MangaIncludes.manga,
 		MangaIncludes.user
-	};
+	];
 
 	/// <summary>
 	/// Builds the query into 1 string

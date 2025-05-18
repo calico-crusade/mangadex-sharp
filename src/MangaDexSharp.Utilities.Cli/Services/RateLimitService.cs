@@ -108,11 +108,12 @@ internal class RateLimitService(
         await EnsureNotLimited(token);
         var result = await request(_md);
 
+        if (result.RateLimit.HasRateLimits)
+            _last = result.RateLimit;
+
         if (!result.ErrorOccurred) return result;
 
         var isTooMany = result.Errors.Any(e => e.Status == 429);
-        if (result.RateLimit.HasRateLimits)
-            _last = result.RateLimit;
 
         if (isTooMany)
             return await Request(request, current + 1, token);

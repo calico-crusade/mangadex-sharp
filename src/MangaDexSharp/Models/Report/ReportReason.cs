@@ -14,7 +14,7 @@ public class ReportReason : MangaDexModel<ReportReason.ReportReasonAttributesMod
 		/// A description of the reason in varying languages
 		/// </summary>
 		[JsonPropertyName("reason")]
-		public Localization Reason { get; set; } = new();
+		public Localization Reason { get; set; } = [];
 
 		/// <summary>
 		/// Whether or not the details are required for the report

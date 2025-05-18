@@ -27,5 +27,5 @@ public class CustomListCreate
 	/// The related manga IDs
 	/// </summary>
 	[JsonPropertyName("manga")]
-	public string[] Manga { get; set; } = Array.Empty<string>();
+	public string[] Manga { get; set; } = [];
 }

@@ -74,8 +74,8 @@ internal class MangaDexReadMarkerService : IMangaDexReadMarkerService
 	{
 		var d = new ReadMarkerBatchUpdate
 		{
-			ChapterIdsRead = read ? chapterIds : Array.Empty<string>(),
-			ChapterIdsUnread = read ? Array.Empty<string>() : chapterIds
+			ChapterIdsRead = read ? chapterIds : [],
+			ChapterIdsUnread = read ? [] : chapterIds
 		};
 		return BatchUpdate(mangaId, d, updateHistory, token);
 	}

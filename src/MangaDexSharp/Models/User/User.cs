@@ -9,7 +9,7 @@ public class User : MangaDexModel<User.UserAttributesModel>, IRelationship, IRel
 	/// All of the related items 
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// The properties of the user
@@ -26,7 +26,7 @@ public class User : MangaDexModel<User.UserAttributesModel>, IRelationship, IRel
 		/// The roles the user has
 		/// </summary>
 		[JsonPropertyName("roles")]
-		public string[] Roles { get; set; } = Array.Empty<string>();
+		public string[] Roles { get; set; } = [];
 
 		/// <summary>
 		/// The version of this request

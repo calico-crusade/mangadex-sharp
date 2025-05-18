@@ -9,7 +9,7 @@ public class ScanlationGroup : MangaDexModel<ScanlationGroup.ScanlationGroupAttr
 	/// All of the related items to this group
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// The properties of the scanlation group
@@ -26,7 +26,7 @@ public class ScanlationGroup : MangaDexModel<ScanlationGroup.ScanlationGroupAttr
 		/// Any alternate names in varying languages
 		/// </summary>
 		[JsonPropertyName("altNames")]
-		public Localization[] AltNames { get; set; } = Array.Empty<Localization>();
+		public Localization[] AltNames { get; set; } = [];
 
 		/// <summary>
 		/// Whether or not the group is locked for changes
@@ -86,7 +86,7 @@ public class ScanlationGroup : MangaDexModel<ScanlationGroup.ScanlationGroupAttr
 		/// The languages the group translates
 		/// </summary>
 		[JsonPropertyName("focusedLanguages")]
-		public string[] FocusedLanguages { get; set; } = Array.Empty<string>();
+		public string[] FocusedLanguages { get; set; } = [];
 
 		/// <summary>
 		/// Whether or not the group is an official publisher

@@ -1,27 +1,28 @@
 ﻿namespace MangaDexSharp.Utilities.Cli.Services;
 
+using System.Text;
 using Writers;
-using MangaStatus = (Manga manga, ReadStatus status);
+using MangaStatus = (Manga manga, ReadStatus status, Chapter? chapter);
 
 public interface IExportReadListService
 {
-    Task WriteUsersMangaStatusToFile(string file, ReadStatus? status, CancellationToken token);
+    Task WriteUsersMangaStatusToFile(string file, ReadStatus? status, bool includeChapters, string lang, CancellationToken token);
 }
 
 internal class ExportReadListService(
     IRateLimitService _api,
     ILogger<ExportReadListService> _logger) : IExportReadListService
 {
-    public static Dictionary<string, Func<string, IRecordWriter<MangaStatus>>> GetWriters()
+    public static Dictionary<string, Func<string, IRecordWriter<MangaStatus>>> GetWriters(string lang)
     {
         return new()
         {
-            ["csv"] = p => new CsvRecordWriter<MangaStatus, CsvManga>(p, CsvManga.FromManga),
-            ["json"] = p => new JsonRecordWriter<MangaStatus, CsvManga>(p, CsvManga.FromManga),
+            ["csv"] = p => new CsvRecordWriter<MangaStatus, CsvManga>(p, t => CsvManga.FromManga(t, lang)),
+            ["json"] = p => new JsonRecordWriter<MangaStatus, CsvManga>(p, t => CsvManga.FromManga(t, lang)),
         };
     }
 
-    public async IAsyncEnumerable<MangaStatus> GetUsersMangaStatus(ReadStatus? status,
+    public async IAsyncEnumerable<MangaStatus> GetUsersMangaStatus(ReadStatus? status, bool includeChapters, string lang,
         [EnumeratorCancellation] CancellationToken token)
     {
         //Get all of the user's read statuses
@@ -52,22 +53,43 @@ internal class ExportReadListService(
             {
                 if (token.IsCancellationRequested) yield break;
                 var ms = readStatus.Statuses.TryGetValue(m.Id, out var s) ? s : ReadStatus.reading;
-                yield return (m, ms);
+                yield return await PopChapter(m, ms, includeChapters, lang, token);
             }
         }
     }
 
-    public async Task WriteUsersMangaStatusToFile(string file, ReadStatus? status, CancellationToken token)
+    public async Task<MangaStatus> PopChapter(Manga manga, ReadStatus status, bool chaps, string lang, CancellationToken token)
+    {
+        if (!chaps) return (manga, status, null);
+
+        var filter = new ChaptersFilter
+        {
+            Manga = manga.Id,
+            Limit = 1,
+            TranslatedLanguage = string.IsNullOrEmpty(lang) ? [] : [lang],
+            Order = new()
+            {
+                [ChaptersFilter.OrderKey.chapter] = OrderValue.desc
+            },
+            
+        };
+        var chapters = await _api.Request(t => t.Chapter.List(filter), token);
+        chapters.ThrowIfError();
+        var chapter = chapters.Data.FirstOrDefault();
+        return (manga, status, chapter);
+    }
+
+    public async Task WriteUsersMangaStatusToFile(string file, ReadStatus? status, bool includeChapters, string lang, CancellationToken token)
     {
         var ext = Path.GetExtension(file).Trim('.').ToLower();
-        if (!GetWriters().TryGetValue(ext, out var fetch))
+        if (!GetWriters(lang).TryGetValue(ext, out var fetch))
         {
             _logger.LogError("No writer found for {Ext}", ext);
             return;
         }
 
         using var writer = fetch(file);
-        var manga = GetUsersMangaStatus(status, token);
+        var manga = GetUsersMangaStatus(status, includeChapters, lang, token);
         await writer.Write(manga);
         _logger.LogInformation("Wrote read list to {File}", file);
     }
@@ -77,10 +99,37 @@ internal class ExportReadListService(
         string Title,
         string CoverUrl,
         string TitleUrl,
-        string Status)
+        string Status,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] string? LatestChapterId,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] string? LatestChapterTitle,
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] string? LatestChapterUrl)
     {
-        public static CsvManga FromManga(MangaStatus m)
+        public static CsvManga FromManga(MangaStatus m, string lang)
         {
+            string? DetermineChapterTitle()
+            {
+                if (m.chapter is null) return null;
+
+                var bob = new StringBuilder();
+                if (!string.IsNullOrEmpty(m.chapter.Attributes?.Volume))
+                    bob.Append($"Vol.{m.chapter.Attributes.Volume} ");
+                if (!string.IsNullOrEmpty(m.chapter.Attributes?.Chapter))
+                    bob.Append($"Ch.{m.chapter.Attributes.Chapter} ");
+                if (!string.IsNullOrEmpty(m.chapter.Attributes?.Title))
+                    bob.Append(m.chapter.Attributes.Title);
+                return bob.ToString().Trim();
+            }
+
+            string? DetermineChapterUrl()
+            {
+                if (m.chapter is null) return null;
+
+                if (!string.IsNullOrEmpty(m.chapter.Attributes?.ExternalUrl))
+                    return m.chapter.Attributes.ExternalUrl;
+
+                return $"https://mangadex.org/chapter/{m.chapter.Id}";
+            }
+
             var cover = m.manga.CoverArt().FirstOrDefault()?.Attributes;
             var coverUrl = cover is null
                 ? string.Empty
@@ -88,10 +137,13 @@ internal class ExportReadListService(
 
             return new CsvManga(
                 m.manga.Id,
-                m.manga.Attributes?.Title?.PreferedOrFirst(t => t.Key == "en").Value ?? string.Empty,
+                m.manga.Attributes?.Title?.PreferedOrFirst(t => t.Key == lang).Value ?? string.Empty,
                 coverUrl,
                 $"https://mangadex.org/title/{m.manga.Id}",
-                m.status.ToString());
+                m.status.ToString(),
+                m.chapter?.Id,
+                DetermineChapterTitle(),
+                DetermineChapterUrl());
         }
     }
 }

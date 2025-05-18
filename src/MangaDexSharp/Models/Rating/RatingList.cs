@@ -9,7 +9,7 @@ public class RatingList : MangaDexRoot
 	/// The ratings of the manga
 	/// </summary>
 	[JsonPropertyName("ratings")]
-	public Dictionary<string, Rating> Ratings { get; set; } = new();
+	public Dictionary<string, Rating> Ratings { get; set; } = [];
 
 	/// <summary>
 	/// Represents a rating for a manga

@@ -1,7 +1,7 @@
 ﻿namespace MangaDexSharp;
 
 /// <summary>
-/// Represents the available query paramters for the chapters endpoints
+/// Represents the available query parameters for the chapters endpoints
 /// </summary>
 public class ChaptersFilter : IPaginateFilter
 {
@@ -23,7 +23,7 @@ public class ChaptersFilter : IPaginateFilter
 	/// <summary>
 	/// Only include chapters with these Ids
 	/// </summary>
-	public string[] Ids { get; set; } = Array.Empty<string>();
+	public string[] Ids { get; set; } = [];
 
 	/// <summary>
 	/// Only include chapters with these titles
@@ -33,7 +33,7 @@ public class ChaptersFilter : IPaginateFilter
 	/// <summary>
 	/// Only include chapters from these scanlation groups
 	/// </summary>
-	public string[] Groups { get; set; } = Array.Empty<string>();
+	public string[] Groups { get; set; } = [];
 
 	/// <summary>
 	/// Only include chapters from this user
@@ -48,27 +48,27 @@ public class ChaptersFilter : IPaginateFilter
 	/// <summary>
 	/// Only include chapters with these volume ordinals
 	/// </summary>
-	public string[] Volumes { get; set; } = Array.Empty<string>();
+	public string[] Volumes { get; set; } = [];
 
 	/// <summary>
 	/// Only include chapters with these chapter ordinals
 	/// </summary>
-	public string[] Chapter { get; set; } = Array.Empty<string>();
+	public string[] Chapter { get; set; } = [];
 
 	/// <summary>
 	/// Filters the chapters to only include chapters available in these languages
 	/// </summary>
-	public string[] TranslatedLanguage { get; set; } = Array.Empty<string>();
+	public string[] TranslatedLanguage { get; set; } = [];
 
 	/// <summary>
 	/// Only include chapters whose original language is in this list
 	/// </summary>
-	public string[] OriginalLanguage { get; set; } = Array.Empty<string>();
+	public string[] OriginalLanguage { get; set; } = [];
 
 	/// <summary>
 	/// Exclude any chapters whose original language is in this list
 	/// </summary>
-	public string[] ExcludedOriginalLanguage { get; set; } = Array.Empty<string>();
+	public string[] ExcludedOriginalLanguage { get; set; } = [];
 
 	/// <summary>
 	/// Only include chapters with these content ratings (NSFW vs SFW)
@@ -78,12 +78,12 @@ public class ChaptersFilter : IPaginateFilter
 	/// <summary>
 	/// Exclude any chapters made by these groups
 	/// </summary>
-	public string[] ExcludedGroups { get; set; } = Array.Empty<string>();
+	public string[] ExcludedGroups { get; set; } = [];
 
 	/// <summary>
 	/// Exclude any chapters uploaded by these users
 	/// </summary>
-	public string[] ExcludedUploaders { get; set; } = Array.Empty<string>();
+	public string[] ExcludedUploaders { get; set; } = [];
 
 	/// <summary>
 	/// Include chapters whose changes haven't been published yet
@@ -108,12 +108,12 @@ public class ChaptersFilter : IPaginateFilter
 	/// <summary>
 	/// Determine how to order the returned chapters
 	/// </summary>
-	public Dictionary<OrderKey, OrderValue> Order { get; set; } = new();
+	public Dictionary<OrderKey, OrderValue> Order { get; set; } = [];
 
 	/// <summary>
 	/// Determine what to include in the return results of the chapter
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[] { MangaIncludes.manga, MangaIncludes.scanlation_group, MangaIncludes.user };
+	public MangaIncludes[] Includes { get; set; } = [MangaIncludes.manga, MangaIncludes.scanlation_group, MangaIncludes.user];
 
 	/// <summary>
 	/// Whether or not to include chapters with 0 pages

@@ -9,7 +9,7 @@ public class MangaTag : MangaDexModel<MangaTag.MangaTagAttributesModel>, IRelati
 	/// All of the related items for this tag
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// All of the properties on the tag
@@ -20,13 +20,13 @@ public class MangaTag : MangaDexModel<MangaTag.MangaTagAttributesModel>, IRelati
 		/// The name of the tag in varying languages
 		/// </summary>
 		[JsonPropertyName("name")]
-		public Localization Name { get; set; } = new();
+		public Localization Name { get; set; } = [];
 
 		/// <summary>
 		/// A description of the tag in varying languages
 		/// </summary>
 		[JsonPropertyName("description")]
-		public Localization Description { get; set; } = new();
+		public Localization Description { get; set; } = [];
 
 		/// <summary>
 		/// How to group the tag

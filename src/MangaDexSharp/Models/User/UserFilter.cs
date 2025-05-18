@@ -23,7 +23,7 @@ public class UserFilter : IPaginateFilter
 	/// <summary>
 	/// Return only users in this list of IDs
 	/// </summary>
-	public string[] Ids { get; set; } = Array.Empty<string>();
+	public string[] Ids { get; set; } = [];
 
 	/// <summary>
 	/// Return only users whose username matches this

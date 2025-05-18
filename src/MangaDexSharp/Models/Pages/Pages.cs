@@ -58,12 +58,12 @@ public class Pages : MangaDexRoot
 		/// The full-resolution image names
 		/// </summary>
 		[JsonPropertyName("data")]
-		public string[] Data { get; set; } = Array.Empty<string>();
+		public string[] Data { get; set; } = [];
 
 		/// <summary>
 		/// The data-saver image names
 		/// </summary>
 		[JsonPropertyName("dataSaver")]
-		public string[] DataSaver { get; set; } = Array.Empty<string>();
+		public string[] DataSaver { get; set; } = [];
 	}
 }

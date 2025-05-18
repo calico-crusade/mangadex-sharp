@@ -58,7 +58,7 @@ public class ReportFilter : IPaginateFilter
 			.Add("reasonId", ReasonId)
 			.Add("objectId", ObjectId)
 			.Add("status", State)
-			.Add("includes", new[] { "user", "reason" });
+			.Add("includes", ["user", "reason"]);
 
 		if (CreatedAtOrder != null)
 			bob.Add("order", new Dictionary<MangaFilter.OrderKey, OrderValue>

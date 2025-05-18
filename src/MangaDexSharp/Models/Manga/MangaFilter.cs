@@ -33,17 +33,17 @@ public class MangaFilter : IPaginateFilter
 	/// <summary>
 	/// Determine what to include in the return results of the manga
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[] { MangaIncludes.cover_art };
+	public MangaIncludes[] Includes { get; set; } = [MangaIncludes.cover_art];
 
 	/// <summary>
 	/// Only include manga with these author IDs
 	/// </summary>
-	public string[] Authors { get; set; } = Array.Empty<string>();
+	public string[] Authors { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga with these artist IDs
 	/// </summary>
-	public string[] Artists { get; set; } = Array.Empty<string>();
+	public string[] Artists { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga made in this year
@@ -53,7 +53,7 @@ public class MangaFilter : IPaginateFilter
 	/// <summary>
 	/// Only include manga with these tags.
 	/// </summary>
-	public string[] IncludedTags { get; set; } = Array.Empty<string>();
+	public string[] IncludedTags { get; set; } = [];
 
 	/// <summary>
 	/// Whether or not to require ALL tags or just some of them
@@ -63,7 +63,7 @@ public class MangaFilter : IPaginateFilter
 	/// <summary>
 	/// Only include manga that don't have these tags
 	/// </summary>
-	public string[] ExcludedTags { get; set; } = Array.Empty<string>();
+	public string[] ExcludedTags { get; set; } = [];
 
 	/// <summary>
 	/// Whether or not to require ALL excluded tags or some of them
@@ -73,32 +73,32 @@ public class MangaFilter : IPaginateFilter
 	/// <summary>
 	/// Only include manga with these publication statuses
 	/// </summary>
-	public Status[] Status { get; set; } = Array.Empty<Status>();
+	public Status[] Status { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga with these original language codes
 	/// </summary>
-	public string[] OriginalLanguage { get; set; } = Array.Empty<string>();
+	public string[] OriginalLanguage { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga that weren't written in these languages originally
 	/// </summary>
-	public string[] ExcludedOriginalLanguage { get; set; } = Array.Empty<string>();
+	public string[] ExcludedOriginalLanguage { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga with these available language codes
 	/// </summary>
-	public string[] AvailableTranslatedLanguage { get; set; } = Array.Empty<string>();
+	public string[] AvailableTranslatedLanguage { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga that fall in these publication demographics
 	/// </summary>
-	public Demographic[] PublicationDemographic { get; set; } = Array.Empty<Demographic>();
+	public Demographic[] PublicationDemographic { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga with these IDs
 	/// </summary>
-	public string[] Ids { get; set; } = Array.Empty<string>();
+	public string[] Ids { get; set; } = [];
 
 	/// <summary>
 	/// Only include manga made since this date
@@ -123,7 +123,7 @@ public class MangaFilter : IPaginateFilter
 	/// <summary>
 	/// Determine how to order the returned results
 	/// </summary>
-	public Dictionary<OrderKey, OrderValue> Order { get; set; } = new();
+	public Dictionary<OrderKey, OrderValue> Order { get; set; } = [];
 
 	/// <summary>
 	/// Builds the query parameters for the URL

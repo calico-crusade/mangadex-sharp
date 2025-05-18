@@ -20,19 +20,19 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 		/// The primary title of the manga in varying languages
 		/// </summary>
 		[JsonPropertyName("title")]
-		public Localization Title { get; set; } = new();
+		public Localization Title { get; set; } = [];
 
 		/// <summary>
 		/// A collection of alternate titles for the manga in varying languages
 		/// </summary>
 		[JsonPropertyName("altTitles")]
-		public Localization[] AltTitles { get; set; } = Array.Empty<Localization>();
+		public Localization[] AltTitles { get; set; } = [];
 
 		/// <summary>
 		/// The description of this manga in varying languages
 		/// </summary>
 		[JsonPropertyName("description")]
-		public Localization Description { get; set; } = new();
+		public Localization Description { get; set; } = [];
 
 		/// <summary>
 		/// Whether or not the manga is locked for changes
@@ -44,7 +44,7 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 		/// Any links for this manga
 		/// </summary>
 		[JsonPropertyName("links")]
-		public Localization Links { get; set; } = new();
+		public Localization Links { get; set; } = [];
 
 		/// <summary>
 		/// The original language the manga was written in
@@ -92,7 +92,7 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 		/// Any tags associated with this manga
 		/// </summary>
 		[JsonPropertyName("tags")]
-		public MangaTag[] Tags { get; set; } = Array.Empty<MangaTag>();
+		public MangaTag[] Tags { get; set; } = [];
 
 		/// <summary>
 		/// The publication state of the manga
@@ -128,7 +128,7 @@ public class Manga : MangaDexModel<Manga.MangaAttributesModel>, IRelationshipMod
 		/// All of the languages this manga is available in
 		/// </summary>
 		[JsonPropertyName("availableTranslatedLanguages")]
-		public string[] AvailableTranslatedLanguages { get; set; } = Array.Empty<string>();
+		public string[] AvailableTranslatedLanguages { get; set; } = [];
 
 		/// <summary>
 		/// The ID of the latest chapter that was uploaded

@@ -236,8 +236,8 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaAggregate> Aggregate(string id, string[]? languages = null, string[]? groups = null)
 	{
-		languages ??= Array.Empty<string>();
-		groups ??= Array.Empty<string>();
+		languages ??= [];
+		groups ??= [];
 		var bob = new FilterBuilder()
 			.Add("translatedLanguage", languages)
 			.Add("groups", groups)
@@ -247,7 +247,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot<Manga>> Get(string id, MangaIncludes[]? includes = null)
 	{
-		includes ??= new[] { MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.artist, MangaIncludes.tag };
+		includes ??= [MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.artist, MangaIncludes.tag];
 		var bob = new FilterBuilder()
 			.Add("includes", includes)
 			.Build();
@@ -328,7 +328,7 @@ internal class MangaDexMangaService : IMangaDexMangaService
 
 	public async Task<MangaDexRoot<Manga>> Draft(string id, MangaIncludes[]? includes = null, string? token = null)
 	{
-		includes ??= new[] { MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.artist, MangaIncludes.tag };
+		includes ??= [MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.artist, MangaIncludes.tag];
 		var c = await _api.Auth(token);
 		var bob = new FilterBuilder()
 			.Add("includes", includes)

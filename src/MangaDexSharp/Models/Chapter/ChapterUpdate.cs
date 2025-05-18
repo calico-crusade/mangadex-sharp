@@ -33,7 +33,7 @@ public class ChapterUpdate
 	/// The groups the chapter was translated by
 	/// </summary>
 	[JsonPropertyName("groups")]
-	public string[] Groups { get; set; } = Array.Empty<string>();
+	public string[] Groups { get; set; } = [];
 
 	/// <summary>
 	/// The version of the request

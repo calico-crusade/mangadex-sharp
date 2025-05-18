@@ -92,9 +92,9 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 	/// <returns>The map of all of the types</returns>
 	public TypeMap[] Types()
 	{
-		return new[]
-		{
-			new TypeMap(typeof(IRelationship), new()
+		return
+        [
+            new TypeMap(typeof(IRelationship), new()
 			{
 				["author"] = typeof(PersonRelationship),
 				["artist"] = typeof(PersonRelationship),
@@ -110,7 +110,7 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				["api_client"] = typeof(ApiClient),
 				["upload_session_file"] = typeof(UploadSessionFile)
 			})
-		};
+		];
 	}
 
 	/// <summary>

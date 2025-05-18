@@ -9,7 +9,7 @@ public class CustomList : MangaDexModel<CustomList.CustomListAttributesModel>, I
 	/// All of the related items for this list
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// All of the attributes the list has

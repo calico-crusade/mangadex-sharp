@@ -9,7 +9,7 @@ public class UploadSessionCreate
 	/// The groups the upload session is for
 	/// </summary>
 	[JsonPropertyName("groups")]
-	public string[] Groups { get; set; } = Array.Empty<string>();
+	public string[] Groups { get; set; } = [];
 
 	/// <summary>
 	/// The manga the upload session is for

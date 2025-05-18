@@ -8,7 +8,7 @@ public class MangaRandomFilter : IFilter
 	/// <summary>
 	/// Determine what to include in the return results of the manga
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[] { MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.author, MangaIncludes.tag, MangaIncludes.artist };
+	public MangaIncludes[] Includes { get; set; } = [MangaIncludes.manga, MangaIncludes.cover_art, MangaIncludes.author, MangaIncludes.author, MangaIncludes.tag, MangaIncludes.artist];
 
 	/// <summary>
 	/// Only include manga with these content ratings (NSFW vs SFW)
@@ -18,7 +18,7 @@ public class MangaRandomFilter : IFilter
 	/// <summary>
 	/// Only include manga with these tags.
 	/// </summary>
-	public string[] IncludedTags { get; set; } = Array.Empty<string>();
+	public string[] IncludedTags { get; set; } = [];
 
 	/// <summary>
 	/// Whether or not to require ALL tags or just some of them
@@ -28,7 +28,7 @@ public class MangaRandomFilter : IFilter
 	/// <summary>
 	/// Only include manga that don't have these tags
 	/// </summary>
-	public string[] ExcludedTags { get; set; } = Array.Empty<string>();
+	public string[] ExcludedTags { get; set; } = [];
 
 	/// <summary>
 	/// Whether or not to require ALL excluded tags or some of them

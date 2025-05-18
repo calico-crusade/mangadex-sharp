@@ -23,7 +23,7 @@ public class ScanlationGroupFilter : IPaginateFilter
 	/// <summary>
 	/// Only include groups with these Ids
 	/// </summary>
-	public string[] Ids { get; set; } = Array.Empty<string>();
+	public string[] Ids { get; set; } = [];
 
 	/// <summary>
 	/// Only include groups that match this name
@@ -52,7 +52,7 @@ public class ScanlationGroupFilter : IPaginateFilter
 			.Add("ids", Ids)
 			.Add("name", Name)
 			.Add("focusedLanguage", FocusedLanguage)
-			.Add("includes", new[] { "leader", "member" });
+			.Add("includes", ["leader", "member"]);
 
 		if (LatestUploadedChapterOrder != null)
 			bob.Add("order", new Dictionary<MangaFilter.OrderKey, OrderValue>

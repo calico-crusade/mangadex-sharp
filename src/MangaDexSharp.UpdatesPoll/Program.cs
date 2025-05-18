@@ -22,4 +22,4 @@ await srv.Poll(chapters =>
 		chapters.Length,
 		string.Join("\r\n\t", chapters.Select(t => $"{t.Chapter.Attributes?.Chapter} - Vol {t.Chapter.Attributes?.Volume} - {t.Chapter.Attributes?.Title}: Pages: {t.PageUrls.Length}")));
 	return Task.CompletedTask;
-}, langs: new[] { "en" });
+}, langs: ["en"]);

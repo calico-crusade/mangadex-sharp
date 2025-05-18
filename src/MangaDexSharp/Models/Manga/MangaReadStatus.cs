@@ -21,7 +21,7 @@ public class MangaReadStatuses : MangaDexRoot
 	/// The read status
 	/// </summary>
 	[JsonPropertyName("statuses")]
-	public Dictionary<string, ReadStatus> Statuses { get; set; } = new();
+	public Dictionary<string, ReadStatus> Statuses { get; set; } = [];
 }
 
 /// <summary>

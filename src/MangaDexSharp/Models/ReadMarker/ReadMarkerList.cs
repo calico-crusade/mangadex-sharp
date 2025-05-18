@@ -9,5 +9,5 @@ public class ReadMarkerList : MangaDexRoot
 	/// All of the chapter IDs that have been read
 	/// </summary>
 	[JsonPropertyName("data")]
-	public string[] Data { get; set; } = Array.Empty<string>();
+	public string[] Data { get; set; } = [];
 }

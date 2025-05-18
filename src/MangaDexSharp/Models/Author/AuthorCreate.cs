@@ -15,7 +15,7 @@ public class AuthorCreate
 	/// The authors biography localized to different langauges
 	/// </summary>
 	[JsonPropertyName("biography")]
-	public Localization Biography { get; set; } = new();
+	public Localization Biography { get; set; } = [];
 
 	/// <summary>
 	/// The authors twitter handle

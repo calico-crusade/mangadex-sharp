@@ -8,7 +8,7 @@ public class FilterBuilder
 	/// <summary>
 	/// All of that parameters in this builder
 	/// </summary>
-	public List<(string key, string value)> Parameters { get; } = new();
+	public List<(string key, string value)> Parameters { get; } = [];
 
 	/// <summary>
 	/// Adds an optional string value to the parameters

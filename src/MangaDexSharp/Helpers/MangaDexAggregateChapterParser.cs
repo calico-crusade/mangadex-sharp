@@ -19,10 +19,10 @@ public class MangaDexAggregateChapterParser : JsonConverter<Dictionary<string, M
     public override Dictionary<string, MangaAggregate.ChapterData>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.StartObject)
-            return JsonSerializer.Deserialize<Dictionary<string, MangaAggregate.ChapterData>>(ref reader, options) ?? new();
+            return JsonSerializer.Deserialize<Dictionary<string, MangaAggregate.ChapterData>>(ref reader, options) ?? [];
 
         if (reader.TokenType != JsonTokenType.StartArray)
-            return new();
+            return [];
 
         var chapters = JsonSerializer.Deserialize<MangaAggregate.ChapterData[]>(ref reader, options);
         return chapters.ToDictionary(t => t.Chapter);

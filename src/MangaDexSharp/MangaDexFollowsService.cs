@@ -82,7 +82,7 @@ internal class MangaDexFollowsService : IMangaDexFollowsService
 		var bob = new FilterBuilder()
 			.Add("limit", limit)
 			.Add("offset", offset)
-			.Add("includes", new[] { "leader", "member" })
+			.Add("includes", ["leader", "member"])
 			.Build();
 		var url = $"user/follows/group?{bob}";
 		return await _api.Get<ScanlationGroupList>(url, c) ?? new() { Result = "error" };
@@ -108,14 +108,14 @@ internal class MangaDexFollowsService : IMangaDexFollowsService
 
 	public async Task<MangaList> Manga(int offset = 0, int limit = 100, MangaIncludes[]? includes = null, string? token = null)
 	{
-		includes ??= new[]
-		{
-			MangaIncludes.manga,
+		includes ??=
+        [
+            MangaIncludes.manga,
 			MangaIncludes.cover_art,
 			MangaIncludes.author,
 			MangaIncludes.artist,
 			MangaIncludes.tag
-		};
+		];
 		var c = await _api.Auth(token);
 		var bob = new FilterBuilder()
 			.Add("limit", limit)

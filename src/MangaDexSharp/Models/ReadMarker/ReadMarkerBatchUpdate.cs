@@ -9,11 +9,11 @@ public class ReadMarkerBatchUpdate
 	/// The IDs of the chapters that have been read
 	/// </summary>
 	[JsonPropertyName("chapterIdsRead")]
-	public string[] ChapterIdsRead { get; set; } = Array.Empty<string>();
+	public string[] ChapterIdsRead { get; set; } = [];
 
 	/// <summary>
 	/// The IDs of the chapters that have not been read
 	/// </summary>
 	[JsonPropertyName("chapterIdsUnread")]
-	public string[] ChapterIdsUnread { get; set; } = Array.Empty<string>();
+	public string[] ChapterIdsUnread { get; set; } = [];
 }

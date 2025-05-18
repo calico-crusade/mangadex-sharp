@@ -23,7 +23,7 @@ public class AuthorFilter : IPaginateFilter
 	/// <summary>
 	/// An optional list of author IDs
 	/// </summary>
-	public string[] Ids { get; set; } = Array.Empty<string>();
+	public string[] Ids { get; set; } = [];
 
 	/// <summary>
 	/// How to order the results of the query (DEFAULT none)
@@ -33,10 +33,10 @@ public class AuthorFilter : IPaginateFilter
 	/// <summary>
 	/// What relationships to include in the resutls (DEFAULT manga)
 	/// </summary>
-	public MangaIncludes[] Includes { get; set; } = new[]
-	{
-		MangaIncludes.manga
-	};
+	public MangaIncludes[] Includes { get; set; } =
+    [
+        MangaIncludes.manga
+	];
 
 	/// <summary>
 	/// Builds the query into 1 string

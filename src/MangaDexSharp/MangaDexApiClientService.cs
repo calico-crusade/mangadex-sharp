@@ -110,7 +110,7 @@ internal class MangaDexApiClientService : IMangaDexApiClientService
 
     public async Task<MangaDexRoot<ApiClient>> Get(string id, string? token = null, ApiClientIncludes[]? includes = null)
     {
-        includes ??= new[] { ApiClientIncludes.creator };
+        includes ??= [ApiClientIncludes.creator];
         var bob = new FilterBuilder()
             .Add("includes", includes)
             .Build();

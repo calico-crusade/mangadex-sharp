@@ -76,7 +76,7 @@ internal class MangaDexChapterService : IMangaDexChapterService
 
 	public async Task<MangaDexRoot<Chapter>> Get(string id, string[]? includes = null)
 	{
-		includes ??= new[] { "scanlation_group", "manga", "user" };
+		includes ??= ["scanlation_group", "manga", "user"];
 		var pars = string.Join("&", includes.Select(t => $"includes[]={t}"));
 		var url = $"{Root}/{id}?{pars}";
 		return await _api.Get<MangaDexRoot<Chapter>>(url) ?? new() { Result = "error" };

@@ -64,5 +64,5 @@ public class TokenResult
     /// The scopes of the token
     /// </summary>
     [JsonIgnore]
-    public string[] Scopes => Scope?.Split(' ') ?? Array.Empty<string>();
+    public string[] Scopes => Scope?.Split(' ') ?? [];
 }

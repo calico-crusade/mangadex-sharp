@@ -9,7 +9,7 @@ public class PersonRelationship : MangaDexModel<PersonRelationship.PersonRelatio
 	/// Any relationships this person has
 	/// </summary>
 	[JsonPropertyName("relationships")]
-	public IRelationship[] Relationships { get; set; } = Array.Empty<IRelationship>();
+	public IRelationship[] Relationships { get; set; } = [];
 
 	/// <summary>
 	/// The properties of the person
