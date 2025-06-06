@@ -270,23 +270,39 @@ ConfigurationOIDC.PasswordPath = "SomeOther:Path:ToThe:Password";
 ```
 
 ## Uploading / Editing Chapters
-There is now a handy utility for uploading / editing chapters via the API:
+There is now a handy utility for uploading / editing chapters via the API.
+
+You will need to install the [new NuGet package](https://www.nuget.org/packages/MangaDexSharp.Utilities).
+
+```bash
+PM> Install-Package MangaDexSharp.Utilities
+```
+
+Then you can use it like so:
 
 ```csharp
+using MangaDexSharp;
+using MangaDexSharp.Utilities.Upload;
+
 //Get an instance of the API
-var api = MangaDex.Create(c => c
-    .WithAuthConfig(a => a
-        .WithClientId("<client-id>")
-        .WithClientSecret("<client-secret>")
-        .WithUsername("<username>")
-        .WithPassword("<password>")));
+var provider = new ServiceCollection()
+    .AddMangaDex(c => c
+        .WithAuthConfig(a => a
+            .WithClientId("<client-id>")
+            .WithClientSecret("<client-secret>")
+            .WithUsername("<username>")
+            .WithPassword("<password>"))
+        .AddMangaDexUtils())
+    .BuildServiceProvider();
+
+var upload = provider.GetRequiredService<IUploadUtilityService>();
 
 //Get the manga ID and groups you want to upload to
 string mangaId = "f9c33607-9180-4ba6-b85c-e4b5faee7192"; //Official "Test" Manga
 string[] groups = ["e11e461b-8c3a-4b5c-8b07-8892c2dcf449"]; //Cardboard test
 
 //Create a session for the manga
-await using var session = await api.NewUploadSession(mangaId, groups);
+await using var session = await upload.New(mangaId, groups);
 
 //Upload some files to the session (by file path)
 await session.UploadFile("wrong-file.png");
@@ -316,15 +332,15 @@ var chapter = await session.Commit(new ChapterDraft
 Console.WriteLine("Chapter ID: {0}", chapter.Id);
 
 //You can also edit existing sessions:
-await using var session = await api.ContinueUploadSession();
+await using var session = await upload.Continue();
 
 //Or you can edit an existing chapter that has already been upload
 var chapterId = "8f32fa09-593b-49d4-ae23-229cee63f005";
-await using var session = await api.EditChapterSession(chapterId);
+await using var session = await upload.Edit(chapterId);
 
 //There are a bunch of settings you can change for the upload utility.
 //There is a builder method you can specify when creating the sessions:
-await using var session = await api.NewUploadSession(mangaId, groups, 
+await using var session = await upload.New(mangaId, groups, 
     config => 
     {
         config.MaxBatchSize(5);
