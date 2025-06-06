@@ -1,4 +1,4 @@
-﻿namespace MangaDexSharp.Helpers.UploadUtility;
+﻿namespace MangaDexSharp.Utilities.Upload;
 
 /// <summary>
 /// Represents a delegate that is called when an upload event happens

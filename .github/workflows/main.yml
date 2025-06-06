@@ -1,31 +1,20 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
 on:
   push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
 env:
-  # Set the name of the project
   PROJECT: "MangaDexSharp"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
@@ -36,12 +25,22 @@ jobs:
         run: |
           echo "version-without-v=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
           echo "csproj=./src/${{ env.PROJECT }}/${{ env.PROJECT }}.csproj" >> $GITHUB_OUTPUT
+          echo "csproj-utils=./src/${{ env.PROJECT }}/${{ env.PROJECT }}.Utilities.csproj" >> $GITHUB_OUTPUT
      
-      - name: Publish Extensions Nuget Package
-        id: publish_nuget_extensions
+      - name: Publish Main Nuget Package
+        id: publish_nuget_main
         uses: cardboards-box/publish-nuget@v1.0.0
         with:
           PROJECT_FILE_PATH: ${{ steps.version.outputs.csproj }}
+          TAG_COMMIT: false
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          VERSION_STATIC: ${{ steps.version.outputs.version-without-v }}
+     
+      - name: Publish Utilities Nuget Package
+        id: publish_nuget_utilities
+        uses: cardboards-box/publish-nuget@v1.0.0
+        with:
+          PROJECT_FILE_PATH: ${{ steps.version.outputs.csproj-utils }}
           TAG_COMMIT: false
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           VERSION_STATIC: ${{ steps.version.outputs.version-without-v }}

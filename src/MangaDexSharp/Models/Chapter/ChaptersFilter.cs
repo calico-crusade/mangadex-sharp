@@ -120,10 +120,15 @@ public class ChaptersFilter : IPaginateFilter
 	/// </summary>
 	public bool? IncludeEmptyPages { get; set; }
 
-	/// <summary>
-	/// Whether or not to include chapters that have yet to be published.
-	/// </summary>
-	public bool? IncludeFuturePublishAt { get; set; }
+    /// <summary>
+    /// Whether or not to include chapters that are not currently available (e.g. deleted, removed, etc.)
+    /// </summary>
+    public bool? IncludeUnavailable { get; set; }
+
+    /// <summary>
+    /// Whether or not to include chapters that have yet to be published.
+    /// </summary>
+    public bool? IncludeFuturePublishAt { get; set; }
 
 	/// <summary>
 	/// Whether or not to include chapters that are hosted on other sites.
@@ -161,7 +166,8 @@ public class ChaptersFilter : IPaginateFilter
 			.Add("includeEmptyPages", IncludeEmptyPages)
 			.Add("includeFuturePublishAt", IncludeFuturePublishAt)
 			.Add("includeExternalUrl", IncludeExternalUrl)
-			.Build();
+			.Add("includeUnavailable", IncludeUnavailable)
+            .Build();
 	}
 
 	/// <summary>

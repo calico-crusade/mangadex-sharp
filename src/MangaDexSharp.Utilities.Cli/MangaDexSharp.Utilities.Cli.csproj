@@ -14,9 +14,9 @@
 		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-		<ProjectReference Include="..\MangaDexSharp\MangaDexSharp.csproj" />
+	  <ProjectReference Include="..\MangaDexSharp.Utilities\MangaDexSharp.Utilities.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

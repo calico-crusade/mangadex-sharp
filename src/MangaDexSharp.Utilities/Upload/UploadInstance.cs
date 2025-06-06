@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading;
 
-namespace MangaDexSharp.Helpers.UploadUtility;
+namespace MangaDexSharp.Utilities.Upload;
 
 /// <summary>
 /// Represents an upload session
@@ -147,18 +147,16 @@ internal class UploadInstance(
     UploadSettings _settings,
     UploadSession _session,
     List<UploadSessionFile> _startingFiles,
-    RateLimit _initialLimits,
-    IMangaDex _api) : IUploadInstance
+    IRateLimitService _rates) : IUploadInstance
 {
     private bool _isDeleted = false;
     private bool _isCommitted = false;
-    private RateLimit? _rateLimits = _initialLimits;
     private readonly SemaphoreSlim _uploadSemaphore = new(1, 1);
     private readonly List<IFileUpload> _currentBatch = [];
     private readonly List<UploadSessionFile> _uploadedFiles = [];
 
-    public UploadSession.UploadSessionAttributesModel Attributes 
-        => _session?.Attributes 
+    public UploadSession.UploadSessionAttributesModel Attributes
+        => _session?.Attributes
         ?? throw new InvalidOperationException("Session attributes are null");
 
     public string SessionId => _session.Id;
@@ -173,12 +171,14 @@ internal class UploadInstance(
 
     public int UploadedBatches { get; private set; } = 0;
 
-    public async Task<T> MakeRequest<T>(Func<string?, Task<T>> request)
+    public Task<T> MakeRequest<T>(Func<string?, IMangaDex, Task<T>> request)
         where T : MangaDexRoot, new()
     {
-        var result = await UploadExtensions.RateLimitRequest(request, _rateLimits, 0, _settings);
-        _rateLimits = result.RateLimit;
-        return result;
+        return _rates.Request(async (api) => 
+        {
+            var token = await _settings.GetAuthToken();
+            return await request(token, api);
+        }, _settings.Token);
     }
 
     public void EnsureAlive()
@@ -215,7 +215,7 @@ internal class UploadInstance(
 
     public async Task UploadFiles(bool buffer, params string[] paths)
     {
-        foreach(var file in paths)
+        foreach (var file in paths)
             await UploadFile(file, buffer);
     }
 
@@ -279,7 +279,7 @@ internal class UploadInstance(
         //Trigger the event for the batch
         _settings.BatchUploadStarted(batch);
         //Upload the files to the api
-        var result = await MakeRequest(token => _api.Upload.Upload(SessionId, token, _settings.Token, batch));
+        var result = await MakeRequest((token, api) => api.Upload.Upload(SessionId, token, _settings.Token, batch));
         //Ensure the result is valid
         result.ThrowIfError();
         var uploaded = result.Data.ToArray();
@@ -314,9 +314,9 @@ internal class UploadInstance(
         //If there are no files, skip the deletion
         if (ids.Length == 0) return;
         //Determine whether this is a single request or a batch of deletes
-        Func<string?, Task<MangaDexRoot>> request = ids.Length == 1
-            ? token => _api.Upload.DeleteUpload(SessionId, ids.First(), token)
-            : token => _api.Upload.DeleteUpload(SessionId, ids, token);
+        Func<string?, IMangaDex, Task<MangaDexRoot>> request = ids.Length == 1
+            ? (token, api) => api.Upload.DeleteUpload(SessionId, ids.First(), token)
+            : (token, api) => api.Upload.DeleteUpload(SessionId, ids, token);
         //Make the request
         var result = await MakeRequest(request);
         //Ensure the request was valid
@@ -347,7 +347,7 @@ internal class UploadInstance(
         //Trigger the event for starting the commit of the session
         _settings.SessionCommitStarted(commit, [.. Uploads]);
         //Make the request to commit the session
-        var result = await MakeRequest(token => _api.Upload.Commit(SessionId, commit, token));
+        var result = await MakeRequest((token, api) => api.Upload.Commit(SessionId, commit, token));
         //Ensure the result is valid
         result.ThrowIfError();
         //Trigger the event for committing the session
@@ -360,7 +360,7 @@ internal class UploadInstance(
     {
         if (!IsAlive) return;
         //Abandon the session
-        await MakeRequest(token => _api.Upload.Abandon(SessionId, token));
+        await MakeRequest((token, api) => api.Upload.Abandon(SessionId, token));
         //Trigger the event for abandoning the session
         _settings.SessionAbandoned(fromDispose);
         _isDeleted = true;

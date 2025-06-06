@@ -115,10 +115,15 @@ public class MangaFilter : IPaginateFilter
 	/// </summary>
 	public bool? HasAvailableChapters { get; set; }
 
-	/// <summary>
-	/// Only include manga from this group ID
-	/// </summary>
-	public string Group { get; set; } = string.Empty;
+    /// <summary>
+    /// Whether or not to include manga that have unavailable chapters
+    /// </summary>
+    public bool? HasUnavailableChapters { get; set; }
+
+    /// <summary>
+    /// Only include manga from this group ID
+    /// </summary>
+    public string Group { get; set; } = string.Empty;
 
 	/// <summary>
 	/// Determine how to order the returned results
@@ -155,7 +160,8 @@ public class MangaFilter : IPaginateFilter
 			.Add("order", Order)
 			.Add("includes", Includes)
 			.Add("hasAvailableChapters", HasAvailableChapters)
-			.Add("group", Group)
+			.Add("hasUnavailableChapters", HasUnavailableChapters)
+            .Add("group", Group)
 			.Build();
 	}
 

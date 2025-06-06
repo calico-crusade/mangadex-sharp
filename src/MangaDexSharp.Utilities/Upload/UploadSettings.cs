@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using Microsoft.Extensions.Logging;
-
-namespace MangaDexSharp.Helpers.UploadUtility;
+﻿namespace MangaDexSharp.Utilities.Upload;
 
 /// <summary>
 /// An interface for editing upload settings
@@ -74,17 +71,6 @@ public interface IUploadSettings
     int MaxBatchSize { get; set; }
 
     /// <summary>
-    /// The max number of times to retry a request before abandoning it
-    /// </summary>
-    int MaxRetries { get; set; }
-
-    /// <summary>
-    /// The minimum amount of time to wait before retrying a request
-    /// </summary>
-    /// <remarks>This will be used when it is greater than the rate-limit timeout</remarks>
-    TimeSpan MinRetryTimeout { get; set; }
-
-    /// <summary>
     /// The cancellation token to use for the upload session
     /// </summary>
     /// <remarks>If cancellation is requested and <see cref="AbandonSessionOnDispose"/> is true, the session will be abandoned.</remarks>
@@ -136,39 +122,6 @@ public interface IUploadSettings
     IUploadSettings WithNoBatchBuffering() => WithMaxBatchSize(0);
 
     /// <summary>
-    /// Sets the max number of times to retry a request before abandoning it
-    /// </summary>
-    /// <param name="retries">The max number of files to buffer before uploading</param>
-    /// <returns>The current settings for fluent method chaining</returns>
-    IUploadSettings WithMaxRetries(ushort retries);
-
-    /// <summary>
-    /// Disables request retries
-    /// </summary>
-    /// <returns>The current settings for fluent method chaining</returns>
-    IUploadSettings WithNoRetries() => WithMaxRetries(0);
-
-    /// <summary>
-    /// Sets the minimum amount of time to wait before retrying a request
-    /// </summary>
-    /// <param name="duration">The minimum amount of time to wait before retrying a request</param>
-    /// <returns>The current settings for fluent method chaining</returns>
-    IUploadSettings WithMinRetryTimeout(TimeSpan duration);
-
-    /// <summary>
-    /// Sets the minimum amount of time to wait before retrying a request
-    /// </summary>
-    /// <param name="seconds">The number of seconds to wait</param>
-    /// <returns>The current settings for fluent method chaining</returns>
-    IUploadSettings WithMinRetryTimeout(double seconds) => WithMinRetryTimeout(TimeSpan.FromSeconds(seconds));
-
-    /// <summary>
-    /// Disables the minimum retry timeout - Rate limits will still be observed
-    /// </summary>
-    /// <returns>The current settings for fluent method chaining</returns>
-    IUploadSettings WithNoRetryTimeout() => WithMinRetryTimeout(TimeSpan.Zero);
-
-    /// <summary>
     /// Sets the cancellation token to use for the upload session
     /// </summary>
     /// <param name="token">The cancellation token to use for the upload session</param>
@@ -200,8 +153,6 @@ public interface IUploadSettings
 internal class UploadSettings : IUploadSettings
 {
     private int _maxBatchSize = 10;
-    private int _maxRetries = 3;
-    private TimeSpan _minRetryTimeout = TimeSpan.Zero;
     private IUploadInstance? _instance = null;
 
     public event UploadDelegate<MangaDexRoot> OnApiResponse = delegate { };
@@ -226,28 +177,6 @@ internal class UploadSettings : IUploadSettings
             if (value < 1)
                 throw new ArgumentException("MaxBatchSize cannot be less than 1");
             _maxBatchSize = value;
-        }
-    }
-
-    public int MaxRetries
-    {
-        get => _maxRetries;
-        set
-        {
-            if (value < 0)
-                throw new ArgumentException("MaxRetries cannot be less than 0");
-            _maxRetries = value;
-        }
-    }
-
-    public TimeSpan MinRetryTimeout
-    {
-        get => _minRetryTimeout;
-        set
-        {
-            if (value < TimeSpan.Zero)
-                throw new ArgumentException("MinRetryTimeout cannot be less than 0");
-            _minRetryTimeout = value;
         }
     }
 
@@ -348,18 +277,6 @@ internal class UploadSettings : IUploadSettings
     public IUploadSettings WithMaxBatchSize(int size)
     {
         MaxBatchSize = size;
-        return this;
-    }
-
-    public IUploadSettings WithMaxRetries(ushort retries)
-    {
-        MaxRetries = retries;
-        return this;
-    }
-
-    public IUploadSettings WithMinRetryTimeout(TimeSpan duration)
-    {
-        MinRetryTimeout = duration;
         return this;
     }
 

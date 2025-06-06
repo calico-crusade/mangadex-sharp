@@ -6,10 +6,10 @@ return await new ServiceCollection()
     .AddMangaDex(c => c
         .WithAuthConfig<AuthConfigurationOIDC>(false)
         .WithCredentials<AuthCredentialsService>(false))
+    .AddMangaDexUtils()
     .AddSerilog()
     .AddSingleton<AuthOptionsCache>()
     .AddTransient<IExportReadListService, ExportReadListService>()
-    .AddSingleton<IRateLimitService, RateLimitService>()
     .Cli(args, c =>
     {
         c.Add<ExportReadListVerb>();

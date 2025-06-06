@@ -1,5 +1,7 @@
 ﻿namespace MangaDexSharp.Cli.Verbs;
 
+using Utilities.Upload;
+
 [Verb("upload", HelpText = "Tests uploading a chapter to mangadex using the upload utility")]
 public class UploadVerbOptions
 {
@@ -7,28 +9,13 @@ public class UploadVerbOptions
 }
 
 internal class UploadVerb(
-    IMangaDex _api,
     IMdJsonService _json,
+    IUploadUtilityService _upload,
     ILogger<UploadVerb> logger) : BooleanVerb<UploadVerbOptions>(logger)
 {
-    public async Task CloseExistingSessions()
-    {
-        var session = await _api.Upload.Get();
-        if (session.IsError())
-        {
-            _logger.LogInformation("No existing session detected! {data}", _json.Pretty(session));
-            return;
-        }
-
-        _logger.LogInformation("Found existing session: {data}", _json.Pretty(session));
-
-        await _api.Upload.Abandon(session.Data.Id);
-        _logger.LogInformation("Abandoned session: {id}", session.Data.Id);
-    }
-
     public override async Task<bool> Execute(UploadVerbOptions options, CancellationToken token)
     {
-        await CloseExistingSessions();
+        await _upload.CloseExisting();
 
         string mangaId = "f9c33607-9180-4ba6-b85c-e4b5faee7192"; //Official "Test" Manga
         string[] groups = ["e11e461b-8c3a-4b5c-8b07-8892c2dcf449"]; //Cardboard test
@@ -43,7 +30,7 @@ internal class UploadVerb(
         ];
 
         _logger.LogInformation("Creating sessions!");
-        await using var session = await _api.NewUploadSession(
+        await using var session = await _upload.New(
             mangaId, groups,  c => c
                 .WithCancellationToken(token)
                 .WithMaxBatchSize(3)
@@ -58,10 +45,10 @@ internal class UploadVerb(
 
         var chapter = await session.Commit(new ChapterDraft
         {
-            Chapter = "6969",
-            Title = "Automated Test Chapter",
+            Chapter = "1337",
+            Title = "Automated Test Chapter - MDSharp",
             TranslatedLanguage = "en",
-            Volume = "1"
+            Volume = "69"
         });
 
         _logger.LogInformation("Took {batches} batches", session.UploadedBatches);
