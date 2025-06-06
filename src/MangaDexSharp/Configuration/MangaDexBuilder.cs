@@ -127,6 +127,16 @@ public interface IMangaDexBuilder
 	/// You can create and inject multiple of these and they will be run in the order they're added.
 	/// </remarks>
     IMangaDexBuilder WithEventTracking<T>(bool transient = true) where T : class, IMdEventsService;
+
+    /// <summary>
+    /// Registers an MD utility service with the builder.
+    /// </summary>
+    /// <typeparam name="TInterface">The utility's interface</typeparam>
+    /// <typeparam name="TConcrete">The utility's implementation</typeparam>
+    /// <returns>The current builder for fluent method chaining</returns>
+    IMangaDexBuilder WithUtility<TInterface, TConcrete>()
+        where TInterface : class, IMdUtil
+        where TConcrete : class, TInterface;
 }
 
 internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
@@ -159,6 +169,7 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
                 .AddTransient<IMangaDexScanlationGroupService, MangaDexScanlationGroupService>()
                 .AddTransient<IMangaDexUploadService, MangaDexUploadService>()
                 .AddTransient<IMangaDexUserService, MangaDexUserService>()
+                .AddTransient<IMangaDexStatisticsService, MangaDexStatisticsService>()
 
                 .AddTransient<IMangaDexMiscService, MangaDexMiscService>()
                 .AddTransient<IMangaDexPageService, MangaDexMiscService>()
@@ -337,6 +348,14 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
             _services.AddTransient<IMdEventsService, T>();
         else
             _services.AddSingleton<IMdEventsService, T>();
+        return this;
+    }
+
+    public IMangaDexBuilder WithUtility<TInterface, TConcrete>()
+        where TInterface : class, IMdUtil
+        where TConcrete : class, TInterface
+    {
+        _services.AddTransient<TInterface, TConcrete>();
         return this;
     }
 }

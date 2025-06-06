@@ -1,9 +1,9 @@
-﻿namespace MangaDexSharp.Utilities.Cli.Services;
+﻿namespace MangaDexSharp.Utilities;
 
 /// <summary>
 /// Service for handling rate-limits for the MD API
 /// </summary>
-public interface IRateLimitService
+public interface IRateLimitService : IMdUtil
 {
     /// <summary>
     /// Makes a request to MD while making sure rate-limits are observed
@@ -25,23 +25,43 @@ internal class RateLimitService(
     /// Semaphore for observing the global 5 concurrent requests limit
     /// </summary>
     private readonly SemaphoreSlim _globalLimit = new(5);
+
     /// <summary>
     /// The last rate limit received from the API
     /// </summary>
     private RateLimit? _last;
+
     /// <inheritdoc cref="MaxRetries"/>
     private int? _maxRetries;
+
+    /// <inheritdoc cref="MinDelay"/>
+    private TimeSpan? _minDelay;
 
     /// <summary>
     /// The max number of retries to make when a rate-limit is hit
     /// </summary>
-    public int MaxRetries => _maxRetries ??= _config.GetValue("MaxRetries", 3);
+    public int MaxRetries => _maxRetries ??= int.TryParse(_config["MaxRetries"], out var val) ? val : 3;
+
+    /// <summary>
+    /// The minimum number of seconds to wait before retrying a request after a rate-limit is hit
+    /// </summary>
+    public TimeSpan MinDelay => _minDelay ??= TimeSpan.FromSeconds(double.TryParse(_config["MinDelaySec"], out var val) ? val : 0);
+
+    /// <summary>
+    /// Returns the minimum delay for the given time span
+    /// </summary>
+    /// <param name="span">The span to check</param>
+    /// <returns>The higher of the two spans</returns>
+    public TimeSpan DetermineDelay(TimeSpan span)
+    {
+        return span < MinDelay ? MinDelay : span;
+    }
 
     /// <summary>
     /// Ensure the rate-limit is not hit before making a request
     /// </summary>
     /// <param name="token">The cancellation token for the wait</param>
-    public async Task EnsureNotLimited( CancellationToken token)
+    public async Task EnsureNotLimited(CancellationToken token)
     {
         try
         {
@@ -54,7 +74,7 @@ internal class RateLimitService(
             //Get the retry time
             var retry = _last.RetryAfter!.Value;
             //Calculate how long we have to wait for it to pass
-            var span = retry - DateTime.UtcNow;
+            var span = DetermineDelay(retry - DateTime.UtcNow);
             //No timeout? skip it
             if (span.TotalMilliseconds <= 0) return;
             //Wait for the time to pass

@@ -1,6 +1,6 @@
-﻿using MangaDexSharp.Utilities.Cli.Services;
+﻿namespace MangaDexSharp.Utilities.Cli.Verbs;
 
-namespace MangaDexSharp.Utilities.Cli.Verbs;
+using Services;
 
 [Verb("export-read-list", isDefault: true, HelpText = "Export your MangaDex read list to a file.")]
 public class ExportReadListOptions : AuthOptions

@@ -87,7 +87,14 @@ public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelations
 		/// </summary>
 		[JsonPropertyName("uploader")]
 		public string? Uploader { get; set; }
-	}
+
+        /// <summary>
+        /// Whether or not the chapter has been deleted / removed from the site
+        /// </summary>
+        [JsonPropertyName("isUnavailable")]
+		public bool IsUnavailable { get; set; }
+
+    }
 }
 
 /// <summary>

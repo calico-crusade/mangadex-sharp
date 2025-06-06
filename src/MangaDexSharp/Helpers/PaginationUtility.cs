@@ -81,9 +81,9 @@ public abstract class PaginationUtility<T>
 }
 
 /// <summary>
-/// A paginated utility targetted towards <see cref="MangaDexCollection{T}"/> types
+/// A paginated utility targeted towards <see cref="MangaDexCollection{T}"/> types
 /// </summary>
-/// <typeparam name="TResult">The base implementaion of <see cref="MangaDexCollection{T}"/></typeparam>
+/// <typeparam name="TResult">The base implementation of <see cref="MangaDexCollection{T}"/></typeparam>
 /// <typeparam name="TSource">The result type from the collection</typeparam>
 /// <typeparam name="TFilter">The <see cref="IPaginateFilter"/> object used for the request</typeparam>
 public class PaginationUtility<TResult, TSource, TFilter> : PaginationUtility<TSource>
@@ -100,12 +100,12 @@ public class PaginationUtility<TResult, TSource, TFilter> : PaginationUtility<TS
 	/// </summary>
 	public Func<TFilter, CancellationToken, Task<TResult>> RequestFn { get; }
 
-	/// <summary>
-	/// A paginated utility targetted towards <see cref="MangaDexCollection{T}"/> types
-	/// </summary>
-	/// <param name="filter">Represents the filter used for the requests</param>
-	/// <param name="request">The underlying request to the API</param>
-	public PaginationUtility(TFilter filter, Func<TFilter, CancellationToken, Task<TResult>> request)
+    /// <summary>
+    /// A paginated utility targeted towards <see cref="MangaDexCollection{T}"/> types
+    /// </summary>
+    /// <param name="filter">Represents the filter used for the requests</param>
+    /// <param name="request">The underlying request to the API</param>
+    public PaginationUtility(TFilter filter, Func<TFilter, CancellationToken, Task<TResult>> request)
 	{
 		Filter = filter;
 		RequestFn = request;

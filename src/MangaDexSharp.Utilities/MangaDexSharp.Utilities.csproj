@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Authors>Cardboard</Authors>
+		<Company>N/A</Company>
+		<Description>A MangaDex.org API package - Utilities and Extensions</Description>
+		<PackageProjectUrl>https://github.com/calico-crusade/mangadex-sharp</PackageProjectUrl>
+		<PackageIcon>icon.jpg</PackageIcon>
+		<RepositoryUrl>https://github.com/calico-crusade/mangadex-sharp</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Manga;Mangadex;Anime;Cardboard;mangadex-sharp;mangadex-api;mangadex-utils</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MangaDexSharp\MangaDexSharp.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\icon.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="./../MangaDexSharp/global.cs" />
+	</ItemGroup>
+
+</Project>

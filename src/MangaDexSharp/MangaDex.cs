@@ -99,11 +99,14 @@ public interface IMangaDex
 	/// All of the API client endpoints
 	/// </summary>
 	IMangaDexApiClientService ApiClient { get; }
+
+    /// <summary>
+    /// All of the statistics endpoints
+    /// </summary>
+    IMangaDexStatisticsService Statistics { get; }
 }
 
-/// <summary>
-/// An instance of the MangaDex API
-/// </summary>
+/// <inheritdoc cref="IMangaDex" />
 public class MangaDex(
     IMangaDexMangaService manga,
     IMangaDexChapterService chapter,
@@ -119,102 +122,68 @@ public class MangaDex(
     IMangaDexUploadService upload,
     IMangaDexUserService user,
     IMangaDexAuthService auth,
-    IMangaDexApiClientService apiClient) : IMangaDex
+    IMangaDexApiClientService apiClient,
+    IMangaDexStatisticsService statistics) : IMangaDex
 {
-    /// <summary>
-    /// All of the manga endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexMangaService Manga { get; } = manga;
 
-    /// <summary>
-    /// All of the chapter endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexChapterService Chapter { get; } = chapter;
 
-    /// <summary>
-    /// All of the miscellaneous endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexMiscService Misc { get; } = misc;
 
-    /// <summary>
-    /// All of the author endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexAuthorService Author { get; } = author;
 
-    /// <summary>
-    /// All of the cover-art endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexCoverArtService Cover { get; } = cover;
 
-    /// <summary>
-    /// All of the custom lists endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexCustomListService Lists { get; } = lists;
 
-    /// <summary>
-    /// All of the read-status endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexReadMarkerService ReadMarker { get; } = readMarker;
 
-    /// <summary>
-    /// All of the manga-feed endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexFeedService Feed { get; } = feed;
 
-    /// <summary>
-    /// All of the follows endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexFollowsService Follows { get; } = follows;
 
-    /// <summary>
-    /// All of the report endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexReportService Report { get; } = report;
 
-    /// <summary>
-    /// All of the scanlation group endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexScanlationGroupService ScanlationGroup { get; } = scanlationGroup;
 
-    /// <summary>
-    /// All of the upload session endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexUploadService Upload { get; } = upload;
 
-    /// <summary>
-    /// All of the user endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexUserService User { get; } = user;
 
-    /// <summary>
-    /// All of the chapter-page endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexPageService Pages => Misc;
 
-	/// <summary>
-	/// All of the ratings endpoints
-	/// </summary>
-	public IMangaDexRatingService Ratings => Misc;
+    /// <inheritdoc />
+    public IMangaDexRatingService Ratings => Misc;
 
-	/// <summary>
-	/// All of the threads endpoints
-	/// </summary>
-	public IMangaDexThreadsService Threads => Misc;
+    /// <inheritdoc />
+    public IMangaDexThreadsService Threads => Misc;
 
-	/// <summary>
-	/// All of the captcha endpoints
-	/// </summary>
-	public IMangaDexCaptchaService Captcha => Misc;
+    /// <inheritdoc />
+    public IMangaDexCaptchaService Captcha => Misc;
 
-    /// <summary>
-    /// The OAuth2.0 service for auth.mangadex.org
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexAuthService Auth { get; } = auth;
 
-    /// <summary>
-    /// All of the API client endpoints
-    /// </summary>
+    /// <inheritdoc />
     public IMangaDexApiClientService ApiClient { get; } = apiClient;
+
+    /// <inheritdoc />
+	public IMangaDexStatisticsService Statistics { get; } = statistics;
 
     /// <summary>
     /// Creates an isolated instance of the MangaDex API 

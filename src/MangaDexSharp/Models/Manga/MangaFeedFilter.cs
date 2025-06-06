@@ -95,11 +95,16 @@ public class MangaFeedFilter : IPaginateFilter
 	/// </summary>
 	public bool? IncludeExternalUrl { get; set; }
 
-	/// <summary>
-	/// Builds the query parameters for the URL
-	/// </summary>
-	/// <returns></returns>
-	public string BuildQuery()
+    /// <summary>
+    /// Whether or not to include chapters that are unavailable (deleted or removed from the site).
+    /// </summary>
+    public bool? IncludeUnavailable { get; set; }
+
+    /// <summary>
+    /// Builds the query parameters for the URL
+    /// </summary>
+    /// <returns></returns>
+    public string BuildQuery()
 	{
 		return new FilterBuilder()
 			.Add("limit", Limit)
@@ -119,7 +124,8 @@ public class MangaFeedFilter : IPaginateFilter
 			.Add("includeEmptyPages", IncludeEmptyPages)
 			.Add("includeFuturePublishAt", IncludeFuturePublishAt)
 			.Add("includeExternalUrl", IncludeExternalUrl)
-			.Build();
+            .Add("includeUnavailable", IncludeUnavailable)
+            .Build();
 	}
 
 	/// <summary>

@@ -1,6 +1,4 @@
-﻿using MangaDexSharp.Helpers;
-
-namespace MangaDexSharp;
+﻿namespace MangaDexSharp;
 
 /// <summary>
 /// Represents all of the requests for the auth.mangadex.org service
