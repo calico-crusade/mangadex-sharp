@@ -7,6 +7,7 @@ on:
 
 env:
   PROJECT: "MangaDexSharp"
+  PROJECT_UTILS: "MangaDexSharp.Utilities"
 
 jobs:
   build:
@@ -25,7 +26,7 @@ jobs:
         run: |
           echo "version-without-v=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
           echo "csproj=./src/${{ env.PROJECT }}/${{ env.PROJECT }}.csproj" >> $GITHUB_OUTPUT
-          echo "csproj-utils=./src/${{ env.PROJECT }}/${{ env.PROJECT }}.Utilities.csproj" >> $GITHUB_OUTPUT
+          echo "csproj-utils=./src/${{ env.PROJECT_UTILS }}/${{ env.PROJECT_UTILS }}.csproj" >> $GITHUB_OUTPUT
      
       - name: Publish Main Nuget Package
         id: publish_nuget_main
