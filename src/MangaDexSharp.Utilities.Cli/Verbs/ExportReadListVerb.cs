@@ -2,7 +2,7 @@
 
 using Services;
 
-[Verb("export-read-list", isDefault: true, HelpText = "Export your MangaDex read list to a file.")]
+[Verb("export-read-list", HelpText = "Export your MangaDex read list to a file.")]
 public class ExportReadListOptions : AuthOptions
 {
     private const string FILE_PATH = "read-list.json";

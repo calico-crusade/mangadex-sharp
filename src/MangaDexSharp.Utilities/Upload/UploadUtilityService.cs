@@ -88,6 +88,7 @@ internal class UploadUtilityService(
         var files = session.Data.Relationship<UploadSessionFile>().ToList();
         //Return the instance of the upload
         var instance = new UploadInstance(settings, session.Data, files, _rates);
+        instance.InitReader();
         settings.SetInstance(instance);
         return instance;
     }

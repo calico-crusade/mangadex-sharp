@@ -38,14 +38,16 @@ internal class UploadVerb(
 
         _logger.LogInformation("Session ID: {id}", session.SessionId);
 
-        foreach (var file in files)
-        {
-            await session.UploadFile(file);
-        }
+        await Task.WhenAll(files.Select(t => session.UploadFile(t)));
+
+        //foreach (var file in files)
+        //{
+        //    await session.UploadFile(file);
+        //}
 
         var chapter = await session.Commit(new ChapterDraft
         {
-            Chapter = "1337",
+            Chapter = "1338",
             Title = "Automated Test Chapter - MDSharp",
             TranslatedLanguage = "en",
             Volume = "69"

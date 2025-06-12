@@ -55,6 +55,11 @@ public interface IUploadSettings
     event UploadDelegate<UploadSessionFile[]> OnFilesDeleted;
 
     /// <summary>
+    /// An event triggered whenever an exception occurs in the reader thread
+    /// </summary>
+    event UploadDelegate<Exception> OnError;
+
+    /// <summary>
     /// Whether or not to abandon the session when the upload instance is disposed
     /// and the session has not been committed
     /// </summary>
@@ -164,6 +169,7 @@ internal class UploadSettings : IUploadSettings
     public event UploadDelegate<UploadSessionCommit, UploadSessionFile[]> OnSessionCommitStarted = delegate { };
     public event UploadDelegate<Chapter> OnSessionCommitted = delegate { };
     public event UploadDelegate<UploadSessionFile[]> OnFilesDeleted = delegate { };
+    public event UploadDelegate<Exception> OnError = delegate { };
 
     public bool AbandonSessionOnDispose { get; set; } = true;
 
@@ -257,6 +263,12 @@ internal class UploadSettings : IUploadSettings
             OnFilesDeleted(_instance, files);
     }
 
+    public void Error(Exception exception)
+    {
+        if (_instance is not null)
+            OnError(_instance, exception);
+    }
+
     public IUploadSettings DoNotAbandonSessionOnDispose(bool enabled = false)
     {
         AbandonSessionOnDispose = enabled;
@@ -343,6 +355,11 @@ internal class UploadSettings : IUploadSettings
         OnFilesDeleted += (instance, files) =>
         {
             logger.LogInformation("Files deleted: {Files}", string.Join(", ", files.Select(t => t.Attributes?.OriginalFileName)));
+        };
+
+        OnError += (instance, exception) =>
+        {
+            logger.LogError(exception, "Upload Error Occurred");
         };
 
         return this;

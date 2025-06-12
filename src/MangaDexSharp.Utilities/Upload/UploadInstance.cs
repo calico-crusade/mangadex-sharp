@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using System.Threading;
+using System.Threading.Channels;
 
 namespace MangaDexSharp.Utilities.Upload;
 
@@ -151,82 +151,60 @@ internal class UploadInstance(
 {
     private bool _isDeleted = false;
     private bool _isCommitted = false;
-    private readonly SemaphoreSlim _uploadSemaphore = new(1, 1);
+    private Task? _readerThread;
     private readonly List<IFileUpload> _currentBatch = [];
     private readonly List<UploadSessionFile> _uploadedFiles = [];
+    private readonly Channel<IFileUpload> _uploads = Channel.CreateUnbounded<IFileUpload>();
+    private readonly CancellationTokenSource _cts = new();
 
+    /// <summary>
+    /// The cancellation token for the reader thread
+    /// </summary>
+    public CancellationToken Token => _cts.Token;
+
+    #region Interface Implementations
+    /// <inheritdoc/>
     public UploadSession.UploadSessionAttributesModel Attributes
         => _session?.Attributes
         ?? throw new InvalidOperationException("Session attributes are null");
-
+    /// <inheritdoc/>
     public string SessionId => _session.Id;
+    /// <inheritdoc/>
     public bool IsCommitted => _isCommitted || Attributes.IsCommitted;
+    /// <inheritdoc/>
     public bool IsProcessed => Attributes.IsProcessed;
+    /// <inheritdoc/>
     public bool IsDeleted => _isDeleted || Attributes.IsDeleted;
+    /// <inheritdoc/>
     public bool IsAlive => !IsCommitted && !IsProcessed && !IsDeleted;
-
+    /// <inheritdoc/>
     public IEnumerable<UploadSessionFile> Uploads => _startingFiles.Concat(_uploadedFiles);
-
+    /// <inheritdoc/>
     public IReadOnlyCollection<IFileUpload> NextBatch => _currentBatch.AsReadOnly();
-
+    /// <inheritdoc/>
     public int UploadedBatches { get; private set; } = 0;
 
-    public Task<T> MakeRequest<T>(Func<string?, IMangaDex, Task<T>> request)
-        where T : MangaDexRoot, new()
-    {
-        return _rates.Request(async (api) => 
-        {
-            var token = await _settings.GetAuthToken();
-            return await request(token, api);
-        }, _settings.Token);
-    }
+    /// <inheritdoc/>
+    public Task UploadFile(IFileUpload file) => InternalUpload(file);
 
-    public void EnsureAlive()
-    {
-        if (IsAlive) return;
-
-        var message = "not alive";
-        if (IsCommitted) message = "already committed, you will need to start a chapter edit session.";
-        else if (IsProcessed) message = "already processed, you will need to start a chapter edit session.";
-        else if (IsDeleted) message = "already deleted, you will need to start a new session.";
-
-        throw new InvalidOperationException("Session is not active. It is " + message);
-    }
-
+    /// <inheritdoc/>
     public async Task UploadFiles(IAsyncEnumerable<IFileUpload> files)
     {
-        EnsureAlive();
         //Iterate through all of the files
         await foreach (var file in files)
             await UploadFile(file);
     }
 
-    public async Task UploadFile(IFileUpload file)
-    {
-        //Make sure the file is valid
-        if (file is null) throw new NullReferenceException("File being uploaded is null");
-        //Add the file to the current batch of files
-        _currentBatch.Add(file);
-        //If the batch isn't full, continue until it is.
-        if (_currentBatch.Count < _settings.MaxBatchSize) return;
-        //Upload the batch of files
-        await EnsureBatchUpload();
-    }
-
-    public async Task UploadFiles(bool buffer, params string[] paths)
-    {
-        foreach (var file in paths)
-            await UploadFile(file, buffer);
-    }
-
+    /// <inheritdoc/>
     public Task UploadFile(byte[] data, string fileName)
     {
         return UploadFile(new RawFileUpload(fileName, data));
     }
 
+    /// <inheritdoc/>
     public async Task UploadFile(string path, bool buffer = false)
     {
-        static async Task<IFileUpload> GetUpload(string path, bool buffer)
+        async Task<IFileUpload> GetUpload(string path, bool buffer)
         {
             if (!File.Exists(path))
                 throw new FileNotFoundException("File not found", path);
@@ -237,7 +215,7 @@ internal class UploadInstance(
 
             var stream = new MemoryStream();
             using var fs = File.OpenRead(path);
-            await fs.CopyToAsync(stream);
+            await fs.CopyToAsync(stream, Token);
             stream.Position = 0;
             return new MemoryStreamFileUpload(filename, stream);
         }
@@ -246,6 +224,7 @@ internal class UploadInstance(
         await UploadFile(file);
     }
 
+    /// <inheritdoc/>
     public async Task UploadFile(Stream stream, string fileName, bool buffer = true, bool leaveOpen = false)
     {
         IFileUpload file;
@@ -256,7 +235,7 @@ internal class UploadInstance(
         else
         {
             var io = new MemoryStream();
-            await stream.CopyToAsync(io);
+            await stream.CopyToAsync(io, Token);
             io.Position = 0;
             if (!leaveOpen)
                 await stream.DisposeAsync();
@@ -266,38 +245,14 @@ internal class UploadInstance(
         await UploadFile(file);
     }
 
-    public async Task EnsureBatchUpload()
+    /// <inheritdoc/>
+    public async Task UploadFiles(bool buffer, params string[] paths)
     {
-        //Ensure the session is available for uploads
-        EnsureAlive();
-        //Ensure there are files to upload
-        if (_currentBatch.Count == 0) return;
-        //Ensure we are the only one currently uploading
-        await _uploadSemaphore.WaitAsync();
-        //Get the batch of files to be uploaded
-        IFileUpload[] batch = [.. _currentBatch];
-        //Trigger the event for the batch
-        _settings.BatchUploadStarted(batch);
-        //Upload the files to the api
-        var result = await MakeRequest((token, api) => api.Upload.Upload(SessionId, token, _settings.Token, batch));
-        //Ensure the result is valid
-        result.ThrowIfError();
-        var uploaded = result.Data.ToArray();
-        //Trigger the event for the upload succeeding
-        _settings.BatchUploaded(uploaded);
-        //Add the files to the list of uploaded files
-        _uploadedFiles.AddRange(uploaded);
-        //Dispose of all of the files that have been uploaded
-        foreach (var file in batch)
-            file.Dispose();
-        //Increment the number of batches uploaded
-        UploadedBatches++;
-        //Clear the current batch
-        _currentBatch.Clear();
-        //Release the semaphore to allow other uploads
-        _uploadSemaphore.Release();
+        foreach (var file in paths)
+            await UploadFile(file, buffer);
     }
 
+    /// <inheritdoc/>
     public async Task DeleteUpload(params string[] ids)
     {
         static void RemoveFiles(List<UploadSessionFile> list, string[] ids, out UploadSessionFile[] removals)
@@ -328,15 +283,17 @@ internal class UploadInstance(
         _settings.FilesDeleted(removed);
     }
 
+    /// <inheritdoc/>
     public Task Abandon()
     {
         return InternalAbandon(false);
     }
 
+    /// <inheritdoc/>
     public async Task<Chapter> Commit(ChapterDraft data, string[]? pageOrder = null)
     {
         //Ensure all files are uploaded and available
-        await EnsureBatchUpload();
+        await WaitForComplete();
         //Get the commit data
         pageOrder ??= _settings.PageOrderFactory(_uploadedFiles);
         var commit = new UploadSessionCommit
@@ -355,10 +312,66 @@ internal class UploadInstance(
         _isCommitted = true;
         return result.Data;
     }
+    #endregion
 
+    #region Internal Methods
+    /// <summary>
+    /// Ensure the current session is alive, if not, throw an error
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown if the session is not alive</exception>
+    public void EnsureAlive()
+    {
+        if (IsAlive) return;
+
+        var message = "not alive";
+        if (IsCommitted) message = "already committed, you will need to start a chapter edit session.";
+        else if (IsProcessed) message = "already processed, you will need to start a chapter edit session.";
+        else if (IsDeleted) message = "already deleted, you will need to start a new session.";
+
+        throw new InvalidOperationException("Session is not active. It is " + message);
+    }
+
+    /// <summary>
+    /// Make a rate limited request to the MangaDex API
+    /// </summary>
+    /// <typeparam name="T">The type of return object</typeparam>
+    /// <param name="request">The request to make (token, api instance)</param>
+    /// <returns>The result of the request after observing rate-limits</returns>
+    public Task<T> MakeRequest<T>(Func<string?, IMangaDex, Task<T>> request)
+        where T : MangaDexRoot, new()
+    {
+        return _rates.Request(async (api) =>
+        {
+            var token = await _settings.GetAuthToken();
+            return await request(token, api);
+        }, _settings.Token);
+    }
+
+    /// <summary>
+    /// Wait for the reader thread to complete processing all uploads.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown if the reader thread isn't started</exception>
+    public Task WaitForComplete()
+    {
+        //If there is no reader thread active, we will need to throw an error
+        if (_readerThread is null)
+            throw new InvalidOperationException("Reader thread is not present or has not started.");
+        //Mark the channel as complete
+        _uploads.Writer.Complete();
+        //Wait for the reader thread to finish processing all uploads
+        return _readerThread;
+    }
+
+    /// <summary>
+    /// Abandon the upload session, cancelling all uploads and marking the session as abandoned.
+    /// </summary>
+    /// <param name="fromDispose">Whether or not this is being called from <see cref="DisposeAsync"/> or <see cref="Dispose"/></param>
     public async Task InternalAbandon(bool fromDispose)
     {
         if (!IsAlive) return;
+        //Cancel the uploads
+        if (!_cts.IsCancellationRequested)
+            _cts.Cancel();
         //Abandon the session
         await MakeRequest((token, api) => api.Upload.Abandon(SessionId, token));
         //Trigger the event for abandoning the session
@@ -366,16 +379,116 @@ internal class UploadInstance(
         _isDeleted = true;
     }
 
+    /// <summary>
+    /// Adds a file to the upload queue for processing.
+    /// </summary>
+    /// <param name="file">The file to upload</param>
+    /// <exception cref="NullReferenceException">Thrown if the file is invalid</exception>
+    public async Task InternalUpload(IFileUpload file)
+    {
+        //Ensure the session is alive
+        EnsureAlive();
+        //Make sure the file is valid
+        if (file is null) throw new NullReferenceException("File being uploaded is null");
+        //Queue the file for upload
+        await _uploads.Writer.WriteAsync(file, _settings.Token);
+    }
+
+    /// <summary>
+    /// Reads from the channel and processes uploads in batches.
+    /// </summary>
+    public async Task ReaderQueue()
+    {
+        async Task CommitBatch()
+        {
+            //Ensure the session is available for uploads
+            EnsureAlive();
+            //Ensure there are files to upload
+            if (_currentBatch.Count == 0) return;
+            //Get the batch of files to be uploaded
+            IFileUpload[] batch = [.. _currentBatch];
+            //Trigger the event for the batch
+            _settings.BatchUploadStarted(batch);
+            //Upload the files to the api
+            var result = await MakeRequest((token, api) => api.Upload.Upload(SessionId, token, _settings.Token, batch));
+            //Ensure the result is valid
+            result.ThrowIfError();
+            var uploaded = result.Data.ToArray();
+            //Trigger the event for the upload succeeding
+            _settings.BatchUploaded(uploaded);
+            //Add the files to the list of uploaded files
+            _uploadedFiles.AddRange(uploaded);
+            //Dispose of all of the files that have been uploaded
+            foreach (var file in batch)
+                file.Dispose();
+            //Increment the number of batches uploaded
+            UploadedBatches++;
+            //Clear the current batch
+            _currentBatch.Clear();
+        }
+
+        //Read all uploads from the channel
+        await foreach (var item in _uploads.Reader.ReadAllAsync(Token))
+        {
+            //Add the file to the batch
+            _currentBatch.Add(item);
+            //If the batch isn't full, continue until it is.
+            if (_currentBatch.Count < _settings.MaxBatchSize)
+                continue;
+            //Upload the batch of files
+            await CommitBatch();
+        }
+        //Channel is complete, commit any remaining files
+        await CommitBatch();
+    }
+
+    /// <summary>
+    /// Initializes the reader thread for processing uploads.
+    /// </summary>
+    public void InitReader()
+    {
+        //Ensure the reader thread isn't already initialized
+        if (_readerThread is not null)
+            return;
+        //Forward the cancellation token from the settings
+        _settings.Token.Register(_cts.Cancel);
+
+        //Initialize the reader thread to process uploads
+        _readerThread = Task.Run(async () =>
+        {
+            try
+            {
+                await ReaderQueue();
+            }
+            //Box cancellations
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
+            {
+                _settings.Error(ex);
+                throw;
+            }
+            finally
+            {
+                if (!_cts.IsCancellationRequested)
+                    _cts.Cancel();
+                _readerThread = null;
+            }
+        });
+    }
+    #endregion
+
+    #region Dispose Methods
+    /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
         //If the session is alive and we aren't abandoning the session,
         //make sure we flush any queued files to the server
         if (IsAlive && !_settings.AbandonSessionOnDispose)
-            await EnsureBatchUpload();
+            await WaitForComplete();
         //Clear all of our data
         _currentBatch.Clear();
-        _uploadSemaphore.Dispose();
         _uploadedFiles.Clear();
+        _uploads.Writer.TryComplete();
         //If the session isn't alive or we are abandoning the session,
         //we can just skip the rest of the dispose
         if (!_settings.AbandonSessionOnDispose ||
@@ -384,9 +497,13 @@ internal class UploadInstance(
         await InternalAbandon(true);
     }
 
+    /// <inheritdoc/>
     public void Dispose()
     {
+        //Trigger the async dispose method and wait for it to complete
         DisposeAsync().AsTask().Wait();
+        //Suppress garbage collection for this instance
         GC.SuppressFinalize(this);
     }
+    #endregion
 }

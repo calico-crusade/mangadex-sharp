@@ -12,5 +12,8 @@ return await new ServiceCollection()
     .AddTransient<IExportReadListService, ExportReadListService>()
     .Cli(args, c =>
     {
-        c.Add<ExportReadListVerb>();
+        c.Add<ExportReadListVerb>()
+         .Add<CheckAuthVerb>()
+         .Add<DefaultVerb>()
+         .Add<DownloadVerb>();
     });

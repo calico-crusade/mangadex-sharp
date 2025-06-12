@@ -1,6 +1,7 @@
 ﻿namespace MangaDexSharp;
 
 using Utilities;
+using Utilities.Download;
 using Utilities.Upload;
 
 /// <summary>
@@ -17,7 +18,8 @@ public static class DiExtensions
     {
         return services
             .AddSingleton<IRateLimitService, RateLimitService>()
-            .AddTransient<IUploadUtilityService, UploadUtilityService>();
+            .AddTransient<IUploadUtilityService, UploadUtilityService>()
+            .AddTransient<IDownloadUtilityService, DownloadUtilityService>();
     }
 
     /// <summary>
@@ -29,6 +31,7 @@ public static class DiExtensions
     {
         return builder
             .WithUtility<IRateLimitService, RateLimitService>()
-            .WithUtility<IUploadUtilityService, UploadUtilityService>();
+            .WithUtility<IUploadUtilityService, UploadUtilityService>()
+            .WithUtility<IDownloadUtilityService, DownloadUtilityService>();
     }
 }

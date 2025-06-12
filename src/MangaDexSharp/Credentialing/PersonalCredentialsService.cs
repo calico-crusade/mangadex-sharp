@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace MangaDexSharp;
+﻿namespace MangaDexSharp;
 
 /// <summary>
 /// An instance of the <see cref="ICredentialsService"/> that automatically fetches and refreshes the access token
@@ -109,6 +107,23 @@ public class PersonalCredentialsService(
 
             await SetCache(token);
             return token;
+        }
+        finally
+        {
+            _lock.Release();
+        }
+    }
+
+    /// <summary>
+    /// Clears the authentication token cache
+    /// </summary>
+    public async Task ClearCache()
+    {
+        try
+        {
+            await _lock.WaitAsync();
+            _last = (null, null);
+            if (_cache is not null) await _cache.SetCache(null, DateTime.UtcNow);
         }
         finally
         {

@@ -93,7 +93,6 @@ public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelations
         /// </summary>
         [JsonPropertyName("isUnavailable")]
 		public bool IsUnavailable { get; set; }
-
     }
 }
 

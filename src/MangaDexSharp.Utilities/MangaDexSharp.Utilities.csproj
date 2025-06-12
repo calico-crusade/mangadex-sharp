@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFrameworks>net8;netstandard2.1</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -39,6 +39,11 @@
 
 	<ItemGroup>
 		<Compile Include="./../MangaDexSharp/global.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CardboardBox.Extensions" Version="2.0.2" />
+	  <PackageReference Include="System.Threading.Channels" Version="9.0.5" />
 	</ItemGroup>
 
 </Project>

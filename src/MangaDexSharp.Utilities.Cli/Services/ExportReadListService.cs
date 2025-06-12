@@ -1,5 +1,6 @@
 ﻿namespace MangaDexSharp.Utilities.Cli.Services;
 
+using CardboardBox.Extensions;
 using System.Text;
 using Writers;
 using MangaStatus = (Manga manga, ReadStatus status, Chapter? chapter);
@@ -137,7 +138,7 @@ internal class ExportReadListService(
 
             return new CsvManga(
                 m.manga.Id,
-                m.manga.Attributes?.Title?.PreferedOrFirst(t => t.Key == lang).Value ?? string.Empty,
+                m.manga.Attributes?.Title?.PreferredOrFirst(t => t.Key == lang).Value ?? string.Empty,
                 coverUrl,
                 $"https://mangadex.org/title/{m.manga.Id}",
                 m.status.ToString(),
