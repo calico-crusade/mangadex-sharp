@@ -6,6 +6,8 @@ By using this library, you agree to follow MangaDex's [Acceptable Use Policy](ht
 
 Note: Using a spoofed user-agent is not allowed and will result in being banned from using the API. There is no reason to spoof the user-agent, except for malicious purposes.
 
+By using `IMangaDexUploadService.Commit(String, UploadSessionCommit, String?)` you agree to the [terms of service](https://mangadex.org/compliance)
+
 ## Installation
 You can install the NuGet package with Visual Studio. It targets .net standard 2.1 to take advantage of most of the new features within C# and .net.
 

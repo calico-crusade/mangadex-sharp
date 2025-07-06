@@ -16,6 +16,15 @@ public class UploadSessionCommit
 	/// </summary>
 	[JsonPropertyName("pageOrder")]
 	public string[] PageOrder { get; set; } = [];
+
+    /// <summary>
+    /// Whether or not the terms of service have been accepted.
+    /// </summary>
+    /// <remarks>
+    /// The Terms of Service: https://mangadex.org/compliance
+    /// </remarks>
+    [JsonPropertyName("termsAccepted")]
+	public bool TermsAccepted { get; set; } = true;
 }
 
 /// <summary>
