@@ -168,6 +168,13 @@ public interface IMangaDexMangaService
 	/// <returns>The results of the request</returns>
 	Task<MangaDexRoot> RelationDelete(string mangaId, string id, string? token = null);
 
+    /// <summary>
+    /// Fetches a list of manga recommendations based on the given manga ID
+    /// </summary>
+    /// <param name="mangaId">The ID of the manga to fetch the recommendations for</param>
+    /// <returns>The results of the request</returns>
+    Task<RecommendationList> Recommendations(string mangaId);
+
 	/// <summary>
 	/// Requests all of the <see cref="Manga"/>s that match the filter
 	/// </summary>
@@ -188,18 +195,12 @@ public interface IMangaDexMangaService
 	IAsyncEnumerable<Chapter> FeedAll(string id, MangaFeedFilter? filter = null, int? delay = null, int? rateCap = null);
 }
 
-internal class MangaDexMangaService : IMangaDexMangaService
+internal class MangaDexMangaService(
+	IMdApiService _api) : IMangaDexMangaService
 {
-	private readonly IMdApiService _api;
-
 	public string Root => $"manga";
 
-	public MangaDexMangaService(IMdApiService api)
-	{
-		_api = api;
-	}
-
-	public async Task<MangaList> List(MangaFilter? filter = null)
+    public async Task<MangaList> List(MangaFilter? filter = null)
 	{
 		filter ??= new();
 		return await _api.Get<MangaList>($"{Root}?{filter.BuildQuery()}") ?? new();
@@ -371,4 +372,10 @@ internal class MangaDexMangaService : IMangaDexMangaService
 		var c = await _api.Auth(token);
 		return await _api.Delete<MangaDexRoot>($"{Root}/{mangaId}/relation/{id}", c) ?? new() { Result = "error" };
 	}
+
+    public async Task<RecommendationList> Recommendations(string mangaId)
+    {
+        var url = $"{Root}/{mangaId}/recommendation";
+		return await _api.Get<RecommendationList>(url) ?? new() { Result = "error" };
+    }
 }

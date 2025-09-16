@@ -15,5 +15,6 @@
          .Add<TestFeedVerb>()
          .Add<RandomVerb>()
          .Add<UploadVerb>()
-         .Add<TestStatsVerb>();
+         .Add<TestStatsVerb>()
+         .Add<RecommendationsTestVerb>();
     });

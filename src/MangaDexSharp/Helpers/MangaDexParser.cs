@@ -108,13 +108,14 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				["tag"] = typeof(MangaTag),
 				["chapter"] = typeof(Chapter),
 				["api_client"] = typeof(ApiClient),
-				["upload_session_file"] = typeof(UploadSessionFile)
-			})
+				["upload_session_file"] = typeof(UploadSessionFile),
+				["manga_recommendation"] = typeof(MangaRecommendation),
+            })
 		];
 	}
 
 	/// <summary>
-	/// Gets the type map for the current deserailizer 
+	/// Gets the type map for the current parser 
 	/// </summary>
 	/// <returns></returns>
 	public TypeMap? GetTypeMap()
@@ -137,34 +138,28 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 /// <summary>
 /// Represents the relationship between an interface and it's available concrete types
 /// </summary>
-public class TypeMap
+/// <param name="interface"> The type of interface we're dealing with</param>
+/// <param name="maps">The map of all of the types that represent the interface</param>
+public class TypeMap(
+	Type @interface, 
+	Dictionary<string, Type> maps)
 {
-	/// <summary>
-	/// The type of interface we're dealing with
-	/// </summary>
-	public Type Interface { get; set; }
-	/// <summary>
-	/// The map of all of the types that represent the interface
-	/// </summary>
-	public Dictionary<string, Type> Maps { get; set; }
+    /// <summary>
+    /// The type of interface we're dealing with
+    /// </summary>
+    public Type Interface { get; set; } = @interface;
 
-	/// <summary>
-	/// ctor
-	/// </summary>
-	/// <param name="interface"></param>
-	/// <param name="maps"></param>
-	public TypeMap(Type @interface, Dictionary<string, Type> maps)
-	{
-		Interface = @interface;
-		Maps = maps;
-	}
+    /// <summary>
+    /// The map of all of the types that represent the interface
+    /// </summary>
+    public Dictionary<string, Type> Maps { get; set; } = maps;
 
-	/// <summary>
-	/// dtor
-	/// </summary>
-	/// <param name="interface"></param>
-	/// <param name="maps"></param>
-	public void Deconstruct(out Type @interface, out Dictionary<string, Type> maps)
+    /// <summary>
+    /// dtor
+    /// </summary>
+    /// <param name="interface"></param>
+    /// <param name="maps"></param>
+    public void Deconstruct(out Type @interface, out Dictionary<string, Type> maps)
 	{
 		@interface = Interface;
 		maps = Maps;

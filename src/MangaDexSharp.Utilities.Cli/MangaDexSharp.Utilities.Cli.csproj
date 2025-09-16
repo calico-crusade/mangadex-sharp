@@ -10,10 +10,10 @@
 	
 	<ItemGroup>
 		<PackageReference Include="CardboardBox.Setup" Version="2.0.0" />
-		<PackageReference Include="CsvHelper" Version="33.0.1" />
-		<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+		<PackageReference Include="CsvHelper" Version="33.1.0" />
+		<PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-		<PackageReference Include="Spectre.Console" Version="0.50.0" />
+		<PackageReference Include="Spectre.Console" Version="0.51.1" />
 	</ItemGroup>
 	
 	<ItemGroup>
