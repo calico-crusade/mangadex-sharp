@@ -10,12 +10,26 @@ internal class ExampleVerb(
 {
     public override async Task<bool> Execute(ExampleVerbOptions opts, CancellationToken token)
     {
+        await UnavailableTest();
         await Manga();
         await Chapters();
         await Groups();
         //await OAuth2Login();
         //await LegacyLogin();
         return true;
+    }
+
+    public async Task UnavailableTest()
+    {
+        const string mangaId = "32fdfe9b-6e11-4a13-9e36-dcd8ea77b4e4";
+        var aggregate = await _api.Manga.Aggregate(mangaId, includeUnavailable: true);
+        var hasBoth = aggregate.Volumes.Any(t => t.Value.Chapters.Any(c => c.Value.IsUnavailable))
+            && aggregate.Volumes.Any(t => t.Value.Chapters.Any(c => !c.Value.IsUnavailable));
+        _logger.LogInformation("Manga {mangaId} has both available and unavailable chapters: {hasBoth}", mangaId, hasBoth);
+
+        aggregate = await _api.Manga.Aggregate(mangaId, includeUnavailable: false);
+        var hasOnlyAvailable = aggregate.Volumes.All(t => t.Value.Chapters.All(c => !c.Value.IsUnavailable));
+        _logger.LogInformation("Manga {mangaId} has only available chapters when includeUnavailable is false: {hasOnlyAvailable}", mangaId, hasOnlyAvailable);
     }
 
     public async Task Manga()

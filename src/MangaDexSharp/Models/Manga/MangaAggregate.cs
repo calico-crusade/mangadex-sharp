@@ -71,5 +71,11 @@ public class MangaAggregate
 		/// </summary>
 		[JsonPropertyName("count")]
 		public int Count { get; set; }
+
+        /// <summary>
+        /// Whether or not the chapter is unavailable (deleted, taken down or otherwise)
+        /// </summary>
+        [JsonPropertyName("isUnavailable")]
+		public bool IsUnavailable { get; set; }
 	}
 }

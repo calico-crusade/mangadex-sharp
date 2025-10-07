@@ -26,8 +26,9 @@ public interface IMangaDexMangaService
 	/// <param name="id">The ID of the manga to fetch for</param>
 	/// <param name="languages">The optional list of languages to limit the results to</param>
 	/// <param name="groups">The optional list of groups to limit the results to</param>
+	/// <param name="includeUnavailable">Whether or not to include unavailable chapters in the response</param>
 	/// <returns>A list of volume and chapter layouts</returns>
-	Task<MangaAggregate> Aggregate(string id, string[]? languages = null, string[]? groups = null);
+	Task<MangaAggregate> Aggregate(string id, string[]? languages = null, string[]? groups = null, bool includeUnavailable = true);
 
 	/// <summary>
 	/// Gets a specific manga by ID
@@ -235,13 +236,14 @@ internal class MangaDexMangaService(
 			};
 	}
 
-	public async Task<MangaAggregate> Aggregate(string id, string[]? languages = null, string[]? groups = null)
+	public async Task<MangaAggregate> Aggregate(string id, string[]? languages = null, string[]? groups = null, bool includeUnavailable = true)
 	{
 		languages ??= [];
 		groups ??= [];
 		var bob = new FilterBuilder()
 			.Add("translatedLanguage", languages)
 			.Add("groups", groups)
+			.Add("includeUnavailable", includeUnavailable)
 			.Build();
 		return await _api.Get<MangaAggregate>($"{Root}/{id}/aggregate?{bob}") ?? new();
 	}
