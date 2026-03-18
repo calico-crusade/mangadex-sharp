@@ -94,23 +94,22 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 	{
 		return
         [
-            new TypeMap(typeof(IRelationship), new()
-			{
-				["author"] = typeof(PersonRelationship),
-				["artist"] = typeof(PersonRelationship),
-				["cover_art"] = typeof(CoverArtRelationship),
-				["manga"] = typeof(RelatedDataRelationship),
-				["scanlation_group"] = typeof(ScanlationGroup),
-				["user"] = typeof(User),
-				["leader"] = typeof(User),
-				["creator"] = typeof(User),
-				["member"] = typeof(User),
-				["tag"] = typeof(MangaTag),
-				["chapter"] = typeof(Chapter),
-				["api_client"] = typeof(ApiClient),
-				["upload_session_file"] = typeof(UploadSessionFile),
-				["manga_recommendation"] = typeof(MangaRecommendation),
-            })
+			TypeMap.Create<IRelationship>()
+				.Register<PersonRelationship>("author")
+				.Register<PersonRelationship>("artist")
+				.Register<CoverArtRelationship>("cover_art")
+				.Register<RelatedDataRelationship>("manga")
+				.Register<ScanlationGroup>("scanlation_group")
+				.Register<User>("user")
+				.Register<User>("leader")
+				.Register<User>("creator")
+				.Register<User>("member")
+				.Register<MangaTag>("tag")
+				.Register<Chapter>("chapter")
+				.Register<ApiClient>("api_client")
+				.Register<UploadSessionFile>("upload_session_file")
+				.Register<MangaRecommendation>("manga_recommendation")
+				.Build()
 		];
 	}
 
@@ -163,5 +162,44 @@ public class TypeMap(
 	{
 		@interface = Interface;
 		maps = Maps;
+	}
+
+	/// <summary>
+	/// Creates a new builder for a type map
+	/// </summary>
+	/// <typeparam name="T">The base type</typeparam>
+	/// <returns>The builder</returns>
+	public static Builder<T> Create<T>() => new();
+
+	/// <summary>
+	/// A builder for making a <see cref="TypeMap"/>
+	/// </summary>
+	public class Builder<T>
+	{
+		/// <summary>
+		/// The map of the types that represent the interface
+		/// </summary>
+		public Dictionary<string, Type> Map { get; set; } = [];
+
+		/// <summary>
+		/// Registers a type for the given type
+		/// </summary>
+		/// <typeparam name="TType">The model type</typeparam>
+		/// <param name="name">The key of the type</param>
+		/// <returns>The builder for fluent chaining</returns>
+		public Builder<T> Register<TType>(string name) where TType : T
+		{
+			Map[name] = typeof(TType);
+			return this;
+		}
+
+		/// <summary>
+		/// Builds the type map
+		/// </summary>
+		/// <returns>The type map</returns>
+		public TypeMap Build()
+		{
+			return new TypeMap(typeof(T), Map);
+		}
 	}
 }

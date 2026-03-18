@@ -81,21 +81,31 @@ public interface IMangaDexCaptchaService
 }
 
 /// <summary>
+/// Represents all of the requests related to takedown notices
+/// </summary>
+public interface IMangaDexTakedownService
+{
+	/// <summary>
+	/// Gets a list of all of the current takedown notices on MD
+	/// </summary>
+	/// <param name="limit">The number of records to return</param>
+	/// <param name="offset">The number of records to skip</param>
+	/// <param name="orderBy">The order to return the results in</param>
+	/// <returns>A list of all of the current takedown notices on MD</returns>
+	Task<TakedownList> Takedowns(int limit = 20, int offset = 0, Dictionary<TakedownOrder, OrderValue>? orderBy = null);
+}
+
+/// <summary>
 /// Represents a collection of miscellaneous services
 /// </summary>
 public interface IMangaDexMiscService : 
 	IMangaDexPageService, IMangaDexRatingService, 
-	IMangaDexThreadsService, IMangaDexCaptchaService { }
+	IMangaDexThreadsService, IMangaDexCaptchaService,
+	IMangaDexTakedownService { }
 
-internal class MangaDexMiscService : IMangaDexMiscService
+internal class MangaDexMiscService(
+	IMdApiService _api) : IMangaDexMiscService
 {
-	private readonly IMdApiService _api;
-
-	public MangaDexMiscService(IMdApiService api)
-	{
-		_api = api;
-	}
-
 	public Task ReportPage(PageReport report)
 	{
 		return _api.Post<MangaDexEmpty, PageReport>("https://api.mangadex.network/report", report);
@@ -145,5 +155,16 @@ internal class MangaDexMiscService : IMangaDexMiscService
 		var c = await _api.Auth(token);
 		var url = $"rating/{mangaId}";
 		return await _api.Delete<MangaDexRoot>(url, c) ?? new() { Result = "error" };
+	}
+
+	public async Task<TakedownList> Takedowns(int limit = 20, int offset = 0, Dictionary<TakedownOrder, OrderValue>? orderBy = null)
+	{
+		orderBy ??= new() { [TakedownOrder.createdAt] = OrderValue.desc };
+		var filter = new FilterBuilder()
+			.Add("limit", limit)
+			.Add("offset", offset)
+			.Add("order", orderBy)
+			.Build();
+		return await _api.Get<TakedownList>($"takedown?{filter}") ?? new() { Result = "error" };
 	}
 }

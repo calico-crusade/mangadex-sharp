@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a recommendation item returned from the MD api
 /// </summary>
-public class MangaRecommendation : MangaDexModel<MangaRecommendation.RecommendationAttributes>, IRelationshipModel
+public class MangaRecommendation : MangaDexModel<MangaRecommendation.RecommendationAttributes>, IRelationshipModel, IRelationship
 {
     /// <summary>
     /// All of the relationship items related to this recommendation

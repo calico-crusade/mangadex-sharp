@@ -9,5 +9,5 @@ public class RelatedDataRelationship : Manga, IRelationship
 	/// How the item is related 
 	/// </summary>
 	[JsonPropertyName("related")]
-	public Relationships Related { get; set; }
+	public Relationships? Related { get; set; }
 }

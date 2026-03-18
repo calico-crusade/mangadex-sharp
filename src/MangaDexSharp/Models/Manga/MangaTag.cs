@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a tag associated with a manga
 /// </summary>
-public class MangaTag : MangaDexModel<MangaTag.MangaTagAttributesModel>, IRelationshipModel
+public class MangaTag : MangaDexModel<MangaTag.MangaTagAttributesModel>, IRelationshipModel, IRelationship
 {
 	/// <summary>
 	/// All of the related items for this tag

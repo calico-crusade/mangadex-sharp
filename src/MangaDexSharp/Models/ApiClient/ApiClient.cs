@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents an api client item returned from the MD api
 /// </summary>
-public class ApiClient : MangaDexModel<ApiClient.ApiClientAttributesModel>, IRelationshipModel
+public class ApiClient : MangaDexModel<ApiClient.ApiClientAttributesModel>, IRelationshipModel, IRelationship
 {
     /// <summary>
     /// All of the relationship items related to this api client

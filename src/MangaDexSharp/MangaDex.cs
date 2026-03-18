@@ -66,6 +66,11 @@ public interface IMangaDex
 	IMangaDexCaptchaService Captcha { get; }
 
 	/// <summary>
+	/// All of the takedown endpoints
+	/// </summary>
+	IMangaDexTakedownService Takedown { get; }
+
+	/// <summary>
 	/// All of the read-status endpoints
 	/// </summary>
 	IMangaDexReadMarkerService ReadMarker { get; }
@@ -175,6 +180,9 @@ public class MangaDex(
 
     /// <inheritdoc />
     public IMangaDexCaptchaService Captcha => Misc;
+
+	/// <inheritdoc />
+	public IMangaDexTakedownService Takedown => Misc;
 
     /// <inheritdoc />
     public IMangaDexAuthService Auth { get; } = auth;

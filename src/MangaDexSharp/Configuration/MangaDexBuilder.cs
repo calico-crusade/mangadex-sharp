@@ -176,6 +176,7 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
                 .AddTransient<IMangaDexRatingService, MangaDexMiscService>()
                 .AddTransient<IMangaDexThreadsService, MangaDexMiscService>()
                 .AddTransient<IMangaDexCaptchaService, MangaDexMiscService>()
+                .AddTransient<IMangaDexTakedownService, MangaDexMiscService>()
 
                 .AddTransient<IMangaDexAuthService, MangaDexAuthService>()
                 .AddTransient<IMangaDexApiClientService, MangaDexApiClientService>()

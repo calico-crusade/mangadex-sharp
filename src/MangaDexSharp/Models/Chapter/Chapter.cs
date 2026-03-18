@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a chapter returned by the MD api
 /// </summary>
-public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelationshipModel
+public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelationshipModel, IRelationship
 {
 	/// <summary>
 	/// All of the related items for the chapter
