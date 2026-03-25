@@ -42,8 +42,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="CardboardBox.Extensions" Version="2.0.2" />
-	  <PackageReference Include="System.Threading.Channels" Version="9.0.9" />
+	  <PackageReference Include="CardboardBox.Extensions" Version="3.0.1" />
+	  <PackageReference Include="System.Threading.Channels" Version="10.0.5" />
 	</ItemGroup>
 
 </Project>

@@ -11,7 +11,7 @@ public interface IArchiveInstance
     /// Adds a group of files to the instance
     /// </summary>
     /// <param name="files">The files to save</param>
-    Task AddFiles(IAsyncGrouping<string?, DownloadFile> files);
+    Task AddFiles(IGrouping<string?, DownloadFile> files);
 
     /// <summary>
     /// Indicates that the archive has been finished and no more files will be added.
@@ -56,7 +56,7 @@ internal abstract class ArchiveInstance(
     public virtual Task AddFile(DownloadFile file) => Task.CompletedTask;
 
     /// <inheritdoc />
-    public virtual async Task AddFiles(IAsyncGrouping<string?, DownloadFile> files)
+    public virtual async Task AddFiles(IGrouping<string?, DownloadFile> files)
     {
         if (!_initialized)
         {
@@ -67,7 +67,7 @@ internal abstract class ArchiveInstance(
         _index++;
         await GroupingChanged(files.Key, _index);
 
-        await foreach (var file in files)
+        foreach (var file in files)
             await AddFile(file);
     }
 

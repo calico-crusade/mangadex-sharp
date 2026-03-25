@@ -24,5 +24,5 @@ public interface IMdRequestConfigurationService
     /// </summary>
     /// <param name="uri">The full URI of the request being made</param>
     /// <param name="config">The builder to configure</param>
-    void Configure(string uri, IHttpBuilderConfig config);
+    void Configure(string uri, IHttpBuilder config);
 }

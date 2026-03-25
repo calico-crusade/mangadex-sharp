@@ -15,7 +15,7 @@ public interface IMdApiService : IApiService
     /// <param name="optional">Whether or not the token is optional for this request</param>
     /// <returns>The current request with the attached authentication token</returns>
     /// <exception cref="ArgumentException">Thrown if the authentication token is required but is missing</exception>
-    Task<Action<IHttpBuilderConfig>> Auth(string? token, bool optional = false);
+    Task<Action<IHttpBuilder>> Auth(string? token, bool optional = false);
 }
 
 /// <summary>
@@ -38,6 +38,8 @@ public class MdApiService(
     IMdEventsService _events,
     IMdRequestConfigurationService? _config = null) : ApiService(_factory, _json), IMdApiService
 {
+    private readonly IHttpClientFactory _factory = _factory;
+
     /// <summary>
     /// Provides a method of resolving the user's authentication token from varying sources
     /// </summary>
@@ -45,7 +47,7 @@ public class MdApiService(
     /// <param name="optional">Whether or not the token is optional for this request</param>
     /// <returns>The current request with the attached authentication token</returns>
     /// <exception cref="ArgumentException">Thrown if the authentication token is required but is missing</exception>
-    public async Task<Action<IHttpBuilderConfig>> Auth(string? token, bool optional = false)
+    public async Task<Action<IHttpBuilder>> Auth(string? token, bool optional = false)
     {
         token ??= await _creds.GetToken();
         if (string.IsNullOrEmpty(token) && optional) return c => { };
@@ -100,17 +102,19 @@ public class MdApiService(
     /// <param name="url">The url to request data from</param>
     /// <param name="json">The JSON provider to use for this request</param>
     /// <param name="method">The method used for this HTTP request</param>
+    /// <param name="token">The cancellation token for the request</param>
     /// <returns>The instance of the <see cref="IHttpBuilder"/></returns>
-    public override IHttpBuilder Create(string url, IJsonService json, string method = "GET")
+    public override IHttpBuilder Create(string url, IJsonService? json, string? method, CancellationToken? token)
     {
         var builder = new HttpBuilder(_factory, _json);
 
         var uri = WrapUrl(url);
         _config?.Configure(uri, builder);
         builder
-            .Method(method)
+            .Method(method ?? "GET")
             .Uri(uri)
             .UserAgent(_api.UserAgent)
+            .CancelWith(token)
             .OnResponseParsed(FillRateLimits);
 
         _events.Bind(uri, builder);

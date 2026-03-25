@@ -82,7 +82,7 @@ internal class DownloadVerb(
             if (token.IsCancellationRequested) yield break;
 
             //Get all of the chapters with the same ordinal
-            var chaps = await group.ToArrayAsync(token);
+            var chaps = group.ToArray();
             if (chaps.Length == 0) continue;
 
             //If there is only one chapter, return it

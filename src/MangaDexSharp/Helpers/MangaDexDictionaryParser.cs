@@ -9,6 +9,7 @@
 /// <typeparam name="TKey">The key of the dictionary</typeparam>
 /// <typeparam name="TValue">The value of the dictionary</typeparam>
 public class MangaDexDictionaryParser<TKey, TValue> : JsonConverter<Dictionary<TKey, TValue>>
+    where TKey : notnull
 {
     /// <summary>
     /// Read the dictionary (or empty array) from the JSON reader

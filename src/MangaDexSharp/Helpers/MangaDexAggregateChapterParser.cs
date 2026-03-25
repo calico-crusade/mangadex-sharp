@@ -25,7 +25,7 @@ public class MangaDexAggregateChapterParser : JsonConverter<Dictionary<string, M
             return [];
 
         var chapters = JsonSerializer.Deserialize<MangaAggregate.ChapterData[]>(ref reader, options);
-        return chapters.ToDictionary(t => t.Chapter);
+        return chapters?.ToDictionary(t => t.Chapter) ?? [];
     }
 
     /// <summary>

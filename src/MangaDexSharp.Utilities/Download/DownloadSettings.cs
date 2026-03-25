@@ -4,7 +4,7 @@ namespace MangaDexSharp.Utilities.Download;
 
 using Archives;
 using ArchiveFactory = Func<IDownloadSettings, Archives.IArchiveInstance>;
-using GroupingFactory = Func<IAsyncEnumerable<DownloadFile>, IAsyncEnumerable<IAsyncGrouping<string?, DownloadFile>>>;
+using GroupingFactory = Func<IAsyncEnumerable<DownloadFile>, IAsyncEnumerable<IGrouping<string?, DownloadFile>>>;
 
 
 /// <summary>
@@ -442,7 +442,7 @@ internal class DownloadSettings : IDownloadSettings
         return this;
     }
 
-    public static IAsyncEnumerable<IAsyncGrouping<string?, DownloadFile>> SortVolumes(IAsyncEnumerable<DownloadFile> files)
+    public static IAsyncEnumerable<IGrouping<string?, DownloadFile>> SortVolumes(IAsyncEnumerable<DownloadFile> files)
     {
         static async IAsyncEnumerable<(DownloadFile, double)> Volumize(IAsyncEnumerable<DownloadFile> items)
         {

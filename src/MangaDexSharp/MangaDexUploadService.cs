@@ -114,7 +114,7 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
 {
 	public const string CONTENT_TYPE_FILE = "application/octet-stream";
 
-	public string Root => $"upload";
+	public static string Root => $"upload";
 
 	public async Task<MangaDexRoot<UploadSession>> Get(UploadIncludes[]? include = null, string? token = null)
 	{
@@ -180,12 +180,12 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
 			};
             body.Add(fileContent, dispositionName, file.FileName);
 
-			foreach (var val in body.Headers.ContentType.Parameters.Where(t => t.Name == "boundary"))
-				val.Value = val.Value.Replace("\"", string.Empty);
+			foreach (var val in body.Headers.ContentType?.Parameters.Where(t => t.Name == "boundary") ?? [])
+				val.Value = val.Value?.Replace("\"", string.Empty);
         }
 
-        return await ((IHttpBuilder)_api.Create($"{Root}/{sessionId}", "POST", c, cancel)
-			.BodyContent(body))
+        return await _api.Create($"{Root}/{sessionId}", "POST", c, cancel)
+			.BodyContent(body)
 			.Result<UploadSessionFileList>() ?? new() { Result = "error" };
 	}
 
@@ -199,8 +199,8 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
 	{
 		var c = await _api.Auth(token);
 
-		return await ((IHttpBuilder)_api.Create($"{Root}/{sessionId}/batch", "DELETE", c, null)
-			.Body(fileIds))
+		return await _api.Create($"{Root}/{sessionId}/batch", "DELETE", c, null)
+			.Body(fileIds)
 			.Result<MangaDexRoot>() ?? new() {  Result = "error" };
 	}
 

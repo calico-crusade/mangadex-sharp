@@ -9,11 +9,11 @@ namespace MangaDexSharp;
 public interface IMdEventsService
 {
     /// <summary>
-    /// Binds the events to the <see cref="IHttpBuilderConfig"/>
+    /// Binds the events to the <see cref="IHttpBuilder"/>
     /// </summary>
     /// <param name="url">The URL of the request being made</param>
     /// <param name="config">The HTTP builder to attach to</param>
-    void Bind(string url, IHttpBuilderConfig config);
+    void Bind(string url, IHttpBuilder config);
 }
 
 internal class MdEventsService(
@@ -60,7 +60,7 @@ internal class MdEventsService(
         RunHandlers(t => t.OnResponseReceived(url, response, request));
     }
 
-    public void Bind(string url, IHttpBuilderConfig config)
+    public void Bind(string url, IHttpBuilder config)
     {
         if (!_events.Any()) return;
 
