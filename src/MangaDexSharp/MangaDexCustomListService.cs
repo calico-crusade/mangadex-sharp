@@ -18,8 +18,9 @@ public interface IMangaDexCustomListService
 	/// </summary>
 	/// <param name="id">The ID of the custom list</param>
 	/// <param name="includeManga">Whether or not to include the manga data</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
 	/// <returns>The custom list object</returns>
-	Task<MangaDexRoot<CustomList>> Get(string id, bool includeManga = false);
+	Task<MangaDexRoot<CustomList>> Get(string id, bool includeManga = false, string? token = null);
 
 	/// <summary>
 	/// Updates a custom list
@@ -91,16 +92,10 @@ public interface IMangaDexCustomListService
 	Task<CustomListList> List(string userId, int limit = 100, int offset = 0);
 }
 
-internal class MangaDexCustomListService : IMangaDexCustomListService
+internal class MangaDexCustomListService(
+	IMdApiService _api) : IMangaDexCustomListService
 {
-	private readonly IMdApiService _api;
-
-	public string Root => $"list";
-
-	public MangaDexCustomListService(IMdApiService api)
-	{
-		_api = api;
-	}
+	public static string Root => $"list";
 
 	public async Task<MangaDexRoot<CustomList>> Create(CustomListCreate create, string? token = null)
 	{
@@ -108,10 +103,11 @@ internal class MangaDexCustomListService : IMangaDexCustomListService
 		return await _api.Post<MangaDexRoot<CustomList>, CustomListCreate>(Root, create, c) ?? new() { Result = "error" };
 	}
 
-	public async Task<MangaDexRoot<CustomList>> Get(string id, bool includeManga = false)
+	public async Task<MangaDexRoot<CustomList>> Get(string id, bool includeManga = false, string? token = null)
 	{
 		var url = $"{Root}/{id}" + (includeManga ? "?includes[]=manga" : "");
-		return await _api.Get<MangaDexRoot<CustomList>>(url) ?? new() { Result = "error" };
+		var c = await _api.Auth(token, true);
+		return await _api.Get<MangaDexRoot<CustomList>>(url, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<CustomList>> Update(string id, CustomListCreate create, string? token = null)

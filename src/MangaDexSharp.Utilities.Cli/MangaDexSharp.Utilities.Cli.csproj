@@ -13,9 +13,9 @@
 		<PackageReference Include="CsvHelper" Version="33.1.0" />
 		<PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-		<PackageReference Include="Spectre.Console" Version="0.54.0" />
-		<PackageReference Include="System.Formats.Asn1" Version="10.0.5" />
-		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.5" />
+		<PackageReference Include="Spectre.Console" Version="0.55.2" />
+		<PackageReference Include="System.Formats.Asn1" Version="10.0.8" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.8" />
 	</ItemGroup>
 	
 	<ItemGroup>

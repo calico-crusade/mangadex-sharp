@@ -6,7 +6,7 @@ namespace MangaDexSharp;
 /// A service that bundles and runs all of the implemented <see cref="IMdEventService"/>s
 /// </summary>
 /// <remarks>You probably don't want to implement this one, you probably want: <see cref="IMdEventService"/></remarks>
-public interface IMdEventsService
+public interface IMdEventsService : IMdEventServiceBase
 {
     /// <summary>
     /// Binds the events to the <see cref="IHttpBuilder"/>
@@ -33,9 +33,19 @@ internal class MdEventsService(
     public void OnRateLimitExceeded(string url, RateLimit limits)
     {
         RunHandlers(t => t.OnRateLimitExceeded(url, limits));
-    }
+	}
 
-    public void OnRequestError(string url, Exception error)
+	public void OnRateLimitGlobalPaused(string url, RateLimit limits, TimeSpan span)
+	{
+		RunHandlers(t => t.OnRateLimitGlobalPaused(url, limits, span));
+	}
+
+	public void OnRateLimitGlobalUnpaused(string url, RateLimit limits)
+	{
+		RunHandlers(t => t.OnRateLimitGlobalUnpaused(url, limits));
+	}
+
+	public void OnRequestError(string url, Exception error)
     {
         RunHandlers(t => t.OnRequestError(url, error));
     }

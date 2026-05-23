@@ -20,14 +20,22 @@ public interface IMangaDexBuilder
     /// <returns>The current builder for fluent method chaining</returns>
     IMangaDexBuilder WithApiConfig(IConfigurationApi config);
 
-    /// <summary>
-    /// Uses the given configuration for the MangaDex API client
-    /// </summary>
-    /// <param name="apiUrl">The URL for the MangaDex API</param>
-    /// <param name="userAgent">The User-Agent header to send with requests</param>
-    /// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
-    /// <returns>The current builder for fluent method chaining</returns>
-    IMangaDexBuilder WithApiConfig(string? apiUrl = null, string? userAgent = null, bool throwOnError = false);
+	/// <summary>
+	/// Uses the given configuration for the MangaDex API client
+	/// </summary>
+	/// <param name="apiUrl">The URL for the MangaDex API</param>
+	/// <param name="userAgent">The User-Agent header to send with requests</param>
+	/// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
+	/// <param name="rateLimits">Whether or not to observe and handle rate limits</param>
+	/// <param name="conservative">Whether or not to use conservative rate limits</param>
+	/// <returns>The current builder for fluent method chaining</returns>
+	/// <remarks>
+	/// Enabling <paramref name="conservative"/> limits will use one less request per period
+	/// </remarks>
+	IMangaDexBuilder WithApiConfig(
+        string? apiUrl = null, string? userAgent = null, 
+        bool throwOnError = false, bool rateLimits = true, 
+        bool conservative = true);
 
     /// <summary>
     /// Uses the given configuration for the MangaDex API client
@@ -126,7 +134,7 @@ public interface IMangaDexBuilder
 	/// <remarks>
 	/// You can create and inject multiple of these and they will be run in the order they're added.
 	/// </remarks>
-    IMangaDexBuilder WithEventTracking<T>(bool transient = true) where T : class, IMdEventsService;
+    IMangaDexBuilder WithEventTracking<T>(bool transient = true) where T : class, IMdEventService;
 
     /// <summary>
     /// Registers an MD utility service with the builder.
@@ -137,17 +145,23 @@ public interface IMangaDexBuilder
     IMangaDexBuilder WithUtility<TInterface, TConcrete>()
         where TInterface : class, IMdUtil
         where TConcrete : class, TInterface;
+
+	/// <summary>
+	/// Adds a rate limiter to the MangaDex API client.
+	/// </summary>
+	/// <typeparam name="T">The type of rate limiter</typeparam>
+	/// <param name="transient">Whether or not to register the service as a transient or singleton</param>
+	/// <returns>The current builder for fluent method chaining</returns>
+	IMangaDexBuilder WithRatelimiter<T>(bool transient = false) where T : class, IMdRateLimiter;
 }
 
 internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
 {
-    private bool _hasCreds = false;
-    private bool _hasApiConfig = false;
-    private bool _hasOIDCConfig = false;
-
     public void Build()
     {
-        void AddBaseServices()
+        bool IsRegistered<TService>() => _services.Any(s => s.ServiceType == typeof(TService));
+
+		void AddBaseServices()
         {
             _services
                 .AddHttpClient()
@@ -185,9 +199,8 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
 
         void AddDefaultApiConfig()
         {
-            if (_hasApiConfig) return;
+            if (IsRegistered<IConfigurationApi>()) return;
 
-            _hasApiConfig = true;
             _services.AddSingleton(p =>
             {
                 var config = p.GetService<IConfiguration>();
@@ -199,9 +212,8 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
 
         void AddDefaultOIDCConfig()
         {
-            if (_hasOIDCConfig) return;
+            if (IsRegistered<IConfigurationOIDC>()) return;
 
-            _hasOIDCConfig = true;
             _services.AddSingleton(p =>
             {
                 var config = p.GetService<IConfiguration>();
@@ -213,16 +225,21 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
 
         void AddDefaultCredentials()
         {
-            if (_hasCreds) return;
-
-            _hasCreds = true;
+            if (IsRegistered<ICredentialsService>()) return;
             _services.AddSingleton<ICredentialsService, PersonalCredentialsService>();
         }
 
-        AddBaseServices();
+        void AddDefaultRateLimiter()
+		{
+			if (IsRegistered<IMdRateLimiter>()) return;
+			_services.AddSingleton<IMdRateLimiter, MdRateLimiter>();
+		}
+
+		AddBaseServices();
         AddDefaultApiConfig();
         AddDefaultOIDCConfig();
         AddDefaultCredentials();
+        AddDefaultRateLimiter();
     }
 
     public IMangaDexBuilder WithAccessToken(string token)
@@ -237,18 +254,20 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
 
     public IMangaDexBuilder WithApiConfig(IConfigurationApi config)
     {
-        _hasApiConfig = true;
         _services.AddSingleton(config);
         return this;
     }
 
     public IMangaDexBuilder WithApiConfig(
-        string? apiUrl = null, string? userAgent = null, bool throwOnError = false)
+        string? apiUrl, string? userAgent, 
+        bool throwOnError, bool rateLimits, 
+        bool conservative)
     {
         return WithApiConfig(c =>
         {
             c.WithApiUrl(apiUrl)
-             .WithUserAgent(userAgent);
+             .WithUserAgent(userAgent)
+             .WithAutoRateLimits(rateLimits, conservative);
             if (throwOnError)
                 c.ThrowExceptionOnError();
             else
@@ -270,7 +289,6 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
         else
             _services.AddSingleton<IConfigurationApi, T>();
 
-        _hasApiConfig = true;
         return this;
     }
 
@@ -280,13 +298,11 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
             _services.AddTransient<IConfigurationOIDC, T>();
         else
             _services.AddSingleton<IConfigurationOIDC, T>();
-        _hasOIDCConfig = true;
         return this;
     }
 
     public IMangaDexBuilder WithAuthConfig(IConfigurationOIDC config)
     {
-        _hasOIDCConfig = true;
         _services.AddSingleton(config);
         return this;
     }
@@ -318,7 +334,6 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
             _services.AddTransient<ICredentialsService, T>();
         else
             _services.AddSingleton<ICredentialsService, T>();
-        _hasCreds = true;
         return this;
     }
 
@@ -329,7 +344,6 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
 
     public IMangaDexBuilder WithCredentials(Func<IServiceProvider, ICredentialsService> config)
     {
-        _hasCreds = true;
         _services.AddSingleton(config);
         return this;
     }
@@ -343,12 +357,12 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
         return this;
     }
 
-    public IMangaDexBuilder WithEventTracking<T>(bool transient) where T : class, IMdEventsService
+    public IMangaDexBuilder WithEventTracking<T>(bool transient) where T : class, IMdEventService
     {
         if (transient)
-            _services.AddTransient<IMdEventsService, T>();
+            _services.AddTransient<IMdEventService, T>();
         else
-            _services.AddSingleton<IMdEventsService, T>();
+            _services.AddSingleton<IMdEventService, T>();
         return this;
     }
 
@@ -359,4 +373,13 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
         _services.AddTransient<TInterface, TConcrete>();
         return this;
     }
+
+	public IMangaDexBuilder WithRatelimiter<T>(bool transient) where T : class, IMdRateLimiter
+	{
+		if (transient)
+			_services.AddTransient<IMdRateLimiter, T>();
+		else
+			_services.AddSingleton<IMdRateLimiter, T>();
+        return this;
+	}
 }

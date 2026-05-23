@@ -43,7 +43,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="CardboardBox.Extensions" Version="3.0.1" />
-	  <PackageReference Include="System.Threading.Channels" Version="10.0.5" />
+	  <PackageReference Include="System.Threading.Channels" Version="10.0.8" />
 	</ItemGroup>
 
 </Project>

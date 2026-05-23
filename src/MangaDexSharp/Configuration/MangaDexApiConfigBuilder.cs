@@ -20,6 +20,16 @@ public class MangaDexApiConfigBuilder
     /// </summary>
     public bool? ThrowOnError { get; set; }
 
+	/// <summary>
+	/// Whether or not to use conservative rate limits
+	/// </summary>
+	public bool? ConservativeLimits { get; set; }
+
+	/// <summary>
+	/// Whether or not to handle rate limits within the application
+	/// </summary>
+	public bool? HandleRateLimits { get; set; }
+
     /// <summary>
     /// Uses the given API url
     /// </summary>
@@ -71,8 +81,27 @@ public class MangaDexApiConfigBuilder
         return this;
     }
 
+    /// <summary>
+    /// Sets whether or not to automatically handle rate limits.
+    /// </summary>
+    /// <param name="enabled">Whether or not to enable rate limit handling</param>
+    /// <param name="conservative">Whether or not to use conservative rate limits</param>
+    /// <returns>The current builder for method chaining</returns>
+    /// <remarks>
+    /// Enabling <paramref name="conservative"/> limits will use one less request per period
+    /// </remarks>
+    public MangaDexApiConfigBuilder WithAutoRateLimits(bool enabled = true, bool conservative = true)
+    {
+        HandleRateLimits = enabled;
+        ConservativeLimits = conservative;
+        return this;
+    }
+
     internal IConfigurationApi Build()
     {
-        return ConfigurationApi.FromHardCoded(ApiUrl, UserAgent, ThrowOnError);
+        return ConfigurationApi.FromHardCoded(
+            ApiUrl, UserAgent, 
+            ThrowOnError, HandleRateLimits, 
+            ConservativeLimits);
     }
 }

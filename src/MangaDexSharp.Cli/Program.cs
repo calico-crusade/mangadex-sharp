@@ -16,5 +16,6 @@
          .Add<RandomVerb>()
          .Add<UploadVerb>()
          .Add<TestStatsVerb>()
-         .Add<RecommendationsTestVerb>();
+         .Add<RecommendationsTestVerb>()
+         .Add<TestRateLimitsVerb>();
     });

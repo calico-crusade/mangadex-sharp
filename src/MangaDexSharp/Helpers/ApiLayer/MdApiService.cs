@@ -30,12 +30,14 @@ public interface IMdApiService : IApiService
 /// <param name="_creds">The credentials to use for the application</param>
 /// <param name="_events">The service for handling events</param>
 /// <param name="_config">The optional configuration method for changing how the underlying HTTP requests are made</param>
+/// <param name="_rateLimiter">The optional rate limiter for controlling request rates</param>
 public class MdApiService(
     IHttpClientFactory _factory,
     IMdJsonService _json,
     IConfigurationApi _api,
     ICredentialsService _creds,
     IMdEventsService _events,
+	IMdRateLimiter _rateLimiter,
     IMdRequestConfigurationService? _config = null) : ApiService(_factory, _json), IMdApiService
 {
     private readonly IHttpClientFactory _factory = _factory;
@@ -65,7 +67,8 @@ public class MdApiService(
     /// <returns>The wrapped URL</returns>
     public string WrapUrl(string url)
     {
-        if (url.ToLower().StartsWith("http")) return url;
+        if (url.StartsWith("http", StringComparison.InvariantCultureIgnoreCase)) 
+            return url;
 
         return $"{_api.ApiUrl.TrimEnd('/')}/{url.TrimStart('/')}";
     }
@@ -77,8 +80,6 @@ public class MdApiService(
     /// <param name="resp">The response message from MangaDex</param>
     public void FillRateLimits(HttpResponseMessage resp, object? data)
     {
-        if (data is null || data is not MangaDexRateLimits limits) return;
-
         var rateLimits = new RateLimit();
 
         if (resp.Headers.TryGetValues("X-RateLimit-Limit", out var strLimit) &&
@@ -93,7 +94,10 @@ public class MdApiService(
             double.TryParse(strRetry.FirstOrDefault(), out var retry))
             rateLimits.RetryAfter = DateTime.UnixEpoch.AddSeconds(retry);
 
-        limits.RateLimit = rateLimits;
+        _rateLimiter.Observe(resp.RequestMessage?.RequestUri?.ToString() ?? string.Empty, rateLimits);
+
+		if (data is null || data is not MangaDexRateLimits limits) return;
+		limits.RateLimit = rateLimits;
     }
 
     /// <summary>
@@ -106,13 +110,13 @@ public class MdApiService(
     /// <returns>The instance of the <see cref="IHttpBuilder"/></returns>
     public override IHttpBuilder Create(string url, IJsonService? json, string? method, CancellationToken? token)
     {
-        var builder = new HttpBuilder(_factory, _json);
+        var builder = new MdHttpBuilder(_factory, _json, _rateLimiter);
 
         var uri = WrapUrl(url);
         _config?.Configure(uri, builder);
-        builder
-            .Method(method ?? "GET")
-            .Uri(uri)
+		builder
+			.Uri(uri)
+			.Method(method ?? "GET")
             .UserAgent(_api.UserAgent)
             .CancelWith(token)
             .OnResponseParsed(FillRateLimits);

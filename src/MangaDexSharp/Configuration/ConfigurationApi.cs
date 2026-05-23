@@ -19,6 +19,16 @@ public interface IConfigurationApi
     /// Whether or not to throw an exception if the API returns an error
     /// </summary>
     bool ThrowOnError { get; }
+
+    /// <summary>
+    /// Whether or not to handle rate limits within the application
+    /// </summary>
+    bool HandleRateLimits { get; }
+
+	/// <summary>
+	/// Whether or not to use conservative rate limits
+	/// </summary>
+	bool ConservativeLimits { get; }
 }
 
 /// <summary>
@@ -42,9 +52,19 @@ public class ConfigurationApi : IConfigurationApi
     public const string API_USER_AGENT = "manga-dex-sharp";
 
     /// <summary>
-    /// The default value for whether or not to throw an exception if the API returns an error
+    /// The default conservative limits value
     /// </summary>
-    public const bool API_THROW_ON_ERROR = false;
+    public const bool API_CONSERVATIVE_LIMITS = true;
+
+    /// <summary>
+    /// The default for handling rate limits
+    /// </summary>
+    public const bool API_HANDLE_RATE_LIMITS = false;
+
+	/// <summary>
+	/// The default value for whether or not to throw an exception if the API returns an error
+	/// </summary>
+	public const bool API_THROW_ON_ERROR = false;
 
     /// <summary>
     /// Where to fetch the API url from in the config file
@@ -62,9 +82,19 @@ public class ConfigurationApi : IConfigurationApi
     public static string ErrorThrownPath { get; set; } = "Mangadex:ThrowOnError";
 
     /// <summary>
-    /// The URL for the MangaDex API
+    /// Where to fetch the ConservativeLimits flag from in the config file
     /// </summary>
-    public string ApiUrl { get; set; } = API_ROOT;
+    public static string ConservativeLimitsPath { get; set; } = "Mangadex:RateLimits:Conservative";
+
+	/// <summary>
+	/// Where to fetch the HandleRateLimits flag from in the config file
+	/// </summary>
+	public static string HandleRateLimitsPath { get; set; } = "Mangadex:RateLimits:Enabled";
+
+	/// <summary>
+	/// The URL for the MangaDex API
+	/// </summary>
+	public string ApiUrl { get; set; } = API_ROOT;
 
     /// <summary>
     /// The User-Agent header to send with requests
@@ -76,19 +106,40 @@ public class ConfigurationApi : IConfigurationApi
     /// </summary>
     public bool ThrowOnError { get; set; } = API_THROW_ON_ERROR;
 
-    /// <summary>
-    /// Fetches the API configuration from the provided configuration
-    /// </summary>
-    /// <param name="config">The configuration to use</param>
-    /// <returns>The API configuration</returns>
-    public static IConfigurationApi FromConfiguration(IConfiguration config)
+	/// <summary>
+	/// Whether or not to use conservative rate limits
+	/// </summary>
+	public bool ConservativeLimits { get; set; } = API_CONSERVATIVE_LIMITS;
+
+	/// <summary>
+	/// Whether or not to handle rate limits within the application
+	/// </summary>
+	public bool HandleRateLimits { get; set; } = API_HANDLE_RATE_LIMITS;
+
+	/// <summary>
+	/// Fetches the API configuration from the provided configuration
+	/// </summary>
+	/// <param name="config">The configuration to use</param>
+	/// <returns>The API configuration</returns>
+	public static IConfigurationApi FromConfiguration(IConfiguration config)
     {
+        bool GetBool(string path, bool defValue)
+        {
+			if (config[path] is null)
+				return defValue;
+
+            return bool.TryParse(config[path]?.ToLower(), out var result)
+                ? result : defValue;
+		}
+
         return new ConfigurationApi
         {
             ApiUrl = config[ApiPath] ?? API_ROOT,
             UserAgent = config[UserAgentPath] ?? API_USER_AGENT,
-            ThrowOnError = config[ErrorThrownPath] == "true"
-        };
+            ThrowOnError = GetBool(ErrorThrownPath, API_THROW_ON_ERROR),
+			ConservativeLimits = GetBool(ConservativeLimitsPath, API_CONSERVATIVE_LIMITS),
+            HandleRateLimits = GetBool(HandleRateLimitsPath, API_HANDLE_RATE_LIMITS)
+		};
     }
 
     /// <summary>
@@ -97,15 +148,21 @@ public class ConfigurationApi : IConfigurationApi
     /// <param name="apiUrl">The URL for the MangaDex API</param>
     /// <param name="userAgent">The User-Agent header to send with requests</param>
     /// <param name="throwOnError">Whether or not to throw an exception if the API returns an error</param>
+    /// <param name="conservativeLimits">Whether or not to use conservative rate limits</param>
+    /// <param name="handleRateLimits">Whether or not to handle rate limits within the application</param>
     /// <returns>The API configuration</returns>
     public static IConfigurationApi FromHardCoded(
-        string? apiUrl = null, string? userAgent = null, bool? throwOnError = null)
+        string? apiUrl = null, string? userAgent = null, 
+        bool? throwOnError = null, bool? handleRateLimits = null,
+        bool? conservativeLimits = null)
     {
         return new ConfigurationApi
         {
             ApiUrl = apiUrl ?? API_ROOT,
             UserAgent = userAgent ?? API_USER_AGENT,
-            ThrowOnError = throwOnError ?? API_THROW_ON_ERROR
-        };
+            ThrowOnError = throwOnError ?? API_THROW_ON_ERROR,
+            ConservativeLimits = conservativeLimits ?? API_CONSERVATIVE_LIMITS,
+			HandleRateLimits = handleRateLimits ?? API_HANDLE_RATE_LIMITS
+		};
     }
 }
