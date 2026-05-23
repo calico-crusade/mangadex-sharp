@@ -20,13 +20,13 @@ public class Chapter : MangaDexModel<Chapter.ChapterAttributesModel>, IRelations
 		/// The name / ordinal of the volume the chapter belongs to
 		/// </summary>
 		[JsonPropertyName("volume")]
-		public string Volume { get; set; } = string.Empty;
+		public string? Volume { get; set; }
 
 		/// <summary>
 		/// The ordinal of the chapter
 		/// </summary>
 		[JsonPropertyName("chapter")]
-		public string Chapter { get; set; } = string.Empty;
+		public string? Chapter { get; set; }
 
 		/// <summary>
 		/// The optional title of the chapter
