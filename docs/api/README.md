@@ -1,0 +1,285 @@
+# API Reference
+
+Generated reference pages for the documented projects. `MangaDexSharp.Cli` is intentionally excluded.
+
+## MangaDexSharp
+- [MangaDexSharp.AggregateDisposable](MangaDexSharp/MangaDexSharp.AggregateDisposable.md) - An aggregate disposable
+- [MangaDexSharp.ApiClient](MangaDexSharp/MangaDexSharp.ApiClient.md) - Represents an api client item returned from the MD api
+- [MangaDexSharp.ApiClientAttributesModel](MangaDexSharp/MangaDexSharp.ApiClientAttributesModel.md) - All of the properties on this api client
+- [MangaDexSharp.ApiClientData](MangaDexSharp/MangaDexSharp.ApiClientData.md) - The data for creating a new API client
+- [MangaDexSharp.ApiClientFilter](MangaDexSharp/MangaDexSharp.ApiClientFilter.md) - Represents the available query parameters for the API client endpoint
+- [MangaDexSharp.ApiClientIncludes](MangaDexSharp/MangaDexSharp.ApiClientIncludes.md) - Relationships that can be included in the API client return results
+- [MangaDexSharp.ApiClientList](MangaDexSharp/MangaDexSharp.ApiClientList.md) - Represents a collection of API clients returned by the MD api
+- [MangaDexSharp.ApiClientState](MangaDexSharp/MangaDexSharp.ApiClientState.md) - The state of the API client
+- [MangaDexSharp.ApiClientUpdateData](MangaDexSharp/MangaDexSharp.ApiClientUpdateData.md) - The data that can be updated for an API client
+- [MangaDexSharp.AuthorCreate](MangaDexSharp/MangaDexSharp.AuthorCreate.md) - Represents a request to create an author
+- [MangaDexSharp.AuthorFilter](MangaDexSharp/MangaDexSharp.AuthorFilter.md) - Represents a query parameter filter for the authors endpoints
+- [MangaDexSharp.Builder](MangaDexSharp/MangaDexSharp.Builder.md) - A builder for making a TypeMap
+- [MangaDexSharp.CaptchaChallenge](MangaDexSharp/MangaDexSharp.CaptchaChallenge.md) - Represents a captcha challenge result
+- [MangaDexSharp.Chapter](MangaDexSharp/MangaDexSharp.Chapter.md) - Represents a chapter returned by the MD api
+- [MangaDexSharp.ChapterAttributesModel](MangaDexSharp/MangaDexSharp.ChapterAttributesModel.md) - All of the attributes the chapter has
+- [MangaDexSharp.ChapterData](MangaDexSharp/MangaDexSharp.ChapterData.md) - Represents a chapter of the manga
+- [MangaDexSharp.ChapterData](MangaDexSharp/MangaDexSharp.ChapterData.md) - Represents the pages of a chapter
+- [MangaDexSharp.ChapterDraft](MangaDexSharp/MangaDexSharp.ChapterDraft.md) - Represents a draft of the chapter
+- [MangaDexSharp.ChapterList](MangaDexSharp/MangaDexSharp.ChapterList.md) - Represents a collection of chapters returned by the MD api
+- [MangaDexSharp.ChaptersFilter](MangaDexSharp/MangaDexSharp.ChaptersFilter.md) - Represents the available query parameters for the chapters endpoints
+- [MangaDexSharp.ChapterUpdate](MangaDexSharp/MangaDexSharp.ChapterUpdate.md) - Represents a request to update a chapter in the MD api
+- [MangaDexSharp.CommentStatistics](MangaDexSharp/MangaDexSharp.CommentStatistics.md) - Represents statistics returned by the MD api
+- [MangaDexSharp.CommentStats](MangaDexSharp/MangaDexSharp.CommentStats.md) - The statistics for comments
+- [MangaDexSharp.ConfigurationApi](MangaDexSharp/MangaDexSharp.ConfigurationApi.md) - The configuration options for the MangaDex API services
+- [MangaDexSharp.ConfigurationCredentialsService](MangaDexSharp/MangaDexSharp.ConfigurationCredentialsService.md) - Represents a provider that fetches the ICredentialsService from the configuration
+- [MangaDexSharp.ConfigurationOIDC](MangaDexSharp/MangaDexSharp.ConfigurationOIDC.md) - The configuration options for Open-ID Connect (OIDC) services
+- [MangaDexSharp.ContentRating](MangaDexSharp/MangaDexSharp.ContentRating.md) - The content rating used within MD (NSFW vs SFW)
+- [MangaDexSharp.CopyrightOwner](MangaDexSharp/MangaDexSharp.CopyrightOwner.md) - The copyright owner of a takedown notice.
+- [MangaDexSharp.CoverArtAttributesModel](MangaDexSharp/MangaDexSharp.CoverArtAttributesModel.md) - All of the properties the cover art has
+- [MangaDexSharp.CoverArtCreate](MangaDexSharp/MangaDexSharp.CoverArtCreate.md) - Represents a create cover art request to the MD api
+- [MangaDexSharp.CoverArtFilter](MangaDexSharp/MangaDexSharp.CoverArtFilter.md) - Represents the available query parameters for cover art requests
+- [MangaDexSharp.CoverArtList](MangaDexSharp/MangaDexSharp.CoverArtList.md) - Represents a list of cover arts
+- [MangaDexSharp.CoverArtRelationship](MangaDexSharp/MangaDexSharp.CoverArtRelationship.md) - Represents the relationship between cover art and the parent manga
+- [MangaDexSharp.CoverArtUpdate](MangaDexSharp/MangaDexSharp.CoverArtUpdate.md) - Represents a request to update a cover art object in the MD api
+- [MangaDexSharp.CustomList](MangaDexSharp/MangaDexSharp.CustomList.md) - Represents a custom list of entities from the MD api
+- [MangaDexSharp.CustomListAttributesModel](MangaDexSharp/MangaDexSharp.CustomListAttributesModel.md) - All of the attributes the list has
+- [MangaDexSharp.CustomListCreate](MangaDexSharp/MangaDexSharp.CustomListCreate.md) - Represents a request to create a custom list
+- [MangaDexSharp.CustomListList](MangaDexSharp/MangaDexSharp.CustomListList.md) - Represents a list of custom lists returned by the MD api
+- [MangaDexSharp.Demographic](MangaDexSharp/MangaDexSharp.Demographic.md) - Represents the publication demographics used within MD
+- [MangaDexSharp.DraftStatus](MangaDexSharp/MangaDexSharp.DraftStatus.md) - Represents the status of a manga draft
+- [MangaDexSharp.EditChapterCreate](MangaDexSharp/MangaDexSharp.EditChapterCreate.md) - Represents a request to start editing a chapter
+- [MangaDexSharp.Extensions](MangaDexSharp/MangaDexSharp.Extensions.md) - A bunch of useful extensions for MD related tasks
+- [MangaDexSharp.FilterBuilder](MangaDexSharp/MangaDexSharp.FilterBuilder.md) - A utility for building query parameters in MD's style
+- [MangaDexSharp.Group](MangaDexSharp/MangaDexSharp.Group.md) - How to group manga tags
+- [MangaDexSharp.HardCodedCredentialsService](MangaDexSharp/MangaDexSharp.HardCodedCredentialsService.md) - Represents a provider that stores the credentials in-memory
+- [MangaDexSharp.IConfigurationApi](MangaDexSharp/MangaDexSharp.IConfigurationApi.md) - The configuration options for the MangaDex API services
+- [MangaDexSharp.IConfigurationOIDC](MangaDexSharp/MangaDexSharp.IConfigurationOIDC.md) - The configuration options for Open-ID Connect (OIDC) services
+- [MangaDexSharp.ICredentialsService](MangaDexSharp/MangaDexSharp.ICredentialsService.md) - A service that provides a method for fetching the API token and URL data
+- [MangaDexSharp.IFileUpload](MangaDexSharp/MangaDexSharp.IFileUpload.md) - Represents a file that is to be uploaded to the chapter
+- [MangaDexSharp.IFilter](MangaDexSharp/MangaDexSharp.IFilter.md) - Represents a set of query parameters
+- [MangaDexSharp.IJsonType](MangaDexSharp/MangaDexSharp.IJsonType.md) - Represents a JSON object that has a `type` filed on it
+- [MangaDexSharp.IMangaDex](MangaDexSharp/MangaDexSharp.IMangaDex.md) - Represents an instance of the MangaDex API
+- [MangaDexSharp.IMangaDexApiClientService](MangaDexSharp/MangaDexSharp.IMangaDexApiClientService.md) - Represents all of the requests related to API Clients
+- [MangaDexSharp.IMangaDexAuthorService](MangaDexSharp/MangaDexSharp.IMangaDexAuthorService.md) - Represents all of the requests on the /author endpoints
+- [MangaDexSharp.IMangaDexAuthService](MangaDexSharp/MangaDexSharp.IMangaDexAuthService.md) - Represents all of the requests for the auth.mangadex.org service
+- [MangaDexSharp.IMangaDexBuilder](MangaDexSharp/MangaDexSharp.IMangaDexBuilder.md) - A service for building the MangaDex API client configuration
+- [MangaDexSharp.IMangaDexCaptchaService](MangaDexSharp/MangaDexSharp.IMangaDexCaptchaService.md) - Represents all of the requests related to captchas
+- [MangaDexSharp.IMangaDexChapterService](MangaDexSharp/MangaDexSharp.IMangaDexChapterService.md) - Represents all of the requests on the /chapter endpoints
+- [MangaDexSharp.IMangaDexCoverArtService](MangaDexSharp/MangaDexSharp.IMangaDexCoverArtService.md) - Represents all of the requests on the /cover endpoints
+- [MangaDexSharp.IMangaDexCustomListService](MangaDexSharp/MangaDexSharp.IMangaDexCustomListService.md) - Represents all of the requests on the /list endpoints
+- [MangaDexSharp.IMangaDexFeedService](MangaDexSharp/MangaDexSharp.IMangaDexFeedService.md) - Represents all of the different feed endpoints (expect manga, that's on the IMangaDex.Manga service)
+- [MangaDexSharp.IMangaDexFollowsService](MangaDexSharp/MangaDexSharp.IMangaDexFollowsService.md) - Represents all of the different requests relating to objects the current user follows
+- [MangaDexSharp.IMangaDexMangaService](MangaDexSharp/MangaDexSharp.IMangaDexMangaService.md) - Represents all of the requests related to manga
+- [MangaDexSharp.IMangaDexMiscService](MangaDexSharp/MangaDexSharp.IMangaDexMiscService.md) - Represents a collection of miscellaneous services
+- [MangaDexSharp.IMangaDexPageService](MangaDexSharp/MangaDexSharp.IMangaDexPageService.md) - Represents all of the requests for pages and md-at-home
+- [MangaDexSharp.IMangaDexRatingService](MangaDexSharp/MangaDexSharp.IMangaDexRatingService.md) - Represents all of the requests relating to rating manga
+- [MangaDexSharp.IMangaDexReadMarkerService](MangaDexSharp/MangaDexSharp.IMangaDexReadMarkerService.md) - Represents all requests related to read status markers
+- [MangaDexSharp.IMangaDexReportService](MangaDexSharp/MangaDexSharp.IMangaDexReportService.md) - Represents all of the requests relating to object reports
+- [MangaDexSharp.IMangaDexScanlationGroupService](MangaDexSharp/MangaDexSharp.IMangaDexScanlationGroupService.md) - Represents all of the requests related to scanlation groups
+- [MangaDexSharp.IMangaDexStatisticsService](MangaDexSharp/MangaDexSharp.IMangaDexStatisticsService.md) - Represents all of the requests on the /statistics endpoints
+- [MangaDexSharp.IMangaDexTakedownService](MangaDexSharp/MangaDexSharp.IMangaDexTakedownService.md) - Represents all of the requests related to takedown notices
+- [MangaDexSharp.IMangaDexThreadsService](MangaDexSharp/MangaDexSharp.IMangaDexThreadsService.md) - Represents all of the requests for threads
+- [MangaDexSharp.IMangaDexUploadService](MangaDexSharp/MangaDexSharp.IMangaDexUploadService.md) - Represents all of the requests related to uploading chapters
+- [MangaDexSharp.IMangaDexUserService](MangaDexSharp/MangaDexSharp.IMangaDexUserService.md) - Represents all of the requests regarding the current user and the obsoleted login methods
+- [MangaDexSharp.IMdApiService](MangaDexSharp/MangaDexSharp.IMdApiService.md) - An implementation of the IApiService that is specific to the MangaDex API
+- [MangaDexSharp.IMdCacheService](MangaDexSharp/MangaDexSharp.IMdCacheService.md) - Exposes the underlying caching mechanism for Cardboard HTTP tailed to MangaDex
+- [MangaDexSharp.IMdEventService](MangaDexSharp/MangaDexSharp.IMdEventService.md) - Represents a service that handles events triggered within MangaDexSharp
+- [MangaDexSharp.IMdEventServiceBase](MangaDexSharp/MangaDexSharp.IMdEventServiceBase.md) - The base interface for IMdEventService
+- [MangaDexSharp.IMdEventsService](MangaDexSharp/MangaDexSharp.IMdEventsService.md) - A service that bundles and runs all of the implemented IMdEventServices
+- [MangaDexSharp.IMdJsonService](MangaDexSharp/MangaDexSharp.IMdJsonService.md) - Exposes common Json serialization and deserialization methods tailored to MangaDex
+- [MangaDexSharp.IMdRateLimiter](MangaDexSharp/MangaDexSharp.IMdRateLimiter.md) - An instance of a rate limiter for the MD API.
+- [MangaDexSharp.IMdRequestConfigurationService](MangaDexSharp/MangaDexSharp.IMdRequestConfigurationService.md) - A service for adding custom configuration to the underlying HTTP requests that MD api makes You should only register one of these and you should only do it if you know what you are doing.
+- [MangaDexSharp.IMdUtil](MangaDexSharp/MangaDexSharp.IMdUtil.md) - Indicates the service is a utility service for MangaDexSharp
+- [MangaDexSharp.IOIDCService](MangaDexSharp/MangaDexSharp.IOIDCService.md) - Represents a service that handles OIDC authentication
+- [MangaDexSharp.IPaginateFilter](MangaDexSharp/MangaDexSharp.IPaginateFilter.md) - Represents a set of query parameters for paginated request
+- [MangaDexSharp.IRelationship](MangaDexSharp/MangaDexSharp.IRelationship.md) - Represents the relationship between the parent item and the associated type
+- [MangaDexSharp.IRelationshipModel](MangaDexSharp/MangaDexSharp.IRelationshipModel.md) - Represents an item that can have a relationship with another item
+- [MangaDexSharp.ITokenCacheService](MangaDexSharp/MangaDexSharp.ITokenCacheService.md) - A service for caching the token and the time it was last executed
+- [MangaDexSharp.Localization](MangaDexSharp/MangaDexSharp.Localization.md) - Represents a collection of localized (translated) strings
+- [MangaDexSharp.LoginRequest](MangaDexSharp/MangaDexSharp.LoginRequest.md) - Represents the request to login to MD using the old username/password combination
+- [MangaDexSharp.LoginResult](MangaDexSharp/MangaDexSharp.LoginResult.md) - Represents the result of a login request
+- [MangaDexSharp.Manga](MangaDexSharp/MangaDexSharp.Manga.md) - Represents a manga item returned from the MD api
+- [MangaDexSharp.MangaAggregate](MangaDexSharp/MangaDexSharp.MangaAggregate.md) - Represents a view of the volumes and chapters available for this manga
+- [MangaDexSharp.MangaAttributesModel](MangaDexSharp/MangaDexSharp.MangaAttributesModel.md) - All of the properties on this manga
+- [MangaDexSharp.MangaCommit](MangaDexSharp/MangaDexSharp.MangaCommit.md) - Represens a request to MD to commit a manga change / draft
+- [MangaDexSharp.MangaCreate](MangaDexSharp/MangaDexSharp.MangaCreate.md) - Represents a request to create a manga in the MD api
+- [MangaDexSharp.MangaDex](MangaDexSharp/MangaDexSharp.MangaDex.md) - class
+- [MangaDexSharp.MangaDexAggregateChapterParser](MangaDexSharp/MangaDexSharp.MangaDexAggregateChapterParser.md) - Utility for parsing the aggregate chapter data from MangaDex. This was a bug fix because if the volumes come back with only one entry for the chapters dictionary, MD gives an array instead. The key for the chapter in this case is the MangaAggregate.ChapterData.Chapter value.
+- [MangaDexSharp.MangaDexApiConfigBuilder](MangaDexSharp/MangaDexSharp.MangaDexApiConfigBuilder.md) - The builder for the IConfigurationApi service
+- [MangaDexSharp.MangaDexCollection](MangaDexSharp/MangaDexSharp.MangaDexCollection.md) - Represents a return result from the MD api that results in a collection of items
+- [MangaDexSharp.MangaDexDictionaryParser](MangaDexSharp/MangaDexSharp.MangaDexDictionaryParser.md) - Utility for parsing dictionaries within MD return results. This was a bug fix as some of the MD return results were returning empty arrays instead of empty objects for dictionaries and that was causing parser issues within System.Text.Json.
+- [MangaDexSharp.MangaDexDictionaryParser](MangaDexSharp/MangaDexSharp.MangaDexDictionaryParser.md) - Utility for parsing dictionaries within MD return results. This was a bug fix as some of the MD return results were returning empty arrays instead of empty objects for dictionaries and that was causing parser issues within System.Text.Json.
+- [MangaDexSharp.MangaDexEmpty](MangaDexSharp/MangaDexSharp.MangaDexEmpty.md) - Represents an empty result from the MD api
+- [MangaDexSharp.MangaDexEnumParser](MangaDexSharp/MangaDexSharp.MangaDexEnumParser.md) - Utility for parsing enums with MD return results
+- [MangaDexSharp.MangaDexError](MangaDexSharp/MangaDexSharp.MangaDexError.md) - Represents an error returned by the MD api
+- [MangaDexSharp.MangaDexException](MangaDexSharp/MangaDexSharp.MangaDexException.md) - Represents an exception that occurred while using the MangaDex API
+- [MangaDexSharp.MangaDexModel](MangaDexSharp/MangaDexSharp.MangaDexModel.md) - Represents an item returned by the MD api
+- [MangaDexSharp.MangaDexModel](MangaDexSharp/MangaDexSharp.MangaDexModel.md) - Represents an item returned by the MD API that contains the `attributes` property
+- [MangaDexSharp.MangaDexOIDCConfigBuilder](MangaDexSharp/MangaDexSharp.MangaDexOIDCConfigBuilder.md) - The builder for the IConfigurationOIDC service
+- [MangaDexSharp.MangaDexParser](MangaDexSharp/MangaDexSharp.MangaDexParser.md) - Utility for parsing relationship and attribute types from MD return results. This is to support the varying types returned in the `relationships` and `attributes` result sets.
+- [MangaDexSharp.MangaDexRateLimits](MangaDexSharp/MangaDexSharp.MangaDexRateLimits.md) - Represents a return result from the MangaDex API that has rate limit headers
+- [MangaDexSharp.MangaDexRoot](MangaDexSharp/MangaDexSharp.MangaDexRoot.md) - Represents the return results of almost all MD api endpoints
+- [MangaDexSharp.MangaDexRoot](MangaDexSharp/MangaDexSharp.MangaDexRoot.md) - Represents the return results of the MD api endpoints
+- [MangaDexSharp.MangaDexRootExtensions](MangaDexSharp/MangaDexSharp.MangaDexRootExtensions.md) - A few helpful extension methods for MangaDexRoot models
+- [MangaDexSharp.MangaDexStruct](MangaDexSharp/MangaDexSharp.MangaDexStruct.md) - Represents the return results of the MD api endpoints
+- [MangaDexSharp.MangaDraftFilter](MangaDexSharp/MangaDexSharp.MangaDraftFilter.md) - Represents a query parameter filter for the drafts endpoints
+- [MangaDexSharp.MangaFeedFilter](MangaDexSharp/MangaDexSharp.MangaFeedFilter.md) - Represents a query parameter filter for the manga feed endpoints
+- [MangaDexSharp.MangaFilter](MangaDexSharp/MangaDexSharp.MangaFilter.md) - Represents the available query parameters for the manga endpoint
+- [MangaDexSharp.MangaIncludes](MangaDexSharp/MangaDexSharp.MangaIncludes.md) - Relationships that can be included in manga and chapter return results
+- [MangaDexSharp.MangaList](MangaDexSharp/MangaDexSharp.MangaList.md) - Represents a collection of manga returned by the MD api
+- [MangaDexSharp.MangaRandomFilter](MangaDexSharp/MangaDexSharp.MangaRandomFilter.md) - Represents the available query parameters for the random manga endpoint
+- [MangaDexSharp.MangaReadStatus](MangaDexSharp/MangaDexSharp.MangaReadStatus.md) - Represents the read status of a manga in the MD api
+- [MangaDexSharp.MangaReadStatuses](MangaDexSharp/MangaDexSharp.MangaReadStatuses.md) - Represents a collection of read statuses of manga in the MD api
+- [MangaDexSharp.MangaReadStatusPush](MangaDexSharp/MangaDexSharp.MangaReadStatusPush.md) - Represents a request to update the read status of a manga
+- [MangaDexSharp.MangaRecommendation](MangaDexSharp/MangaDexSharp.MangaRecommendation.md) - Represents a recommendation item returned from the MD api
+- [MangaDexSharp.MangaRelation](MangaDexSharp/MangaDexSharp.MangaRelation.md) - Represents the relationship between manga
+- [MangaDexSharp.MangaRelationship](MangaDexSharp/MangaDexSharp.MangaRelationship.md) - Represents a relationship between two manga
+- [MangaDexSharp.MangaRelationshipAttributesModel](MangaDexSharp/MangaDexSharp.MangaRelationshipAttributesModel.md) - The properties of the relationship
+- [MangaDexSharp.MangaRelationships](MangaDexSharp/MangaDexSharp.MangaRelationships.md) - Represents a collection of manga relationships
+- [MangaDexSharp.MangaStatistics](MangaDexSharp/MangaDexSharp.MangaStatistics.md) - Represents statistics returned by the MD api for Manga specifically
+- [MangaDexSharp.MangaTag](MangaDexSharp/MangaDexSharp.MangaTag.md) - Represents a tag associated with a manga
+- [MangaDexSharp.MangaTagAttributesModel](MangaDexSharp/MangaDexSharp.MangaTagAttributesModel.md) - All of the properties on the tag
+- [MangaDexSharp.MdApiService](MangaDexSharp/MangaDexSharp.MdApiService.md) - The default implementation of the IApiService The DI constructor
+- [MangaDexSharp.MdEventService](MangaDexSharp/MangaDexSharp.MdEventService.md) - Default implementation of IMdEventService that does nothing and provides easy overrides for the events you want
+- [MangaDexSharp.MdHttpBuilder](MangaDexSharp/MangaDexSharp.MdHttpBuilder.md) - A customized instance of HttpBuilder that handles rate limits
+- [MangaDexSharp.MdJsonService](MangaDexSharp/MangaDexSharp.MdJsonService.md) - The concrete implementation for the IMdJsonService
+- [MangaDexSharp.MdRateLimiter](MangaDexSharp/MangaDexSharp.MdRateLimiter.md) - The default rate limiter that
+- [MangaDexSharp.MemoryStreamFileUpload](MangaDexSharp/MangaDexSharp.MemoryStreamFileUpload.md) - Represents an in-memory stream content
+- [MangaDexSharp.Mode](MangaDexSharp/MangaDexSharp.Mode.md) - The query filter join mode
+- [MangaDexSharp.MStatistics](MangaDexSharp/MangaDexSharp.MStatistics.md) - class
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - The available fields the can be ordered by
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - The available fields the can be ordered by
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - The available fields the can be ordered by
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - The available fields the can be ordered by
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - The available fields the can be ordered by
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - [INTERNAL] Used as the name of the name-order key
+- [MangaDexSharp.OrderKey](MangaDexSharp/MangaDexSharp.OrderKey.md) - The fields to sort the query by
+- [MangaDexSharp.OrderValue](MangaDexSharp/MangaDexSharp.OrderValue.md) - How to order return results
+- [MangaDexSharp.PageReport](MangaDexSharp/MangaDexSharp.PageReport.md) - Represents the report of a broken page link
+- [MangaDexSharp.Pages](MangaDexSharp/MangaDexSharp.Pages.md) - Represents the response of a pages request
+- [MangaDexSharp.PaginationUtility](MangaDexSharp/MangaDexSharp.PaginationUtility.md) - A paginated utility targeted towards MangaDexCollection{T} types
+- [MangaDexSharp.PaginationUtility](MangaDexSharp/MangaDexSharp.PaginationUtility.md) - A utility for fetching all of the results of a paginated list, taking rate-limits into consideration.
+- [MangaDexSharp.PathFileUpload](MangaDexSharp/MangaDexSharp.PathFileUpload.md) - Represents a file from the disk
+- [MangaDexSharp.PersonalCredentialsService](MangaDexSharp/MangaDexSharp.PersonalCredentialsService.md) - An instance of the ICredentialsService that automatically fetches and refreshes the access token
+- [MangaDexSharp.PersonList](MangaDexSharp/MangaDexSharp.PersonList.md) - A collection of people
+- [MangaDexSharp.PersonRelationship](MangaDexSharp/MangaDexSharp.PersonRelationship.md) - Represents a person in the MD api
+- [MangaDexSharp.PersonRelationshipAttributesModel](MangaDexSharp/MangaDexSharp.PersonRelationshipAttributesModel.md) - The properties of the person
+- [MangaDexSharp.RateLimit](MangaDexSharp/MangaDexSharp.RateLimit.md) - Represents the rate limit headers from the response
+- [MangaDexSharp.Rating](MangaDexSharp/MangaDexSharp.Rating.md) - Represents a rating for a manga
+- [MangaDexSharp.RatingCreate](MangaDexSharp/MangaDexSharp.RatingCreate.md) - Represents a request to create a rating in the MD api
+- [MangaDexSharp.RatingList](MangaDexSharp/MangaDexSharp.RatingList.md) - Represents a collection of ratings for a manga
+- [MangaDexSharp.RatingStats](MangaDexSharp/MangaDexSharp.RatingStats.md) - Statis related to the manga's rating
+- [MangaDexSharp.RawFileUpload](MangaDexSharp/MangaDexSharp.RawFileUpload.md) - Represents a files raw byte content
+- [MangaDexSharp.ReadMarkerBatchUpdate](MangaDexSharp/MangaDexSharp.ReadMarkerBatchUpdate.md) - Represents a manga read marker batch update request
+- [MangaDexSharp.ReadMarkerList](MangaDexSharp/MangaDexSharp.ReadMarkerList.md) - Represents a collection of read chapter IDs
+- [MangaDexSharp.ReadStatus](MangaDexSharp/MangaDexSharp.ReadStatus.md) - Represents the status of a manga
+- [MangaDexSharp.RecommendationAttributes](MangaDexSharp/MangaDexSharp.RecommendationAttributes.md) - All of the properties on this recommendation
+- [MangaDexSharp.RecommendationList](MangaDexSharp/MangaDexSharp.RecommendationList.md) - Represents a collection of recommendations returned by the MD api
+- [MangaDexSharp.RefreshRequest](MangaDexSharp/MangaDexSharp.RefreshRequest.md) - Represents a request to refresh a token
+- [MangaDexSharp.RelatedDataRelationship](MangaDexSharp/MangaDexSharp.RelatedDataRelationship.md) - Represents a related item
+- [MangaDexSharp.Relationships](MangaDexSharp/MangaDexSharp.Relationships.md) - Represents the varying relationships between manga titles
+- [MangaDexSharp.Report](MangaDexSharp/MangaDexSharp.Report.md) - Represents a report in the MD api
+- [MangaDexSharp.ReportAttributesModel](MangaDexSharp/MangaDexSharp.ReportAttributesModel.md) - Any properties the report has
+- [MangaDexSharp.ReportCategory](MangaDexSharp/MangaDexSharp.ReportCategory.md) - Represents the different types of reports
+- [MangaDexSharp.ReportCreate](MangaDexSharp/MangaDexSharp.ReportCreate.md) - Represents a request to create a report within the MD api
+- [MangaDexSharp.ReportFilter](MangaDexSharp/MangaDexSharp.ReportFilter.md) - Represents the available query parameters for the report endpoint
+- [MangaDexSharp.ReportList](MangaDexSharp/MangaDexSharp.ReportList.md) - Represents a collection of reports
+- [MangaDexSharp.ReportReason](MangaDexSharp/MangaDexSharp.ReportReason.md) - Represents a reason a report can be made for
+- [MangaDexSharp.ReportReasonAttributesModel](MangaDexSharp/MangaDexSharp.ReportReasonAttributesModel.md) - The properties of the reason
+- [MangaDexSharp.ReportReasonList](MangaDexSharp/MangaDexSharp.ReportReasonList.md) - Represents a collection of report reasons
+- [MangaDexSharp.ReportState](MangaDexSharp/MangaDexSharp.ReportState.md) - Represents the state of a report
+- [MangaDexSharp.ScanlationGroup](MangaDexSharp/MangaDexSharp.ScanlationGroup.md) - Represents a scanlation group in the MD api
+- [MangaDexSharp.ScanlationGroupAttributesModel](MangaDexSharp/MangaDexSharp.ScanlationGroupAttributesModel.md) - The properties of the scanlation group
+- [MangaDexSharp.ScanlationGroupCreate](MangaDexSharp/MangaDexSharp.ScanlationGroupCreate.md) - Represents a request to create a scanlation group
+- [MangaDexSharp.ScanlationGroupFilter](MangaDexSharp/MangaDexSharp.ScanlationGroupFilter.md) - Represents the available query parameters for filtering group endpoints
+- [MangaDexSharp.ScanlationGroupList](MangaDexSharp/MangaDexSharp.ScanlationGroupList.md) - Represents a collection of scanlation groups
+- [MangaDexSharp.ScanlationGroupUpdate](MangaDexSharp/MangaDexSharp.ScanlationGroupUpdate.md) - Represents a request to update a scanlation group
+- [MangaDexSharp.Statistics](MangaDexSharp/MangaDexSharp.Statistics.md) - The statistics for this entity
+- [MangaDexSharp.Status](MangaDexSharp/MangaDexSharp.Status.md) - The publication status of the manga
+- [MangaDexSharp.StreamFileUpload](MangaDexSharp/MangaDexSharp.StreamFileUpload.md) - Represents a files stream content Warning; using this class can cause issues if request retries are enabled (like in the case of using upload sessions). So it is preferably to use
+- [MangaDexSharp.TagList](MangaDexSharp/MangaDexSharp.TagList.md) - Represents a collection of tags
+- [MangaDexSharp.Takedown](MangaDexSharp/MangaDexSharp.Takedown.md) - Represents a takedown notice returned from the MD api
+- [MangaDexSharp.TakedownAttributes](MangaDexSharp/MangaDexSharp.TakedownAttributes.md) - All of the properties on this takedown notice
+- [MangaDexSharp.TakedownList](MangaDexSharp/MangaDexSharp.TakedownList.md) - Represents a collection of takedown requests returned by the MD api
+- [MangaDexSharp.TakedownOrder](MangaDexSharp/MangaDexSharp.TakedownOrder.md) - The available fields the can be ordered by
+- [MangaDexSharp.Thread](MangaDexSharp/MangaDexSharp.Thread.md) - Represents a comment thread on the MD forums
+- [MangaDexSharp.ThreadAttributesModel](MangaDexSharp/MangaDexSharp.ThreadAttributesModel.md) - The properties of the thread
+- [MangaDexSharp.ThreadCreate](MangaDexSharp/MangaDexSharp.ThreadCreate.md) - Represents a request to create a thread
+- [MangaDexSharp.ThreadType](MangaDexSharp/MangaDexSharp.ThreadType.md) - The type of a thread
+- [MangaDexSharp.Token](MangaDexSharp/MangaDexSharp.Token.md) - Represents an authentication token for a login request
+- [MangaDexSharp.TokenRequest](MangaDexSharp/MangaDexSharp.TokenRequest.md) - Authorization token request parameters
+- [MangaDexSharp.TokenResult](MangaDexSharp/MangaDexSharp.TokenResult.md) - The result of a token request
+- [MangaDexSharp.TooManyRequestsPause](MangaDexSharp/MangaDexSharp.TooManyRequestsPause.md) - A helper for pausing the API when too many requests are made
+- [MangaDexSharp.TypeMap](MangaDexSharp/MangaDexSharp.TypeMap.md) - Represents the relationship between an interface and it's available concrete types
+- [MangaDexSharp.UploadIncludes](MangaDexSharp/MangaDexSharp.UploadIncludes.md) - Relationships that can be included when fetching upload sessions
+- [MangaDexSharp.UploadSession](MangaDexSharp/MangaDexSharp.UploadSession.md) - Represents an upload sessions
+- [MangaDexSharp.UploadSessionAttributesModel](MangaDexSharp/MangaDexSharp.UploadSessionAttributesModel.md) - The properties for this upload session
+- [MangaDexSharp.UploadSessionCommit](MangaDexSharp/MangaDexSharp.UploadSessionCommit.md) - Represents a request to commit an upload sessions
+- [MangaDexSharp.UploadSessionCreate](MangaDexSharp/MangaDexSharp.UploadSessionCreate.md) - Represents a request to create an upload session
+- [MangaDexSharp.UploadSessionFile](MangaDexSharp/MangaDexSharp.UploadSessionFile.md) - Represents a file in an upload session
+- [MangaDexSharp.UploadSessionFileAttributesModel](MangaDexSharp/MangaDexSharp.UploadSessionFileAttributesModel.md) - The properties of the file
+- [MangaDexSharp.UploadSessionFileList](MangaDexSharp/MangaDexSharp.UploadSessionFileList.md) - Represents a list of files during an upload session
+- [MangaDexSharp.User](MangaDexSharp/MangaDexSharp.User.md) - Represents a user in the MD api
+- [MangaDexSharp.UserAttributesModel](MangaDexSharp/MangaDexSharp.UserAttributesModel.md) - The properties of the user
+- [MangaDexSharp.UserFilter](MangaDexSharp/MangaDexSharp.UserFilter.md) - Represents the available query parameters for the users endpoint
+- [MangaDexSharp.UserList](MangaDexSharp/MangaDexSharp.UserList.md) - Represents a list of users
+- [MangaDexSharp.Visibility](MangaDexSharp/MangaDexSharp.Visibility.md) - The visibility of a custom list
+- [MangaDexSharp.VolumeData](MangaDexSharp/MangaDexSharp.VolumeData.md) - Represents a volume of a manga
+
+## MangaDexSharp.OAuthLocal.Web
+- [MangaDexSharp.OAuthLocal.Web.WebCredentialService](MangaDexSharp.OAuthLocal.Web/MangaDexSharp.OAuthLocal.Web.WebCredentialService.md) - class
+- [MangaDexSharp.OAuthLocal.Web.Controllers.HomeController](MangaDexSharp.OAuthLocal.Web/MangaDexSharp.OAuthLocal.Web.Controllers.HomeController.md) - class
+- [MangaDexSharp.OAuthLocal.Web.Controllers.MangaController](MangaDexSharp.OAuthLocal.Web/MangaDexSharp.OAuthLocal.Web.Controllers.MangaController.md) - class
+- [MangaDexSharp.OAuthLocal.Web.Models.ErrorViewModel](MangaDexSharp.OAuthLocal.Web/MangaDexSharp.OAuthLocal.Web.Models.ErrorViewModel.md) - class
+
+## MangaDexSharp.UpdatesPoll
+- [MangaDexSharp.UpdatesPoll.ChapterPages](MangaDexSharp.UpdatesPoll/MangaDexSharp.UpdatesPoll.ChapterPages.md) - Represents a chapter and it's associated page URLs
+- [MangaDexSharp.UpdatesPoll.IUpdatesPollService](MangaDexSharp.UpdatesPoll/MangaDexSharp.UpdatesPoll.IUpdatesPollService.md) - interface
+- [MangaDexSharp.UpdatesPoll.UpdatesPollService](MangaDexSharp.UpdatesPoll/MangaDexSharp.UpdatesPoll.UpdatesPollService.md) - class
+
+## MangaDexSharp.Utilities
+- [MangaDexSharp.DiExtensions](MangaDexSharp.Utilities/MangaDexSharp.DiExtensions.md) - Extensions for dependency injection in MangaDexSharp
+- [MangaDexSharp.Utilities.IRateLimitService](MangaDexSharp.Utilities/MangaDexSharp.Utilities.IRateLimitService.md) - Service for handling rate-limits for the MD API
+- [MangaDexSharp.Utilities.RateLimitSettings](MangaDexSharp.Utilities/MangaDexSharp.Utilities.RateLimitSettings.md) - Optional settings for rate limits
+- [MangaDexSharp.Utilities.Download.ArchiveType](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.ArchiveType.md) - Represents the type of archive to use when downloading pages
+- [MangaDexSharp.Utilities.Download.DownloadFile](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.DownloadFile.md) - Represents a file that will or has been downloaded.
+- [MangaDexSharp.Utilities.Download.DownloadStatus](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.DownloadStatus.md) - The status of a download operation
+- [MangaDexSharp.Utilities.Download.FileGroupingType](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.FileGroupingType.md) - How to group chapters when creating archives
+- [MangaDexSharp.Utilities.Download.IDownloadInstance](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.IDownloadInstance.md) - Represents a download session
+- [MangaDexSharp.Utilities.Download.IDownloadSettings](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.IDownloadSettings.md) - An interface for editing download settings
+- [MangaDexSharp.Utilities.Download.IDownloadUtilityService](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.IDownloadUtilityService.md) - Service for downloading chapters
+- [MangaDexSharp.Utilities.Download.IImageDownloadQueue](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.IImageDownloadQueue.md) - A utility for downloading images
+- [MangaDexSharp.Utilities.Download.ImageNameTransform](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.ImageNameTransform.md) - The parameters for the image name transformation.
+- [MangaDexSharp.Utilities.Download.void](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.void.md) - Represents a delegate that is called when a download event happens
+- [MangaDexSharp.Utilities.Download.void](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.void.md) - Represents a delegate that is called when a download event happens
+- [MangaDexSharp.Utilities.Download.void](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.void.md) - Represents a delegate that is called when a download event happens
+- [MangaDexSharp.Utilities.Download.Archives.IArchiveInstance](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Download.Archives.IArchiveInstance.md) - Interface representing something that can create an archive instance
+- [MangaDexSharp.Utilities.Upload.IUploadInstance](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Upload.IUploadInstance.md) - Represents an upload session
+- [MangaDexSharp.Utilities.Upload.IUploadSettings](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Upload.IUploadSettings.md) - An interface for editing upload settings
+- [MangaDexSharp.Utilities.Upload.IUploadUtilityService](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Upload.IUploadUtilityService.md) - Service for starting upload sessions
+- [MangaDexSharp.Utilities.Upload.void](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Upload.void.md) - Represents a delegate that is called when an upload event happens
+- [MangaDexSharp.Utilities.Upload.void](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Upload.void.md) - Represents a delegate that is called when an upload event happens
+- [MangaDexSharp.Utilities.Upload.void](MangaDexSharp.Utilities/MangaDexSharp.Utilities.Upload.void.md) - Represents a delegate that is called when an upload event happens
+
+## MangaDexSharp.Utilities.Cli
+- [MangaDexSharp.Utilities.Cli.AuthOptions](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.AuthOptions.md) - class
+- [MangaDexSharp.Utilities.Cli.Extensions](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Extensions.md) - class
+- [MangaDexSharp.Utilities.Cli.SecretAttribute](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.SecretAttribute.md) - class
+- [MangaDexSharp.Utilities.Cli.Services.AuthConfigurationOIDC](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.AuthConfigurationOIDC.md) - class
+- [MangaDexSharp.Utilities.Cli.Services.AuthCredentialsService](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.AuthCredentialsService.md) - class
+- [MangaDexSharp.Utilities.Cli.Services.AuthOptionsCache](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.AuthOptionsCache.md) - class
+- [MangaDexSharp.Utilities.Cli.Services.CsvManga](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.CsvManga.md) - record class
+- [MangaDexSharp.Utilities.Cli.Services.ExportReadListService](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.ExportReadListService.md) - class
+- [MangaDexSharp.Utilities.Cli.Services.IExportReadListService](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.IExportReadListService.md) - interface
+- [MangaDexSharp.Utilities.Cli.Services.Writers.CsvRecordWriter](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.Writers.CsvRecordWriter.md) - class
+- [MangaDexSharp.Utilities.Cli.Services.Writers.IRecordWriter](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.Writers.IRecordWriter.md) - interface
+- [MangaDexSharp.Utilities.Cli.Services.Writers.JsonRecordWriter](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Services.Writers.JsonRecordWriter.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.CheckAuthOptions](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.CheckAuthOptions.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.CheckAuthVerb](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.CheckAuthVerb.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.DefaultOptions](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.DefaultOptions.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.DefaultVerb](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.DefaultVerb.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.DownloadOptions](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.DownloadOptions.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.DownloadVerb](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.DownloadVerb.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.ExportReadListOptions](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.ExportReadListOptions.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.ExportReadListVerb](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.ExportReadListVerb.md) - class
+- [MangaDexSharp.Utilities.Cli.Verbs.VerbDisplay](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.VerbDisplay.md) - record class
+- [MangaDexSharp.Utilities.Cli.Verbs.VerbOption](MangaDexSharp.Utilities.Cli/MangaDexSharp.Utilities.Cli.Verbs.VerbOption.md) - record class
+
+
+

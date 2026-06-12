@@ -9,7 +9,7 @@ internal class TestRateLimitsOptions
 internal class TestRateLimitsVerb(
 	ILogger<TestRateLimitsVerb> logger) : BooleanVerb<TestRateLimitsOptions>(logger)
 {
-	private IMdRateLimiter _limiter = null!;
+	private MdRateLimiter _limiter = null!;
 
 	public static MdHttpBuilder Request(string url, string method)
 	{
@@ -49,15 +49,24 @@ internal class TestRateLimitsVerb(
 
 	public Task TestGlobalPause(CancellationToken token)
 	{
-		var url = "https://api.mangadex.org/author";
-		var request = Request(url, "PUT");
+		var url = "https://api.mangadex.org/at-home/server/testing";
+		var request = Request(url, "GET");
 		_limiter.Observe(url, new()
 		{
 			Limit = 10, 
 			Remaining = 0,
-			RetryAfter = DateTime.UtcNow.AddSeconds(30)
+			RetryAfter = DateTime.UtcNow.AddSeconds(15)
 		});
 		return SpamRequest(request, token);
+	}
+
+	public async Task TestIoHandle(CancellationToken token)
+	{
+		var url = "https://api.mangadex.org/at-home/server/testing";
+		var request = Request(url, "GET");
+		var (custom, _) = await _limiter.GetLimiter(request, token);
+		if (custom is null)
+			_logger.LogWarning("Custom rate limiter is null");
 	}
 
 	public override async Task<bool> Execute(TestRateLimitsOptions options, CancellationToken token)
@@ -70,7 +79,7 @@ internal class TestRateLimitsVerb(
 				.WithEventTracking<EventWatcher>())
 			.BuildServiceProvider();
 
-		_limiter = services.GetRequiredService<IMdRateLimiter>();
+		_limiter = (MdRateLimiter)services.GetRequiredService<IMdRateLimiter>();
 
 		await TestGlobalPause(token);
 		return true;

@@ -28,7 +28,7 @@ public class MangaVerb(
             return false;
         }
 
-        _logger.LogInformation("Manga Data: {json}", _json.Pretty(manga));
+		_logger.LogInformation("Manga Data: {json}", _json.Pretty(manga));
         return true;
     }
 }
