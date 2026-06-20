@@ -173,8 +173,9 @@ public interface IMangaDexMangaService
     /// Fetches a list of manga recommendations based on the given manga ID
     /// </summary>
     /// <param name="mangaId">The ID of the manga to fetch the recommendations for</param>
+    /// <param name="filter">How to filter the recommendations</param>
     /// <returns>The results of the request</returns>
-    Task<RecommendationList> Recommendations(string mangaId);
+    Task<RecommendationList> Recommendations(string mangaId, MangaRecommendationFilter? filter = null);
 
 	/// <summary>
 	/// Requests all of the <see cref="Manga"/>s that match the filter
@@ -375,9 +376,10 @@ internal class MangaDexMangaService(
 		return await _api.Delete<MangaDexRoot>($"{Root}/{mangaId}/relation/{id}", c) ?? new() { Result = "error" };
 	}
 
-    public async Task<RecommendationList> Recommendations(string mangaId)
+    public async Task<RecommendationList> Recommendations(string mangaId, MangaRecommendationFilter? filter = null)
     {
-        var url = $"{Root}/{mangaId}/recommendation";
+		filter ??= new();
+        var url = $"{Root}/{mangaId}/recommendation?{filter.BuildQuery()}";
 		return await _api.Get<RecommendationList>(url) ?? new() { Result = "error" };
     }
 }

@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexReportService](https://github.com/ca
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Report) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Report` or inject the service from a provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;

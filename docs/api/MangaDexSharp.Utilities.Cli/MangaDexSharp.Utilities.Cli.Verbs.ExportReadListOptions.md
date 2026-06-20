@@ -7,7 +7,7 @@
 
 ## Purpose
 
-$typeName is part of the $typeProject surface.
+This type is part of the documented API surface.
 
 This page exists so references to [ExportReadListOptions](https://github.com/calico-crusade/mangadex-sharp/blob/main/src/MangaDexSharp.Utilities.Cli/Verbs/ExportReadListVerb.cs#L6) have a stable documentation target in the repo. It records what the type is used for, why it is present in the solution, and the members exposed by the current source.
 

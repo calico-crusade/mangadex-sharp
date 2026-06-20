@@ -183,6 +183,7 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
                 .AddTransient<IMangaDexScanlationGroupService, MangaDexScanlationGroupService>()
                 .AddTransient<IMangaDexUploadService, MangaDexUploadService>()
                 .AddTransient<IMangaDexUserService, MangaDexUserService>()
+                .AddTransient<IMangaDexSettingsService, MangaDexSettingsService>()
                 .AddTransient<IMangaDexStatisticsService, MangaDexStatisticsService>()
 
                 .AddTransient<IMangaDexMiscService, MangaDexMiscService>()
@@ -191,6 +192,8 @@ internal class MangaDexBuilder(IServiceCollection _services) : IMangaDexBuilder
                 .AddTransient<IMangaDexThreadsService, MangaDexMiscService>()
                 .AddTransient<IMangaDexCaptchaService, MangaDexMiscService>()
                 .AddTransient<IMangaDexTakedownService, MangaDexMiscService>()
+                .AddTransient<IMangaDexInfrastructureService, MangaDexMiscService>()
+                .AddTransient<IMangaDexLegacyService, MangaDexMiscService>()
 
                 .AddTransient<IMangaDexAuthService, MangaDexAuthService>()
                 .AddTransient<IMangaDexApiClientService, MangaDexApiClientService>()

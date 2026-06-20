@@ -12,6 +12,8 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.ApiClientList](MangaDexSharp/MangaDexSharp.ApiClientList.md) - Represents a collection of API clients returned by the MD api
 - [MangaDexSharp.ApiClientState](MangaDexSharp/MangaDexSharp.ApiClientState.md) - The state of the API client
 - [MangaDexSharp.ApiClientUpdateData](MangaDexSharp/MangaDexSharp.ApiClientUpdateData.md) - The data that can be updated for an API client
+- [MangaDexSharp.AuthCheck](MangaDexSharp/MangaDexSharp.AuthCheck.md) - Represents the permissions associated with an access token
+- [MangaDexSharp.AuthLogout](MangaDexSharp/MangaDexSharp.AuthLogout.md) - Represents the result of logging out of the MangaDex API
 - [MangaDexSharp.AuthorCreate](MangaDexSharp/MangaDexSharp.AuthorCreate.md) - Represents a request to create an author
 - [MangaDexSharp.AuthorFilter](MangaDexSharp/MangaDexSharp.AuthorFilter.md) - Represents a query parameter filter for the authors endpoints
 - [MangaDexSharp.Builder](MangaDexSharp/MangaDexSharp.Builder.md) - A builder for making a TypeMap
@@ -65,6 +67,8 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.IMangaDexCustomListService](MangaDexSharp/MangaDexSharp.IMangaDexCustomListService.md) - Represents all of the requests on the /list endpoints
 - [MangaDexSharp.IMangaDexFeedService](MangaDexSharp/MangaDexSharp.IMangaDexFeedService.md) - Represents all of the different feed endpoints (expect manga, that's on the IMangaDex.Manga service)
 - [MangaDexSharp.IMangaDexFollowsService](MangaDexSharp/MangaDexSharp.IMangaDexFollowsService.md) - Represents all of the different requests relating to objects the current user follows
+- [MangaDexSharp.IMangaDexInfrastructureService](MangaDexSharp/MangaDexSharp.IMangaDexInfrastructureService.md) - Represents MangaDex infrastructure endpoints
+- [MangaDexSharp.IMangaDexLegacyService](MangaDexSharp/MangaDexSharp.IMangaDexLegacyService.md) - Represents all of the legacy ID mapping endpoints
 - [MangaDexSharp.IMangaDexMangaService](MangaDexSharp/MangaDexSharp.IMangaDexMangaService.md) - Represents all of the requests related to manga
 - [MangaDexSharp.IMangaDexMiscService](MangaDexSharp/MangaDexSharp.IMangaDexMiscService.md) - Represents a collection of miscellaneous services
 - [MangaDexSharp.IMangaDexPageService](MangaDexSharp/MangaDexSharp.IMangaDexPageService.md) - Represents all of the requests for pages and md-at-home
@@ -72,6 +76,7 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.IMangaDexReadMarkerService](MangaDexSharp/MangaDexSharp.IMangaDexReadMarkerService.md) - Represents all requests related to read status markers
 - [MangaDexSharp.IMangaDexReportService](MangaDexSharp/MangaDexSharp.IMangaDexReportService.md) - Represents all of the requests relating to object reports
 - [MangaDexSharp.IMangaDexScanlationGroupService](MangaDexSharp/MangaDexSharp.IMangaDexScanlationGroupService.md) - Represents all of the requests related to scanlation groups
+- [MangaDexSharp.IMangaDexSettingsService](MangaDexSharp/MangaDexSharp.IMangaDexSettingsService.md) - Represents all of the requests related to MangaDex user settings
 - [MangaDexSharp.IMangaDexStatisticsService](MangaDexSharp/MangaDexSharp.IMangaDexStatisticsService.md) - Represents all of the requests on the /statistics endpoints
 - [MangaDexSharp.IMangaDexTakedownService](MangaDexSharp/MangaDexSharp.IMangaDexTakedownService.md) - Represents all of the requests related to takedown notices
 - [MangaDexSharp.IMangaDexThreadsService](MangaDexSharp/MangaDexSharp.IMangaDexThreadsService.md) - Represents all of the requests for threads
@@ -91,6 +96,10 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.IRelationship](MangaDexSharp/MangaDexSharp.IRelationship.md) - Represents the relationship between the parent item and the associated type
 - [MangaDexSharp.IRelationshipModel](MangaDexSharp/MangaDexSharp.IRelationshipModel.md) - Represents an item that can have a relationship with another item
 - [MangaDexSharp.ITokenCacheService](MangaDexSharp/MangaDexSharp.ITokenCacheService.md) - A service for caching the token and the time it was last executed
+- [MangaDexSharp.LegacyMapping](MangaDexSharp/MangaDexSharp.LegacyMapping.md) - Represents a legacy ID mapping result
+- [MangaDexSharp.LegacyMappingList](MangaDexSharp/MangaDexSharp.LegacyMappingList.md) - Represents a collection of legacy ID mapping results
+- [MangaDexSharp.LegacyMappingRequest](MangaDexSharp/MangaDexSharp.LegacyMappingRequest.md) - Represents a request to map legacy MangaDex IDs to current UUIDs
+- [MangaDexSharp.LegacyMappingType](MangaDexSharp/MangaDexSharp.LegacyMappingType.md) - Represents the type of legacy ID mapping to request
 - [MangaDexSharp.Localization](MangaDexSharp/MangaDexSharp.Localization.md) - Represents a collection of localized (translated) strings
 - [MangaDexSharp.LoginRequest](MangaDexSharp/MangaDexSharp.LoginRequest.md) - Represents the request to login to MD using the old username/password combination
 - [MangaDexSharp.LoginResult](MangaDexSharp/MangaDexSharp.LoginResult.md) - Represents the result of a login request
@@ -128,6 +137,7 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.MangaReadStatuses](MangaDexSharp/MangaDexSharp.MangaReadStatuses.md) - Represents a collection of read statuses of manga in the MD api
 - [MangaDexSharp.MangaReadStatusPush](MangaDexSharp/MangaDexSharp.MangaReadStatusPush.md) - Represents a request to update the read status of a manga
 - [MangaDexSharp.MangaRecommendation](MangaDexSharp/MangaDexSharp.MangaRecommendation.md) - Represents a recommendation item returned from the MD api
+- [MangaDexSharp.MangaRecommendationFilter](MangaDexSharp/MangaDexSharp.MangaRecommendationFilter.md) - Represents the available query parameters for manga recommendations
 - [MangaDexSharp.MangaRelation](MangaDexSharp/MangaDexSharp.MangaRelation.md) - Represents the relationship between manga
 - [MangaDexSharp.MangaRelationship](MangaDexSharp/MangaDexSharp.MangaRelationship.md) - Represents a relationship between two manga
 - [MangaDexSharp.MangaRelationshipAttributesModel](MangaDexSharp/MangaDexSharp.MangaRelationshipAttributesModel.md) - The properties of the relationship
@@ -166,6 +176,8 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.RatingList](MangaDexSharp/MangaDexSharp.RatingList.md) - Represents a collection of ratings for a manga
 - [MangaDexSharp.RatingStats](MangaDexSharp/MangaDexSharp.RatingStats.md) - Statis related to the manga's rating
 - [MangaDexSharp.RawFileUpload](MangaDexSharp/MangaDexSharp.RawFileUpload.md) - Represents a files raw byte content
+- [MangaDexSharp.ReadingHistory](MangaDexSharp/MangaDexSharp.ReadingHistory.md) - Represents a user's reading history response
+- [MangaDexSharp.ReadingHistoryItem](MangaDexSharp/MangaDexSharp.ReadingHistoryItem.md) - Represents an entry in a user's reading history
 - [MangaDexSharp.ReadMarkerBatchUpdate](MangaDexSharp/MangaDexSharp.ReadMarkerBatchUpdate.md) - Represents a manga read marker batch update request
 - [MangaDexSharp.ReadMarkerList](MangaDexSharp/MangaDexSharp.ReadMarkerList.md) - Represents a collection of read chapter IDs
 - [MangaDexSharp.ReadStatus](MangaDexSharp/MangaDexSharp.ReadStatus.md) - Represents the status of a manga
@@ -190,6 +202,7 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.ScanlationGroupFilter](MangaDexSharp/MangaDexSharp.ScanlationGroupFilter.md) - Represents the available query parameters for filtering group endpoints
 - [MangaDexSharp.ScanlationGroupList](MangaDexSharp/MangaDexSharp.ScanlationGroupList.md) - Represents a collection of scanlation groups
 - [MangaDexSharp.ScanlationGroupUpdate](MangaDexSharp/MangaDexSharp.ScanlationGroupUpdate.md) - Represents a request to update a scanlation group
+- [MangaDexSharp.SettingsTemplate](MangaDexSharp/MangaDexSharp.SettingsTemplate.md) - Represents a MangaDex settings template
 - [MangaDexSharp.Statistics](MangaDexSharp/MangaDexSharp.Statistics.md) - The statistics for this entity
 - [MangaDexSharp.Status](MangaDexSharp/MangaDexSharp.Status.md) - The publication status of the manga
 - [MangaDexSharp.StreamFileUpload](MangaDexSharp/MangaDexSharp.StreamFileUpload.md) - Represents a files stream content Warning; using this class can cause issues if request retries are enabled (like in the case of using upload sessions). So it is preferably to use
@@ -208,6 +221,8 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.TooManyRequestsPause](MangaDexSharp/MangaDexSharp.TooManyRequestsPause.md) - A helper for pausing the API when too many requests are made
 - [MangaDexSharp.TypeMap](MangaDexSharp/MangaDexSharp.TypeMap.md) - Represents the relationship between an interface and it's available concrete types
 - [MangaDexSharp.UploadIncludes](MangaDexSharp/MangaDexSharp.UploadIncludes.md) - Relationships that can be included when fetching upload sessions
+- [MangaDexSharp.UploadApprovalRequired](MangaDexSharp/MangaDexSharp.UploadApprovalRequired.md) - Represents whether an upload needs moderation approval
+- [MangaDexSharp.UploadApprovalRequiredRequest](MangaDexSharp/MangaDexSharp.UploadApprovalRequiredRequest.md) - Represents a request to check whether an upload needs moderation approval
 - [MangaDexSharp.UploadSession](MangaDexSharp/MangaDexSharp.UploadSession.md) - Represents an upload sessions
 - [MangaDexSharp.UploadSessionAttributesModel](MangaDexSharp/MangaDexSharp.UploadSessionAttributesModel.md) - The properties for this upload session
 - [MangaDexSharp.UploadSessionCommit](MangaDexSharp/MangaDexSharp.UploadSessionCommit.md) - Represents a request to commit an upload sessions
@@ -218,6 +233,8 @@ Generated reference pages for the documented projects. `MangaDexSharp.Cli` is in
 - [MangaDexSharp.User](MangaDexSharp/MangaDexSharp.User.md) - Represents a user in the MD api
 - [MangaDexSharp.UserAttributesModel](MangaDexSharp/MangaDexSharp.UserAttributesModel.md) - The properties of the user
 - [MangaDexSharp.UserFilter](MangaDexSharp/MangaDexSharp.UserFilter.md) - Represents the available query parameters for the users endpoint
+- [MangaDexSharp.UserSettings](MangaDexSharp/MangaDexSharp.UserSettings.md) - Represents a user's MangaDex settings
+- [MangaDexSharp.UserSettingsUpdate](MangaDexSharp/MangaDexSharp.UserSettingsUpdate.md) - Represents a request to update a user's MangaDex settings
 - [MangaDexSharp.UserList](MangaDexSharp/MangaDexSharp.UserList.md) - Represents a list of users
 - [MangaDexSharp.Visibility](MangaDexSharp/MangaDexSharp.Visibility.md) - The visibility of a custom list
 - [MangaDexSharp.VolumeData](MangaDexSharp/MangaDexSharp.VolumeData.md) - Represents a volume of a manga

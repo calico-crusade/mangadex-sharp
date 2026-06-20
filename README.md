@@ -1,350 +1,393 @@
 # mangadex-sharp
-A C# API for Mangadex.org
+
+A .NET client library for the [MangaDex API](https://api.mangadex.org/docs/redoc.html).
+
+The core package is `MangaDexSharp`. The repository also contains optional utilities for downloading chapters, uploading/editing chapters, rate-limited workflows, and small sample/CLI applications.
 
 ## Usage Agreement
-By using this library, you agree to follow MangaDex's [Acceptable Use Policy](https://api.mangadex.org/docs/#acceptable-usage-policy) and [Acknowledge the General Connection Requirements](https://api.mangadex.org/docs/2-limitations/#general-connection-requirements).
 
-Note: Using a spoofed user-agent is not allowed and will result in being banned from using the API. There is no reason to spoof the user-agent, except for malicious purposes.
+By using this library, you are responsible for following MangaDex's [Acceptable Usage Policy](https://api.mangadex.org/docs/#acceptable-usage-policy) and [general connection requirements](https://api.mangadex.org/docs/2-limitations/#general-connection-requirements).
 
-By using `IMangaDexUploadService.Commit(String, UploadSessionCommit, String?)` you agree to the [terms of service](https://mangadex.org/compliance)
+Do not spoof another application's User-Agent. Use an honest User-Agent for your application.
+
+By calling `IMangaDexUploadService.Commit(string, UploadSessionCommit, string?)`, you agree to the MangaDex upload terms at <https://mangadex.org/compliance>.
+
+## Packages
+
+| Package | Purpose |
+| --- | --- |
+| `MangaDexSharp` | Core API client, models, filters, authentication helpers, and dependency injection setup. |
+| `MangaDexSharp.Utilities` | Upload, download, and rate-limit helper workflows built on top of the core client. |
+| `MangaDexSharp.UpdatesPoll` | Polling helper for recently updated chapters. |
+| `MangaDexSharp.Utilities.Cli` | Command-line utilities for auth checks, downloading, and read-list export. |
 
 ## Installation
-You can install the NuGet package with Visual Studio. It targets .net standard 2.1 to take advantage of most of the new features within C# and .net.
 
-```
+```powershell
 PM> Install-Package MangaDexSharp
 ```
 
-## Setup
-You can either use it directly or via dependency injection (for use with asp.net core).
-> **_NOTE:_** It is no longer necessary to manually register the `CardboardBox.Http` and `CardboardBox.Json` packages as of v1.0.20.
+For upload/download helpers:
 
-### Depdency Injection:
+```powershell
+PM> Install-Package MangaDexSharp.Utilities
+```
+
+## Quick Start
+
 ```csharp
+using MangaDexSharp;
 
+var api = MangaDex.Create();
+
+var manga = await api.Manga.Get("fc0a7b86-992e-4126-b30f-ca04811979bf");
+var feed = await api.Manga.Feed(manga.Data.Id, new MangaFeedFilter
+{
+    TranslatedLanguage = ["en"],
+    IncludeExternalUrl = false
+});
+
+var chapter = await api.Chapter.Get(feed.Data[0].Id);
+var pages = await api.Pages.Pages(chapter.Data.Id);
+
+Console.WriteLine(manga.Data.Attributes?.Title["en"]);
+Console.WriteLine($"Chapter pages: {pages.Chapter.Data.Length}");
+```
+
+## Dependency Injection
+
+```csharp
 using MangaDexSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-...
-
-//This will find the authentication token in your configuration file (appsettings.json) under: "MangaDex:Token"
-builder.Services.AddMangaDex(); 
-//Or, if you want to inject the token directly you can use this (You don't need both of these.):
-builder.Services.AddMangaDex(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
+builder.Services.AddMangaDex(c => c
+    .WithApiConfig(a => a
+        .WithUserAgent("my-app/1.0")
+        .WithAutoRateLimits(enabled: true, conservative: true))
+    .WithAccessTokenFromConfig());
 
 var app = builder.Build();
 ```
 
-Then you can inject the API into any of your controllers or other services:
+Then inject `IMangaDex` or an individual endpoint service:
+
 ```csharp
 using MangaDexSharp;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SomeApplication;
-
 [ApiController]
-public class SomeController : ControllerBase
+public class MangaController(IMangaDex mangaDex) : ControllerBase
 {
-    private readonly IMangaDex _md;
-
-    public SomeController(IMangaDex md)
+    [HttpGet("manga/{id}")]
+    public Task<MangaDexRoot<Manga>> Get(string id)
     {
-        _md = md;
-    }
-
-    [HttpGet, Route("manga/{id}")]
-    public async Task<IActionResult> Get(string id)
-    {
-        return Ok(await _md.Manga.Get(id));
+        return mangaDex.Manga.Get(id);
     }
 }
 ```
 
+## Direct Client Creation
 
-### Directly:
 ```csharp
 using MangaDexSharp;
 
-...
-//You cannot access authed routes if you use this option.
-var api = MangaDex.Create();
+var api = MangaDex.Create(c => c
+    .WithApiConfig(a => a.WithUserAgent("my-script/1.0")));
 
-//However, you can specify the token like so:
-var api = MangaDex.Create(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
-
-var manga = await api.Manga.Get("some-manga-id-here");
+var random = await api.Manga.Random(new MangaRandomFilter
+{
+    ContentRating = [ContentRating.safe]
+});
 ```
 
-## Usage
-The API follows the [docs](https://api.mangadex.org/docs/redoc.html) pretty closely. 
-With the root object for the api being the `IMangaDex` interface.
-Once you have an instance (see above), you can access any of the sub-sections within it.
-Here are some common use cases:
+For authenticated routes:
+
+```csharp
+var api = MangaDex.Create(c => c.WithAccessToken("<access-token>"));
+var me = await api.User.Me();
+```
+
+You can also pass a token to a single authenticated request:
 
 ```csharp
 var api = MangaDex.Create();
+await api.Manga.Follow("fc0a7b86-992e-4126-b30f-ca04811979bf", "<access-token>");
+```
 
-//Fetching a manga by manga ID:
-var manga = await api.Manga.Get("fc0a7b86-992e-4126-b30f-ca04811979bf");
+## Service Map
 
-//Searching for a manga via it's title:
-var results = await api.Manga.List(new MangaFilter 
+The `IMangaDex` root exposes API areas as properties:
+
+| Property | Examples |
+| --- | --- |
+| `Manga` | Search, get, create, update, feed, random, tags, status, drafts, relations, recommendations. |
+| `Chapter` | Search, get, update, delete chapters. |
+| `Author` | Search, get, create, update, delete authors. |
+| `Cover` | List, upload, get, edit, delete cover art. |
+| `Lists` | Create, get, update, delete, follow, and manage manga in custom lists. |
+| `Feed` | Followed-manga feed and custom-list feed. |
+| `Follows` | Followed groups, users, manga, and custom lists. |
+| `ReadMarker` | Read markers and read-marker batch updates. |
+| `Report` | Report reasons, reports, and report creation. |
+| `ScanlationGroup` | Search, get, create, update, delete, follow, unfollow groups. |
+| `Upload` | Upload sessions, files, commits, cleanup, and moderation approval checks. |
+| `User` | User search, profile, current user, account deletion, reading history, legacy login helpers. |
+| `Auth` | OAuth token helpers plus API token check/logout. |
+| `ApiClient` | API client management and secret regeneration. |
+| `Statistics` | Manga, chapter, and group statistics. |
+| `Settings` | User settings and settings templates. |
+| `Infrastructure` | API healthcheck. |
+| `Legacy` | Legacy integer ID to UUID mapping. |
+| `Pages` | MangaDex@Home page server resolution. |
+| `Ratings`, `Threads`, `Captcha`, `Takedown` | Smaller API groups exposed through `Misc` as convenience properties. |
+
+## Common Examples
+
+### Search Manga
+
+```csharp
+var results = await api.Manga.List(new MangaFilter
 {
-    Title = "The Unrivaled Mememori-kun"
+    Title = "The Unrivaled Mememori-kun",
+    ContentRating = [ContentRating.safe, ContentRating.suggestive],
+    Includes = [MangaIncludes.cover_art, MangaIncludes.author],
+    Order = new()
+    {
+        [MangaFilter.OrderKey.relevance] = OrderValue.desc
+    }
 });
+```
 
-//Get all of the chapters from a manga by manga ID:
-var chapters = await api.Manga.Feed("fc0a7b86-992e-4126-b30f-ca04811979bf");
+### Read A Manga Feed
 
-//Fetch a chapter by chapter ID:
-var chapter = await api.Chapter.Get("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
+```csharp
+var chapters = await api.Manga.Feed("fc0a7b86-992e-4126-b30f-ca04811979bf", new MangaFeedFilter
+{
+    TranslatedLanguage = ["en"],
+    IncludeUnavailable = false,
+    ExternalUrl = null,
+    Order = new()
+    {
+        [MangaFeedFilter.OrderKey.chapter] = OrderValue.asc
+    }
+});
+```
 
-//Get all of the pages of a specific chapter by chapter ID:
+### Download Pages
+
+```csharp
 var pages = await api.Pages.Pages("2c98fbe9-a63f-47c2-9862-ecc9199610a2");
+
+foreach (var page in pages.Chapter.Data)
+{
+    var url = $"{pages.BaseUrl}/data/{pages.Chapter.Hash}/{page}";
+    Console.WriteLine(url);
+}
+```
+
+### Check Authentication
+
+```csharp
+var auth = await api.Auth.Check("<access-token>");
+
+if (auth.IsAuthenticated)
+    Console.WriteLine(string.Join(", ", auth.Permissions));
+```
+
+### Get Current User And Reading History
+
+```csharp
+var me = await api.User.Me("<access-token>");
+var history = await api.User.History("<access-token>");
+
+Console.WriteLine(me.Data.Attributes?.Username);
+Console.WriteLine($"History entries: {history.Ratings.Count}");
+```
+
+### Work With Custom Lists
+
+```csharp
+var list = await api.Lists.Create(new CustomListCreate
+{
+    Name = "Favorites",
+    Visibility = Visibility.private,
+    Manga = []
+}, "<access-token>");
+
+await api.Lists.MangaAdd("fc0a7b86-992e-4126-b30f-ca04811979bf", list.Data.Id, order: 0, token: "<access-token>");
+```
+
+### Upload Cover Art
+
+```csharp
+using var file = new PathFileUpload("cover.jpg");
+
+var cover = await api.Cover.Upload("fc0a7b86-992e-4126-b30f-ca04811979bf", new CoverArtCreate
+{
+    File = file,
+    Volume = "1",
+    Description = "Volume 1 cover",
+    Locale = "en",
+    ContentType = "image/jpeg"
+}, "<access-token>");
+```
+
+### Check Upload Approval
+
+```csharp
+var approval = await api.Upload.CheckApprovalRequired(
+    manga: "fc0a7b86-992e-4126-b30f-ca04811979bf",
+    locale: "en",
+    token: "<access-token>");
+
+Console.WriteLine($"Approval required: {approval.RequiresApproval}");
+```
+
+### Map Legacy IDs
+
+```csharp
+var mappings = await api.Legacy.LegacyMapping(LegacyMappingType.manga, 1, 2, 3);
+
+foreach (var mapping in mappings.Data)
+    Console.WriteLine($"{mapping.Attributes?.LegacyId} -> {mapping.Attributes?.NewId}");
+```
+
+### User Settings
+
+```csharp
+using System.Text.Json;
+
+var current = await api.Settings.Get("<access-token>");
+
+using var doc = JsonDocument.Parse("""{"theme":"dark"}""");
+var updated = await api.Settings.Update(new UserSettingsUpdate
+{
+    Settings = doc.RootElement.Clone(),
+    UpdatedAt = DateTime.UtcNow
+}, "<access-token>");
 ```
 
 ## Authentication
-MangaDex switched to authorization bearer tokens via an OAuth2 flow recently. 
-In order to access any resources that require an account, you will need to get one of those tokens (you can read more [here](https://api.mangadex.org/docs/02-authentication/)).
-Once you have a bearer token, you can either add it at an API level or for a specific request, you can also create your own token service provider.
 
-> Note: You can see an example of how to fetch bearer tokens for the new OAuth2 flow in the `src/MangaDexSharp.OAuthLocal.Web` project.
-
-### OAuth2 Personal Clients:
-You can use the OAuth2 Personal client to fetch the session token like so:
+MangaDex uses OAuth2 bearer tokens for account-level routes. Create an API client from MangaDex account settings, then request tokens with `api.Auth`.
 
 ```csharp
 var api = MangaDex.Create();
 
-//You can get these from https://mangadex.org/settings under the "API Clients" tab.
-string clientId = "<client-id>"; 
-string clientSecret = "<client-secret>";
+var token = await api.Auth.Personal(
+    id: "<client-id>",
+    secret: "<client-secret>",
+    username: "<username>",
+    password: "<password>");
 
-//These are your mangadex.org account credentials
-string username = "<username>";
-string password = "<password>";
-
-//Request the tokens from the authorization service
-var auth = await api.Auth.Personal(clientId, clientSecret, username, password);
-var accessToken = auth.AccessToken;
-var refreshToken = auth.RefreshToken;
-
-var me = await api.User.Me(accessToken);
-
-//Or you can create an authenticated api
-var authedApi = MangaDex.Create(accessToken);
-var me = await authedApi.User.Me();
-
-//You can also refresh the token like so:
-var refreshed = await api.Auth.Refresh(refreshToken, clientId, clientSecret);
-var me = await api.User.Me(refreshed.AccessToken);
+var authed = MangaDex.Create(c => c.WithAccessToken(token.AccessToken));
+var me = await authed.User.Me();
 ```
 
-### OAuth2 Public Clients:
-These are not implemented yet on MangaDex, this library will be updated when they are.
-
-You can read more about them [here](https://api.mangadex.org/docs/02-authentication/public-clients/)
-
-### Legacy Authentication method:
-You can use the legacy login method to fetch the session token like so:
+Refresh tokens:
 
 ```csharp
-var api = MangaDex.Create();
-
-var result = await api.User.Login("<username>", "<password>");
-
-var token = result.Data.Session;
-
-//You can either pass the token into authenticated routes
-var me = await api.User.Me(token);
-
-//Or you can create an authenticated api
-var authedApi = MangaDex.Create(c => c.WithAccessToken(token));
-var me = await authedApi.User.Me();
+var refreshed = await api.Auth.Refresh(token.RefreshToken, "<client-id>", "<client-secret>");
 ```
 
-> Note: These methods are technically deprecated on mangadex's docs, so they are marked as `[Obsolete]` and will show up as warnings.
-
-### API Level:
-You have 2 primary options for using this, you can either specify it directly when you create a client or inject it via configuration.
+Check or logout API tokens:
 
 ```csharp
-//You can apply it directly like this:
-var api = MangaDex.Create(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
-
-//Or if you're using dependency injection, you can provide it here:
-builder.Services.AddMangaDex(c => c.WithAccessToken("<AUTH TOKEN HERE>"));
-
-//Or you can include it in your appsettings.json (or environment variables):
-builder.Services.AddMangaDex();
-//And then add a "MangaDex:Token": "<AUTH TOKEN HERE>" to your environment variables.
-//Note: you can change the name of the environment variable by setting doing this:
-MangaDexSharp.ConfigurationCredentialsService.TokenPath = "SomeEnvironmentVariableName";
+var check = await api.Auth.Check(refreshed.AccessToken);
+var logout = await api.Auth.Logout(refreshed.AccessToken);
 ```
 
-Alternatively, you can create your own `ICredentialsService` implementation and then add it via dependency injection:
-```csharp
-using MangaDexSharp;
+Legacy username/password login routes remain available on `api.User`, but they are obsolete and should not be preferred for new applications.
 
-//This has access to your services if you're using Dependency Injection.
-public class MyCustomCredentialsService : ICredentialsService
+## Configuration
+
+Configuration can come from `MangaDex.Create`, dependency injection, `IConfiguration`, or custom services.
+
+```json
 {
-    public async Task<string> GetToken() 
+  "Mangadex": {
+    "ApiUrl": "https://api.mangadex.org",
+    "UserAgent": "my-app/1.0",
+    "ThrowOnError": "false",
+    "RateLimits": {
+      "Enabled": "true",
+      "Conservative": "true"
+    },
+    "Token": "<access-token>",
+    "ClientId": "<client-id>",
+    "ClientSecret": "<client-secret>",
+    "Username": "<username>",
+    "Password": "<password>"
+  }
+}
+```
+
+Default configuration key paths can be changed through static properties such as:
+
+```csharp
+ConfigurationCredentialsService.TokenPath = "MangaDex:AccessToken";
+ConfigurationApi.ApiPath = "MangaDex:ApiUrl";
+ConfigurationApi.UserAgentPath = "MangaDex:UserAgent";
+ConfigurationOIDC.ClientIdPath = "MangaDex:ClientId";
+```
+
+For advanced credential loading, implement `ICredentialsService`:
+
+```csharp
+public class MyCredentialsService : ICredentialsService
+{
+    public Task<string> GetToken()
     {
-        return "Some-token resolved here";
+        return Task.FromResult("<access-token>");
     }
 }
-...
-//Then add your service like so:
-builder.Services.AddMangaDex(c => c.WithCredentials<MyCustomCredentialsService>());
+
+builder.Services.AddMangaDex(c => c.WithCredentials<MyCredentialsService>());
 ```
 
-### Specific Request
-Any request that requires authentication within the API has a `string? token = null` parameter on the method.
-The API will default to using this parameter if it's set. 
+## Uploading And Editing Chapters
 
-```csharp
-var api = MangaDex.Create();
-
-//Follow a manga
-await api.Manga.Follow("fc0a7b86-992e-4126-b30f-ca04811979bf", "<AUTH TOKEN HERE>");
-```
-
-## Configuration options
-There are a number of different configuration options (namely: the API URL, authentication token, and the User-Agent) that you can set.
-
-These can all be set in a few different ways:
-* Via a configuration file (appsettings.json)
-* Via the `MangaDex.Create()` method
-* Via the DI services injector `IServiceCollection.AddMangaDex()`
-* Or via a custom `ICredentialsService`.
-
-Below is an example of how to do each of them:
-```csharp
-//With MangaDex.Create():
-var api = MangaDex.Create(c => c
-    .WithAccessToken("Some Token")
-    .WithApiConfig(a => a
-        .WithApiUrl("https://api.mangadex.dev")
-        .WithUserAgent("Some-Fancy-User-Agent")));
-
-//With DI services:
-services.AddMangaDex(c => c
-    .WithAccessToken("Some Token")
-    .WithApiConfig(a => a
-        .WithApiUrl("https://api.mangadex.dev")
-        .WithUserAgent("Some-Fancy-User-Agent")));
-
-//With a custom IConfigurationApi
-public class SomeConfig : IConfigurationApi
-{
-    ...
-    public string? Token => "Some Token";
-    public string ApiUrl => "https://api.mangadex.dev";
-    public string UserAgent => "Some-Fancy-User-Agent";
-    ...
-}
-...
-services.AddMangaDex(c => c.WithApiConfig<SomeConfig>());
-
-//From configuration file (appsettings.json)
-{
-    "Mangadex": {
-        "Token": "Some-Token",
-        "UserAgent": "Some-Fancy-User-Agent",
-        "ApiUrl": "https://api.mangadex.dev"
-    }
-}
-```
-
-For the last option, if you want to change the [configuration keys](https://github.com/calico-crusade/mangadex-sharp/blob/1f09a1aceef0a79d7553c45b69cd401b5ed888bb/src/MangaDexSharp/CredentialsService.cs#L28) that the application loads the variables from, you can change the following static properties:
-```csharp
-ConfigurationCredentialsService.TokenPath = "SomeOther:Path:ToThe:Token";
-ConfigurationApi.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
-ConfigurationApi.ApiPath = "SomeOther:Path:ToThe:ApiUrl";
-ConfigurationApi.UserAgentPath = "SomeOther:Path:ToThe:UserAgent";
-ConfigurationOIDC.AuthPath = "SomeOther:Path:ToThe:AuthUrl";
-ConfigurationOIDC.ClientIdPath = "SomeOther:Path:ToThe:ClientId";
-ConfigurationOIDC.ClientSecretPath = "SomeOther:Path:ToThe:ClientSecret";
-ConfigurationOIDC.UsernamePath = "SomeOther:Path:ToThe:Username";
-ConfigurationOIDC.PasswordPath = "SomeOther:Path:ToThe:Password";
-```
-
-## Uploading / Editing Chapters
-There is now a handy utility for uploading / editing chapters via the API.
-
-You will need to install the [new NuGet package](https://www.nuget.org/packages/MangaDexSharp.Utilities).
-
-```bash
-PM> Install-Package MangaDexSharp.Utilities
-```
-
-Then you can use it like so:
+Install `MangaDexSharp.Utilities` for the higher-level upload workflow.
 
 ```csharp
 using MangaDexSharp;
 using MangaDexSharp.Utilities.Upload;
+using Microsoft.Extensions.DependencyInjection;
 
-//Get an instance of the API
 var provider = new ServiceCollection()
     .AddMangaDex(c => c
-        .WithAuthConfig(a => a
-            .WithClientId("<client-id>")
-            .WithClientSecret("<client-secret>")
-            .WithUsername("<username>")
-            .WithPassword("<password>"))
+        .WithAuthConfig("<client-id>", "<client-secret>", "<username>", "<password>")
         .AddMangaDexUtils())
     .BuildServiceProvider();
 
 var upload = provider.GetRequiredService<IUploadUtilityService>();
 
-//Get the manga ID and groups you want to upload to
-string mangaId = "f9c33607-9180-4ba6-b85c-e4b5faee7192"; //Official "Test" Manga
-string[] groups = ["e11e461b-8c3a-4b5c-8b07-8892c2dcf449"]; //Cardboard test
+var mangaId = "f9c33607-9180-4ba6-b85c-e4b5faee7192";
+var groups = new[] { "e11e461b-8c3a-4b5c-8b07-8892c2dcf449" };
 
-//Create a session for the manga
-await using var session = await upload.New(mangaId, groups);
+await using var session = await upload.New(mangaId, groups, c => c.MaxBatchSize(5));
 
-//Upload some files to the session (by file path)
-await session.UploadFile("wrong-file.png");
 await session.UploadFile("page-1.jpg");
 await session.UploadFile("page-2.jpg");
-await session.UploadFile("page-3.png");
 
-//Maybe upload the files by stream instead?
-using var io = File.OpenRead("some-weird-gif.gif");
-await session.UploadFile(io, "page-4.gif");
-
-//Woops, messed up that one, let's delete it from the upload
-var file = session.Uploads
-    .FirstOrDefault(t => t.Attributes.OriginalFileName == "wrong-file.png");
-if (file is not null)
-    await session.DeleteUpload(file);
-
-//Commit the chapter to MD
-var chapter = await session.Commit(new ChapterDraft 
+var chapter = await session.Commit(new ChapterDraft
 {
-    Chapter = "69.5",
-    Title = "My Super Chapter",
+    Chapter = "1",
+    Title = "Example Chapter",
     TranslatedLanguage = "en",
-    Volume = "420"
+    Volume = "1"
 });
-//Print out the chapter ID
-Console.WriteLine("Chapter ID: {0}", chapter.Id);
 
-//You can also edit existing sessions:
-await using var session = await upload.Continue();
-
-//Or you can edit an existing chapter that has already been upload
-var chapterId = "8f32fa09-593b-49d4-ae23-229cee63f005";
-await using var session = await upload.Edit(chapterId);
-
-//There are a bunch of settings you can change for the upload utility.
-//There is a builder method you can specify when creating the sessions:
-await using var session = await upload.New(mangaId, groups, 
-    config => 
-    {
-        config.MaxBatchSize(5);
-    });
+Console.WriteLine(chapter.Id);
 ```
+
+## Documentation
+
+The `docs` folder contains package, app, and generated API reference pages:
+
+- [Documentation index](docs/README.md)
+- [Core package guide](docs/packages/mangadexsharp.md)
+- [Utilities package guide](docs/packages/mangadexsharp-utilities.md)
+- [Updates poll guide](docs/packages/mangadexsharp-updatespoll.md)
+- [API reference](docs/api/README.md)

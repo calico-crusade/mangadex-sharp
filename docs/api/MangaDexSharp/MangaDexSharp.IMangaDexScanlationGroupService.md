@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexScanlationGroupService](https://gith
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.ScanlationGroup) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.ScanlationGroup` or inject the service from a provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;

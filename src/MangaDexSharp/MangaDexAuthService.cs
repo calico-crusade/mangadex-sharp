@@ -5,6 +5,20 @@
 /// </summary>
 public interface IMangaDexAuthService
 {
+	/// <summary>
+	/// Checks the permissions associated with the current access token
+	/// </summary>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The permissions associated with the token</returns>
+	Task<AuthCheck> Check(string? token = null);
+
+	/// <summary>
+	/// Logs the current access token out of the MangaDex API
+	/// </summary>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The logout result</returns>
+	Task<AuthLogout> Logout(string? token = null);
+
     /// <summary>
     /// Executes the auth service's token request
     /// </summary>
@@ -40,8 +54,20 @@ public interface IMangaDexAuthService
 /// This is mostly still here to maintain compatibility with the old service.
 /// Most everything was moved to <see cref="OIDCService"/>.
 /// </summary>
-internal class MangaDexAuthService(IOIDCService _auth) : IMangaDexAuthService
+internal class MangaDexAuthService(IOIDCService _auth, IMdApiService _api) : IMangaDexAuthService
 {
+	public async Task<AuthCheck> Check(string? token = null)
+	{
+		var c = await _api.Auth(token);
+		return await _api.Get<AuthCheck>("auth/check", c) ?? new() { Result = "error" };
+	}
+
+	public async Task<AuthLogout> Logout(string? token = null)
+	{
+		var c = await _api.Auth(token);
+		return await _api.Post<AuthLogout, MangaDexEmpty>("auth/logout", new MangaDexEmpty(), c) ?? new() { Result = "error" };
+	}
+
     public Task<TokenResult> Request(TokenRequest request)
     {
         return _auth.Request(request);

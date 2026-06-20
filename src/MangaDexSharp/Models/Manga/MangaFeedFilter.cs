@@ -95,6 +95,16 @@ public class MangaFeedFilter : IPaginateFilter
 	/// </summary>
 	public bool? IncludeExternalUrl { get; set; }
 
+	/// <summary>
+	/// Only include chapters whose external URL is hosted on this domain.
+	/// </summary>
+	public string? ExternalUrl { get; set; }
+
+	/// <summary>
+	/// Exclude chapters whose external URL is hosted on this domain.
+	/// </summary>
+	public string? ExcludeExternalUrl { get; set; }
+
     /// <summary>
     /// Whether or not to include chapters that are unavailable (deleted or removed from the site).
     /// </summary>
@@ -124,6 +134,8 @@ public class MangaFeedFilter : IPaginateFilter
 			.Add("includeEmptyPages", IncludeEmptyPages)
 			.Add("includeFuturePublishAt", IncludeFuturePublishAt)
 			.Add("includeExternalUrl", IncludeExternalUrl)
+			.Add("externalUrl", ExternalUrl)
+			.Add("excludeExternalUrl", ExcludeExternalUrl)
             .Add("includeUnavailable", IncludeUnavailable)
             .Build();
 	}

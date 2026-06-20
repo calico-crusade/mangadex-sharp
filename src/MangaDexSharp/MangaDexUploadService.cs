@@ -108,6 +108,15 @@ public interface IMangaDexUploadService
 	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
 	/// <returns>The uploaded chapter</returns>
 	Task<MangaDexRoot<Chapter>> Commit(string sessionId, UploadSessionCommit data, string? token = null);
+
+	/// <summary>
+	/// Checks whether the given manga and locale requires moderation approval before upload
+	/// </summary>
+	/// <param name="manga">The manga ID to check</param>
+	/// <param name="locale">The translated language locale to check</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>Whether or not moderation approval is required</returns>
+	Task<UploadApprovalRequired> CheckApprovalRequired(string manga, string locale, string? token = null);
 }
 
 internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadService
@@ -214,5 +223,16 @@ internal class MangaDexUploadService(IMdApiService _api) : IMangaDexUploadServic
 	{
 		var c = await _api.Auth(token);
 		return await _api.Post<MangaDexRoot<Chapter>, UploadSessionCommit>($"{Root}/{sessionId}/commit", data, c) ?? new() { Result = "error" };
+	}
+
+	public async Task<UploadApprovalRequired> CheckApprovalRequired(string manga, string locale, string? token = null)
+	{
+		var c = await _api.Auth(token);
+		var request = new UploadApprovalRequiredRequest
+		{
+			Manga = manga,
+			Locale = locale
+		};
+		return await _api.Post<UploadApprovalRequired, UploadApprovalRequiredRequest>($"{Root}/check-approval-required", request, c) ?? new() { Result = "error" };
 	}
 }

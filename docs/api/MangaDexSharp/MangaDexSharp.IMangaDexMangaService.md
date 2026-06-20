@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexMangaService](https://github.com/cal
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Manga) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Manga` or inject `IMangaDexMangaService` from a service provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;
@@ -46,7 +46,7 @@ var api = MangaDex.Create();
 | Method/ctor | `Relations` | `Task<MangaRelationships> Relations(string id);` | public |
 | Method/ctor | `Relation` | `Task<MangaDexRoot<MangaRelationship>> Relation(string id, Relationships relation, string target, string? token = null);` | public |
 | Method/ctor | `RelationDelete` | `Task<MangaDexRoot> RelationDelete(string mangaId, string id, string? token = null);` | public |
-| Method/ctor | `Recommendations` | `Task<RecommendationList> Recommendations(string mangaId);` | public |
+| Method/ctor | `Recommendations` | `Task<RecommendationList> Recommendations(string mangaId, MangaRecommendationFilter? filter = null);` | public |
 | Method/ctor | `ListAll` | `IAsyncEnumerable<Manga> ListAll(MangaFilter? filter = null, int? delay = null, int? rateCap = null);` | public |
 | Method/ctor | `FeedAll` | `IAsyncEnumerable<Chapter> FeedAll(string id, MangaFeedFilter? filter = null, int? delay = null, int? rateCap = null);` | public |
 

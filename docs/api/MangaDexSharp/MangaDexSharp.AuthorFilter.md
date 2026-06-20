@@ -30,6 +30,7 @@ var api = MangaDex.Create();
 | Property | `Limit` | `int` | public |
 | Property | `Offset` | `int` | public |
 | Property | `Ids` | `string[]` | public |
+| Property | `Name` | `string?` | public |
 | Property | `NameOrder` | `OrderValue?` | public |
 | Property | `Includes` | `MangaIncludes[]` | public |
 | Method/ctor | `BuildQuery` | `public string BuildQuery() {` | public |

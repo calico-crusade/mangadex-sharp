@@ -52,6 +52,8 @@ var api = MangaDex.Create();
 | Property | `IncludeUnavailable` | `bool?` | public |
 | Property | `IncludeFuturePublishAt` | `bool?` | public |
 | Property | `IncludeExternalUrl` | `bool?` | public |
+| Property | `ExternalUrl` | `string?` | public |
+| Property | `ExcludeExternalUrl` | `string?` | public |
 | Method/ctor | `BuildQuery` | `public string BuildQuery() {` | public |
 
 ## Related

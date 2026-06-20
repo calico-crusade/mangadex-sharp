@@ -60,9 +60,29 @@ public interface IMangaDexCustomListService
 	/// </summary>
 	/// <param name="mangaId">The ID of the manga to add</param>
 	/// <param name="listId">The ID of the custom list to add it to</param>
+	/// <param name="order">Where to insert the manga in the custom list</param>
 	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
 	/// <returns>The results of the request</returns>
-	Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token = null);
+	Task<MangaDexRoot> MangaAdd(string mangaId, string listId, int? order = null, string? token = null);
+
+	/// <summary>
+	/// Adds a manga to a custom list
+	/// </summary>
+	/// <param name="mangaId">The ID of the manga to add</param>
+	/// <param name="listId">The ID of the custom list to add it to</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
+	Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token);
+
+	/// <summary>
+	/// Removes a manga from a custom list
+	/// </summary>
+	/// <param name="mangaId">The ID of the manga to remove</param>
+	/// <param name="listId">The ID of the custom list to remove it from</param>
+	/// <param name="order">Where to remove the manga from in the custom list</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
+	Task<MangaDexRoot> MangaRemove(string mangaId, string listId, int? order = null, string? token = null);
 
 	/// <summary>
 	/// Removes a manga from a custom list
@@ -71,7 +91,7 @@ public interface IMangaDexCustomListService
 	/// <param name="listId">The ID of the custom list to remove it from</param>
 	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
 	/// <returns>The results of the request</returns>
-	Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token = null);
+	Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token);
 
 	/// <summary>
 	/// Fetches a paginated list of custom lists
@@ -113,7 +133,7 @@ internal class MangaDexCustomListService(
 	public async Task<MangaDexRoot<CustomList>> Update(string id, CustomListCreate create, string? token = null)
 	{
 		var c = await _api.Auth(token);
-		return await _api.Post<MangaDexRoot<CustomList>, CustomListCreate>($"{Root}/{id}", create, c) ?? new() { Result = "error" };
+		return await _api.Put<MangaDexRoot<CustomList>, CustomListCreate>($"{Root}/{id}", create, c) ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot> Delete(string id, string? token = null)
@@ -134,16 +154,34 @@ internal class MangaDexCustomListService(
 		return await _api.Delete<MangaDexRoot>($"{Root}/{id}/follow", c) ?? new() { Result = "error" };
 	}
 
-	public async Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token = null)
+	public async Task<MangaDexRoot> MangaAdd(string mangaId, string listId, int? order = null, string? token = null)
 	{
 		var c = await _api.Auth(token);
-		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"manga/{mangaId}/list/{listId}", new MangaDexEmpty { }, c) ?? new() { Result = "error" };
+		var filter = new FilterBuilder()
+			.Add("order", order)
+			.Build();
+		var url = $"manga/{mangaId}/list/{listId}" + (string.IsNullOrEmpty(filter) ? "" : $"?{filter}");
+		return await _api.Post<MangaDexRoot, MangaDexEmpty>(url, new MangaDexEmpty { }, c) ?? new() { Result = "error" };
 	}
 
-	public async Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token = null)
+	public Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token)
+	{
+		return MangaAdd(mangaId, listId, null, token);
+	}
+
+	public async Task<MangaDexRoot> MangaRemove(string mangaId, string listId, int? order = null, string? token = null)
 	{
 		var c = await _api.Auth(token);
-		return await _api.Delete<MangaDexRoot>($"manga/{mangaId}/list/{listId}", c) ?? new() { Result = "error" };
+		var filter = new FilterBuilder()
+			.Add("order", order)
+			.Build();
+		var url = $"manga/{mangaId}/list/{listId}" + (string.IsNullOrEmpty(filter) ? "" : $"?{filter}");
+		return await _api.Delete<MangaDexRoot>(url, c) ?? new() { Result = "error" };
+	}
+
+	public Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token)
+	{
+		return MangaRemove(mangaId, listId, null, token);
 	}
 
 	public async Task<CustomListList> List(int limit = 100, int offset = 0, string? token = null)

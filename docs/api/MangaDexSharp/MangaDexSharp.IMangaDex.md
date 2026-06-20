@@ -46,6 +46,9 @@ var api = MangaDex.Create();
 | Property | `User` | `IMangaDexUserService` | public |
 | Property | `Auth` | `IMangaDexAuthService` | public |
 | Property | `ApiClient` | `IMangaDexApiClientService` | public |
+| Property | `Settings` | `IMangaDexSettingsService` | public |
+| Property | `Infrastructure` | `IMangaDexInfrastructureService` | public |
+| Property | `Legacy` | `IMangaDexLegacyService` | public |
 | Property | `Statistics` | `IMangaDexStatisticsService` | public |
 
 ## Related

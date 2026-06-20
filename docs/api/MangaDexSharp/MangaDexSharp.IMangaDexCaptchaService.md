@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexCaptchaService](https://github.com/c
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Captcha) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Captcha` or inject the service from a provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;

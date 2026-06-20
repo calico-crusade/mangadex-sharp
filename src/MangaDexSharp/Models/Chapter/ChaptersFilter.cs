@@ -136,6 +136,16 @@ public class ChaptersFilter : IPaginateFilter
 	public bool? IncludeExternalUrl { get; set; }
 
 	/// <summary>
+	/// Only include chapters whose external URL is hosted on this domain.
+	/// </summary>
+	public string? ExternalUrl { get; set; }
+
+	/// <summary>
+	/// Exclude chapters whose external URL is hosted on this domain.
+	/// </summary>
+	public string? ExcludeExternalUrl { get; set; }
+
+	/// <summary>
 	/// Builds the query parameters for the URL
 	/// </summary>
 	/// <returns></returns>
@@ -166,6 +176,8 @@ public class ChaptersFilter : IPaginateFilter
 			.Add("includeEmptyPages", IncludeEmptyPages)
 			.Add("includeFuturePublishAt", IncludeFuturePublishAt)
 			.Add("includeExternalUrl", IncludeExternalUrl)
+			.Add("externalUrl", ExternalUrl)
+			.Add("excludeExternalUrl", ExcludeExternalUrl)
 			.Add("includeUnavailable", IncludeUnavailable)
             .Build();
 	}

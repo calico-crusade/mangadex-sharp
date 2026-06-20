@@ -105,6 +105,21 @@ public interface IMangaDex
 	/// </summary>
 	IMangaDexApiClientService ApiClient { get; }
 
+	/// <summary>
+	/// All of the settings endpoints
+	/// </summary>
+	IMangaDexSettingsService Settings { get; }
+
+	/// <summary>
+	/// All of the infrastructure endpoints
+	/// </summary>
+	IMangaDexInfrastructureService Infrastructure { get; }
+
+	/// <summary>
+	/// All of the legacy mapping endpoints
+	/// </summary>
+	IMangaDexLegacyService Legacy { get; }
+
     /// <summary>
     /// All of the statistics endpoints
     /// </summary>
@@ -128,6 +143,7 @@ public class MangaDex(
     IMangaDexUserService user,
     IMangaDexAuthService auth,
     IMangaDexApiClientService apiClient,
+    IMangaDexSettingsService settings,
     IMangaDexStatisticsService statistics) : IMangaDex
 {
     /// <inheritdoc />
@@ -189,6 +205,15 @@ public class MangaDex(
 
     /// <inheritdoc />
     public IMangaDexApiClientService ApiClient { get; } = apiClient;
+
+	/// <inheritdoc />
+	public IMangaDexSettingsService Settings { get; } = settings;
+
+	/// <inheritdoc />
+	public IMangaDexInfrastructureService Infrastructure => Misc;
+
+	/// <inheritdoc />
+	public IMangaDexLegacyService Legacy => Misc;
 
     /// <inheritdoc />
 	public IMangaDexStatisticsService Statistics { get; } = statistics;

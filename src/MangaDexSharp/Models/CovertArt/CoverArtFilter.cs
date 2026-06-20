@@ -78,9 +78,9 @@ public class CoverArtFilter : IPaginateFilter
 	public enum OrderKey
 	{
 		/// <summary>
-		/// The name field
+		/// The created at field
 		/// </summary>
-		name,
+		createdAt,
 		/// <summary>
 		/// The updated at field
 		/// </summary>

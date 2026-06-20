@@ -38,7 +38,7 @@ public class ScanlationGroupFilter : IPaginateFilter
 	/// <summary>
 	/// Determine how to order the returned groups
 	/// </summary>
-	public OrderValue? LatestUploadedChapterOrder { get; set; }
+	public Dictionary<OrderKey, OrderValue> Order { get; set; } = [];
 
 	/// <summary>
 	/// Builds the query parameters for the URL
@@ -54,12 +54,35 @@ public class ScanlationGroupFilter : IPaginateFilter
 			.Add("focusedLanguage", FocusedLanguage)
 			.Add("includes", ["leader", "member"]);
 
-		if (LatestUploadedChapterOrder != null)
-			bob.Add("order", new Dictionary<MangaFilter.OrderKey, OrderValue>
-			{
-				[MangaFilter.OrderKey.latestUploadedChapter] = LatestUploadedChapterOrder ?? OrderValue.desc
-			});
+		bob.Add("order", Order);
 
 		return bob.Build();
+	}
+
+	/// <summary>
+	/// The available fields the can be ordered by
+	/// </summary>
+	public enum OrderKey
+	{
+		/// <summary>
+		/// Order by the name field
+		/// </summary>
+		name,
+		/// <summary>
+		/// Order by the created at field
+		/// </summary>
+		createdAt,
+		/// <summary>
+		/// Order by the updated at field
+		/// </summary>
+		updatedAt,
+		/// <summary>
+		/// Order by the followed count field
+		/// </summary>
+		followedCount,
+		/// <summary>
+		/// Order by the relevance field
+		/// </summary>
+		relevance
 	}
 }

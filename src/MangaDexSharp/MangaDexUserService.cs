@@ -21,11 +21,34 @@ public interface IMangaDexUserService
 	Task<MangaDexRoot<User>> Get(string id);
 
 	/// <summary>
+	/// Deletes a user by ID
+	/// </summary>
+	/// <param name="id">The ID of the user to delete</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
+	Task<MangaDexRoot> Delete(string id, string? token = null);
+
+	/// <summary>
+	/// Approves user deletion using the given deletion code
+	/// </summary>
+	/// <param name="code">The deletion approval code</param>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The results of the request</returns>
+	Task<MangaDexRoot> ApproveDelete(string code, string? token = null);
+
+	/// <summary>
 	/// Fetches the current user's profile
 	/// </summary>
 	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
 	/// <returns>The current users profile</returns>
 	Task<MangaDexRoot<User>> Me(string? token = null);
+
+	/// <summary>
+	/// Fetches the current user's reading history
+	/// </summary>
+	/// <param name="token">The authentication token, if none is provided, it will fall back on the <see cref="ICredentialsService"/></param>
+	/// <returns>The current user's reading history</returns>
+	Task<ReadingHistory> History(string? token = null);
 
 	/// <summary>
 	/// Logs into MD using the given email/username and password combination
@@ -53,16 +76,9 @@ public interface IMangaDexUserService
 	Task<LoginResult> Refresh(string token);
 }
 
-internal class MangaDexUserService : IMangaDexUserService
+internal class MangaDexUserService(IMdApiService _api) : IMangaDexUserService
 {
-	private readonly IMdApiService _api;
-
 	public string Root => $"user";
-
-	public MangaDexUserService(IMdApiService api)
-	{
-		_api = api;
-	}
 
 	public async Task<UserList> List(UserFilter? filter = null, string? token = null)
 	{
@@ -76,10 +92,28 @@ internal class MangaDexUserService : IMangaDexUserService
 		return await _api.Get<MangaDexRoot<User>>($"{Root}/{id}") ?? new() { Result = "error" };
 	}
 
+	public async Task<MangaDexRoot> Delete(string id, string? token = null)
+	{
+		var c = await _api.Auth(token);
+		return await _api.Delete<MangaDexRoot>($"{Root}/{id}", c) ?? new() { Result = "error" };
+	}
+
+	public async Task<MangaDexRoot> ApproveDelete(string code, string? token = null)
+	{
+		var c = await _api.Auth(token);
+		return await _api.Post<MangaDexRoot, MangaDexEmpty>($"{Root}/delete/{code}", new MangaDexEmpty(), c) ?? new() { Result = "error" };
+	}
+
 	public async Task<MangaDexRoot<User>> Me(string? token = null)
 	{
 		var c = await _api.Auth(token);
 		return await _api.Get<MangaDexRoot<User>>($"{Root}/me", c) ?? new() { Result = "error" };
+	}
+
+	public async Task<ReadingHistory> History(string? token = null)
+	{
+		var c = await _api.Auth(token);
+		return await _api.Get<ReadingHistory>($"{Root}/history", c) ?? new() { Result = "error" };
 	}
 
 	[Obsolete]

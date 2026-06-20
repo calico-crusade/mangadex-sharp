@@ -6,10 +6,16 @@
 public class CoverArtCreate
 {
 	/// <summary>
-	/// The file name/ID for the cover
+	/// The cover image file to upload
 	/// </summary>
-	[JsonPropertyName("file")]
-	public string File { get; set; } = string.Empty;
+	[JsonIgnore]
+	public IFileUpload? File { get; set; }
+
+	/// <summary>
+	/// The content type to use for the uploaded cover image
+	/// </summary>
+	[JsonIgnore]
+	public string ContentType { get; set; } = "application/octet-stream";
 
 	/// <summary>
 	/// The volume ordinal this cover belongs to

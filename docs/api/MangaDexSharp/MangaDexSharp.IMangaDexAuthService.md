@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexAuthService](https://github.com/cali
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Auth) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Auth` or inject `IMangaDexAuthService` from a service provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;
@@ -26,6 +26,8 @@ var api = MangaDex.Create();
 
 | Kind | Name | Signature/type | Access |
 | --- | --- | --- | --- |
+| Method/ctor | `Check` | `Task<AuthCheck> Check(string? token = null);` | public |
+| Method/ctor | `Logout` | `Task<AuthLogout> Logout(string? token = null);` | public |
 | Method/ctor | `Request` | `Task<TokenResult> Request(TokenRequest request);` | public |
 | Method/ctor | `Personal` | `Task<TokenResult> Personal( string? id = null, string? secret = null, string? username = null, string? password = null);` | public |
 | Method/ctor | `Refresh` | `Task<TokenResult> Refresh(string refreshToken, string? id = null, string? secret = null);` | public |

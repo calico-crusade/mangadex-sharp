@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexUploadService](https://github.com/ca
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Upload) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Upload` or inject `IMangaDexUploadService` from a service provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;
@@ -37,6 +37,7 @@ var api = MangaDex.Create();
 | Method/ctor | `DeleteUpload` | `Task<MangaDexRoot> DeleteUpload(string sessionId, string[] fileIds, string? token = null);` | public |
 | Method/ctor | `Abandon` | `Task<MangaDexRoot> Abandon(string sessionId, string? token = null);` | public |
 | Method/ctor | `Commit` | `Task<MangaDexRoot<Chapter>> Commit(string sessionId, UploadSessionCommit data, string? token = null);` | public |
+| Method/ctor | `CheckApprovalRequired` | `Task<UploadApprovalRequired> CheckApprovalRequired(string manga, string locale, string? token = null);` | public |
 
 ## Related
 

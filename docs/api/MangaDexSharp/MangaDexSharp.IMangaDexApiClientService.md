@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexApiClientService](https://github.com
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.ApiClient) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.ApiClient` or inject the service from a provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;

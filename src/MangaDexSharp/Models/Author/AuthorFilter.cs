@@ -26,6 +26,11 @@ public class AuthorFilter : IPaginateFilter
 	public string[] Ids { get; set; } = [];
 
 	/// <summary>
+	/// Only include authors that match this name
+	/// </summary>
+	public string? Name { get; set; }
+
+	/// <summary>
 	/// How to order the results of the query (DEFAULT none)
 	/// </summary>
 	public OrderValue? NameOrder { get; set; }
@@ -48,6 +53,7 @@ public class AuthorFilter : IPaginateFilter
 			.Add("limit", Limit)
 			.Add("offset", Offset)
 			.Add("ids", Ids)
+			.Add("name", Name)
 			.Add("includes", Includes);
 
 		if (NameOrder != null)

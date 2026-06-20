@@ -1,4 +1,16 @@
-﻿namespace MangaDexSharp;
+namespace MangaDexSharp;
+
+/// <summary>
+/// Represents MangaDex infrastructure endpoints
+/// </summary>
+public interface IMangaDexInfrastructureService
+{
+	/// <summary>
+	/// Pings the MangaDex API
+	/// </summary>
+	/// <returns>The healthcheck result</returns>
+	Task<MangaDexRoot> Ping();
+}
 
 /// <summary>
 /// Represents all of the requests for pages and md-at-home
@@ -96,16 +108,36 @@ public interface IMangaDexTakedownService
 }
 
 /// <summary>
+/// Represents all of the legacy ID mapping endpoints
+/// </summary>
+public interface IMangaDexLegacyService
+{
+	/// <summary>
+	/// Maps MangaDex legacy IDs to current UUIDs
+	/// </summary>
+	/// <param name="type">The type of resource to map</param>
+	/// <param name="ids">The legacy IDs to map</param>
+	/// <returns>The mapped IDs</returns>
+	Task<LegacyMappingList> LegacyMapping(LegacyMappingType type, params int[] ids);
+}
+
+/// <summary>
 /// Represents a collection of miscellaneous services
 /// </summary>
-public interface IMangaDexMiscService : 
-	IMangaDexPageService, IMangaDexRatingService, 
+public interface IMangaDexMiscService :
+	IMangaDexPageService, IMangaDexRatingService,
 	IMangaDexThreadsService, IMangaDexCaptchaService,
-	IMangaDexTakedownService { }
+	IMangaDexTakedownService, IMangaDexInfrastructureService,
+	IMangaDexLegacyService { }
 
 internal class MangaDexMiscService(
 	IMdApiService _api) : IMangaDexMiscService
 {
+	public async Task<MangaDexRoot> Ping()
+	{
+		return await _api.Get<MangaDexRoot>("ping") ?? new() { Result = "error" };
+	}
+
 	public Task ReportPage(PageReport report)
 	{
 		return _api.Post<MangaDexEmpty, PageReport>("https://api.mangadex.network/report", report);
@@ -166,5 +198,15 @@ internal class MangaDexMiscService(
 			.Add("order", orderBy)
 			.Build();
 		return await _api.Get<TakedownList>($"takedown?{filter}") ?? new() { Result = "error" };
+	}
+
+	public async Task<LegacyMappingList> LegacyMapping(LegacyMappingType type, params int[] ids)
+	{
+		var request = new LegacyMappingRequest
+		{
+			Type = type,
+			Ids = ids
+		};
+		return await _api.Post<LegacyMappingList, LegacyMappingRequest>("legacy/mapping", request) ?? new() { Result = "error" };
 	}
 }

@@ -44,6 +44,8 @@ var api = MangaDex.Create();
 | Property | `IncludeEmptyPages` | `bool?` | public |
 | Property | `IncludeFuturePublishAt` | `bool?` | public |
 | Property | `IncludeExternalUrl` | `bool?` | public |
+| Property | `ExternalUrl` | `string?` | public |
+| Property | `ExcludeExternalUrl` | `string?` | public |
 | Property | `IncludeUnavailable` | `bool?` | public |
 | Method/ctor | `BuildQuery` | `public string BuildQuery() {` | public |
 

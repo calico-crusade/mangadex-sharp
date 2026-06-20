@@ -1,4 +1,7 @@
-﻿namespace MangaDexSharp;
+using System.Net.Http;
+using System.Net.Http.Headers;
+
+namespace MangaDexSharp;
 
 /// <summary>
 /// Represents all of the requests on the /cover endpoints
@@ -55,16 +58,11 @@ public interface IMangaDexCoverArtService
 	IAsyncEnumerable<CoverArtRelationship> ListAll(CoverArtFilter? filter = null, int? delay = null, int? rateCap = null);
 }
 
-internal class MangaDexCoverArtService : IMangaDexCoverArtService
+internal class MangaDexCoverArtService(IMdApiService _api) : IMangaDexCoverArtService
 {
-	private readonly IMdApiService _api;
+	public const string CONTENT_TYPE_FILE = "application/octet-stream";
 
 	public string Root => $"cover";
-
-	public MangaDexCoverArtService(IMdApiService api)
-	{
-		_api = api;
-	}
 
 	public async Task<CoverArtList> List(CoverArtFilter? filter = null)
 	{
@@ -83,9 +81,30 @@ internal class MangaDexCoverArtService : IMangaDexCoverArtService
 
 	public async Task<MangaDexRoot<CoverArtRelationship>> Upload(string mangaOrCoverId, CoverArtCreate cover, string? token = null)
 	{
+		if (cover.File == null)
+			throw new ArgumentException("A cover image file is required", nameof(cover));
+
 		var c = await _api.Auth(token);
-		return await _api.Post<MangaDexRoot<CoverArtRelationship>, CoverArtCreate>($"{Root}/{mangaOrCoverId}", cover, c) ??
-			new() { Result = "error" };
+		using var body = new MultipartFormDataContent();
+		var data = await cover.File.Content(CancellationToken.None);
+		var fileContent = new ByteArrayContent(data);
+		fileContent.Headers.ContentType = new MediaTypeHeaderValue(cover.ContentType);
+		fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+		{
+			Name = "file",
+			FileName = cover.File.FileName
+		};
+		body.Add(fileContent, "file", cover.File.FileName);
+		if (cover.Volume != null) body.Add(new StringContent(cover.Volume), "volume");
+		body.Add(new StringContent(cover.Description), "description");
+		body.Add(new StringContent(cover.Locale), "locale");
+
+		foreach (var val in body.Headers.ContentType?.Parameters.Where(t => t.Name == "boundary") ?? [])
+			val.Value = val.Value?.Replace("\"", string.Empty);
+
+		return await _api.Create($"{Root}/{mangaOrCoverId}", "POST", c, null)
+			.BodyContent(body)
+			.Result<MangaDexRoot<CoverArtRelationship>>() ?? new() { Result = "error" };
 	}
 
 	public async Task<MangaDexRoot<CoverArtRelationship>> Get(string mangaOrCoverId)

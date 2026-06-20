@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexFeedService](https://github.com/cali
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Feed) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Feed` or inject the service from a provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;

@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexPageService](https://github.com/cali
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.Page) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Page` or inject the service from a provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;

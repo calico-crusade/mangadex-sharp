@@ -26,7 +26,8 @@ var api = MangaDex.Create();
 
 | Kind | Name | Signature/type | Access |
 | --- | --- | --- | --- |
-| Property | `File` | `string` | public |
+| Property | `File` | `IFileUpload?` | public |
+| Property | `ContentType` | `string` | public |
 | Property | `Volume` | `string?` | public |
 | Property | `Description` | `string` | public |
 | Property | `Locale` | `string` | public |

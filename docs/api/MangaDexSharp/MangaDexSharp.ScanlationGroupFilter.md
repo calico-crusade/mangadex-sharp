@@ -32,7 +32,7 @@ var api = MangaDex.Create();
 | Property | `Ids` | `string[]` | public |
 | Property | `Name` | `string?` | public |
 | Property | `FocusedLanguage` | `string?` | public |
-| Property | `LatestUploadedChapterOrder` | `OrderValue?` | public |
+| Property | `Order` | `Dictionary<OrderKey, OrderValue>` | public |
 | Method/ctor | `BuildQuery` | `public string BuildQuery() {` | public |
 
 ## Related

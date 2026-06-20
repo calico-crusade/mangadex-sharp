@@ -13,7 +13,7 @@ This page exists so references to [IMangaDexCustomListService](https://github.co
 
 ## How To Get Or Use It
 
-Resolve it through IMangaDex (pi.CustomList) or inject $typeName from a service provider configured with AddMangaDex().
+Resolve it through `IMangaDex.Lists` or inject `IMangaDexCustomListService` from a service provider configured with `AddMangaDex()`.
 
 ```csharp
 using MangaDexSharp;
@@ -32,8 +32,10 @@ var api = MangaDex.Create();
 | Method/ctor | `Delete` | `Task<MangaDexRoot> Delete(string id, string? token = null);` | public |
 | Method/ctor | `Follow` | `Task<MangaDexRoot> Follow(string id, string? token = null);` | public |
 | Method/ctor | `Unfollow` | `Task<MangaDexRoot> Unfollow(string id, string? token = null);` | public |
-| Method/ctor | `MangaAdd` | `Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token = null);` | public |
-| Method/ctor | `MangaRemove` | `Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token = null);` | public |
+| Method/ctor | `MangaAdd` | `Task<MangaDexRoot> MangaAdd(string mangaId, string listId, int? order = null, string? token = null);` | public |
+| Method/ctor | `MangaAdd` | `Task<MangaDexRoot> MangaAdd(string mangaId, string listId, string? token);` | public |
+| Method/ctor | `MangaRemove` | `Task<MangaDexRoot> MangaRemove(string mangaId, string listId, int? order = null, string? token = null);` | public |
+| Method/ctor | `MangaRemove` | `Task<MangaDexRoot> MangaRemove(string mangaId, string listId, string? token);` | public |
 | Method/ctor | `List` | `Task<CustomListList> List(int limit = 100, int offset = 0, string? token = null);` | public |
 | Method/ctor | `List` | `Task<CustomListList> List(string userId, int limit = 100, int offset = 0);` | public |
 
