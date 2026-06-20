@@ -6,6 +6,9 @@ on:
     paths:
       - 'docs/**'
 
+permissions:
+  contents: write
+
 jobs:
   publish-wiki:
     runs-on: ubuntu-latest
