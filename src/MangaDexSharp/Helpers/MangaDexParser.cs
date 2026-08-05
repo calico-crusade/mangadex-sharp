@@ -100,6 +100,7 @@ public class MangaDexParser<T> : JsonConverter<T> where T : IJsonType
 				.Register<CoverArtRelationship>("cover_art")
 				.Register<RelatedDataRelationship>("manga")
 				.Register<ScanlationGroup>("scanlation_group")
+				.Register<User>("user_profile")
 				.Register<User>("user")
 				.Register<User>("leader")
 				.Register<User>("creator")
